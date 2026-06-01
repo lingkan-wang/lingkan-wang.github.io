@@ -1,0 +1,10 @@
+# Brainstorming visual-companion artifacts (local only)
+.superpowers/
+
+# Dependencies / build (added once the Next.js app is scaffolded)
+node_modules/
+.next/
+out/
+.vercel/
+.env*.local
+.DS_Store
