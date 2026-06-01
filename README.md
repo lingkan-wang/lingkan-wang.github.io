@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lingkan Wang — Portfolio
 
-## Getting Started
+Product-design portfolio. Next.js (App Router) + TypeScript + Tailwind v4 + Framer Motion. Emil-Kowalski-inspired: restrained, typographic, subtle motion, light/dark.
 
-First, run the development server:
+## Develop
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Add a project
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Add `content/work/<slug>.mdx` with frontmatter (copy an existing file in `content/work/` and edit the fields). The filename is the URL slug.
+2. Drop images in `public/work/<slug>/` and set `cover`, `thumbnail`, and the `<Figure src="...">` paths. Until then, tasteful placeholders render automatically.
+3. Set `confidential: true` to blur the cover placeholder for NDA work.
 
-## Learn More
+## Test & build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm test        # loader unit tests
+npm run build   # production build (all routes static/SSG)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Push to GitHub and import the repo in Vercel (zero config). No env vars required.
 
-## Deploy on Vercel
+## Customization
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Accent color and theme tokens: `app/globals.css` (`--color-accent` etc., in both `@theme` and `.dark`).
+- Bio / contact / nav: `lib/site.ts`.
+- Motion timings: `lib/motion.ts`.
