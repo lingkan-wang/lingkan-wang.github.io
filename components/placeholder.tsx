@@ -11,9 +11,11 @@ export function Placeholder({
 }) {
   return (
     <div
+      role="img"
+      aria-label={label}
       className={`flex ${aspect} w-full items-center justify-center rounded-xl border border-border bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-fg)_4%,transparent),transparent)] ${blur ? "blur-[3px]" : ""} ${className}`}
     >
-      <span className="px-4 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
+      <span aria-hidden="true" className="px-4 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
         {label}
       </span>
     </div>

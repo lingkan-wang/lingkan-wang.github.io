@@ -10,7 +10,7 @@ import {
   useSpring,
   useReducedMotion,
 } from "framer-motion";
-import { previewSpring } from "@/lib/motion";
+import { durations, easeOut, previewSpring } from "@/lib/motion";
 import { Placeholder } from "./placeholder";
 
 export type IndexItem = {
@@ -93,7 +93,7 @@ export function ProjectIndex({ projects }: { projects: IndexItem[] }) {
             initial={{ opacity: 0, scale: 0.9, filter: "blur(6px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            transition={{ duration: durations.base, ease: easeOut }}
           >
             <div className="w-48 overflow-hidden rounded-lg shadow-2xl">
               <Thumb item={active} className="w-full" />
