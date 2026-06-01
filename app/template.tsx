@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
-import { easeOut } from "@/lib/motion";
+import { durations, easeOut } from "@/lib/motion";
 
 export default function Template({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
@@ -12,7 +12,7 @@ export default function Template({ children }: { children: ReactNode }) {
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: easeOut }}
+      transition={{ duration: durations.route, ease: easeOut }}
     >
       {children}
     </motion.div>

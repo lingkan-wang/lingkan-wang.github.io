@@ -3,7 +3,7 @@ import type { Transition, Variants } from "framer-motion";
 // Emil conventions: short, ease-out enters; springs for interactive.
 export const easeOut = [0.22, 1, 0.36, 1] as const;
 
-export const durations = { fast: 0.15, base: 0.2, enter: 0.4 } as const;
+export const durations = { fast: 0.15, base: 0.2, enter: 0.4, route: 0.3 } as const;
 
 export const enterTransition: Transition = {
   duration: durations.enter,

@@ -6,7 +6,6 @@ export const site = {
     "Product designer with 3 years of experience building AI-powered B2C products. I believe great products come from understanding users and turning insights into action.",
   previously: ["CMU HCII", "Ecovacs Robotics", "KuaiShou (Kwai)", "Varsity Tutors"],
   email: "wanglingkan614@gmail.com",
-  phone: "412-996-0978",
   links: {
     linkedin: "https://www.linkedin.com/in/lingkanwang/",
     instagram: "https://www.instagram.com/wanglingkan183/",
