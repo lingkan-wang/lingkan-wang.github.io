@@ -151,6 +151,10 @@ Strictly respect `prefers-reduced-motion` — degrade to instant / no-transform.
 - **Project row hover:** title color shift + subtle x-translate; mono meta cross-fades.
 - **Page transitions:** subtle content fade-up between routes (App Router + Framer Motion).
 - **Theme toggle:** smooth color transitions, no harsh flash.
+- **Nav / menu items (exception — explicit owner request):** when the nav/menu
+  trigger is expanded, clicking a nav item navigates immediately with **no click
+  animation on the item** (no scale, no transition) — it should feel instant. The
+  menu open/close itself may still animate; only the item-click is animation-free.
 - **Tokens:** enter = ease-out cubic-bezier; interactive = spring; durations 150 / 200 / 400ms.
 
 ## 8. Accessibility
