@@ -32,7 +32,7 @@ function Thumb({ item, className = "" }: { item: IndexItem; className?: string }
       className={`rounded-lg border border-border object-cover ${className}`}
     />
   ) : (
-    <Placeholder label={item.company ?? item.title} aspect="aspect-[16/10]" className={`w-40 ${className}`} />
+    <Placeholder label={item.company ?? item.title} aspect="aspect-[16/10]" className={className} />
   );
 }
 
@@ -58,7 +58,12 @@ export function ProjectIndex({ projects }: { projects: IndexItem[] }) {
               href={`/work/${p.slug}`}
               onMouseEnter={() => setActive(p)}
               onMouseLeave={() => setActive(null)}
-              onFocus={() => setActive(p)}
+              onFocus={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                x.set(rect.right - 192);
+                y.set(rect.bottom + 8);
+                setActive(p);
+              }}
               onBlur={() => setActive(null)}
               className="group flex items-baseline justify-between gap-4 py-4 transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-accent"
             >
@@ -82,6 +87,7 @@ export function ProjectIndex({ projects }: { projects: IndexItem[] }) {
       <AnimatePresence>
         {active && !reduce && (
           <motion.div
+            aria-hidden="true"
             className="pointer-events-none fixed left-0 top-0 z-50 hidden [@media(hover:hover)]:block"
             style={{ x: sx, y: sy }}
             initial={{ opacity: 0, scale: 0.9, filter: "blur(6px)" }}

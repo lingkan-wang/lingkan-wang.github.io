@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { getProjectSlugs, getProject, getAdjacent } from "@/lib/projects";
+import { getProjectSlugs, getProject, getAdjacent, type LoadedProject } from "@/lib/projects";
+import { site } from "@/lib/site";
 import { mdxComponents, Prose } from "@/components/mdx";
 import { Placeholder } from "@/components/placeholder";
 import { Reveal } from "@/components/reveal";
@@ -20,7 +21,7 @@ export async function generateMetadata({
   const { slug } = await params;
   try {
     const { meta } = getProject(slug);
-    return { title: `${meta.title} — Lingkan Wang`, description: meta.summary };
+    return { title: `${meta.title} — ${site.name}`, description: meta.summary };
   } catch {
     return {};
   }
@@ -33,13 +34,13 @@ export default async function CaseStudy({
 }) {
   const { slug } = await params;
 
-  let loaded;
+  let loaded: LoadedProject;
   try {
     loaded = getProject(slug);
   } catch {
     notFound();
   }
-  const { meta, content } = loaded!;
+  const { meta, content } = loaded;
   const { prev, next } = getAdjacent(slug);
 
   return (
@@ -64,6 +65,7 @@ export default async function CaseStudy({
             height={675}
             className="w-full rounded-xl border border-border"
             priority
+            sizes="(max-width: 1180px) 92vw, 1080px"
           />
         ) : (
           <Placeholder label={`${meta.company ?? meta.title} — cover`} blur={meta.confidential} />
@@ -78,7 +80,7 @@ export default async function CaseStudy({
       </div>
 
       {/* prev / next */}
-      <nav className="mx-auto mt-24 flex max-w-[680px] items-center justify-between gap-4 border-t border-border px-6 pt-8 text-sm">
+      <nav aria-label="Case study navigation" className="mx-auto mt-24 flex max-w-[680px] items-center justify-between gap-4 border-t border-border px-6 pt-8 text-sm">
         <Link href="/" className="text-muted hover:text-fg">← All work</Link>
         {next ? (
           <Link href={`/work/${next.slug}`} className="text-right font-medium hover:text-accent">
