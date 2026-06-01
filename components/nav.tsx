@@ -5,7 +5,35 @@ import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { site } from "@/lib/site";
 import { ThemeToggle } from "./theme-toggle";
+import { Logo } from "./logo";
 import { durations, easeOut } from "@/lib/motion";
+
+const iconLink = "rounded transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-accent";
+
+function SocialLinks() {
+  return (
+    <>
+      <a href={site.links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className={iconLink}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+          <path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.5 8h4.96v15.5H.5zM8.5 8h4.75v2.12h.07c.66-1.18 2.28-2.42 4.69-2.42 5.02 0 5.95 3.18 5.95 7.3v8.5h-4.96v-7.53c0-1.8-.03-4.1-2.62-4.1-2.62 0-3.02 1.95-3.02 3.97v7.66H8.5z" />
+        </svg>
+      </a>
+      <a href={site.links.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={iconLink}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+          <rect x="3" y="3" width="18" height="18" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
+        </svg>
+      </a>
+      <a href={`mailto:${site.email}`} aria-label="Email" className={iconLink}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
+      </a>
+    </>
+  );
+}
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -14,18 +42,28 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur">
       <nav aria-label="Primary" className="mx-auto max-w-[1080px] px-6">
-        <div className="flex items-center justify-between py-4">
-          <Link href="/" className="font-semibold tracking-tight">
-            {site.shortName}
+        <div className="relative flex items-center justify-between py-3">
+          {/* brand: avatar logo + name / role */}
+          <Link href="/" className="flex items-center gap-2.5 rounded focus-visible:outline-2 focus-visible:outline-accent">
+            <Logo />
+            <span className="leading-tight">
+              <span className="block text-sm font-semibold tracking-tight text-fg">{site.name}</span>
+              <span className="block font-mono text-[10px] uppercase tracking-widest text-muted">{site.role}</span>
+            </span>
           </Link>
 
-          {/* desktop */}
-          <div className="hidden items-center gap-6 sm:flex">
+          {/* centered nav (desktop) — plain links, no click animation */}
+          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 sm:flex">
             {site.nav.map((item) => (
               <Link key={item.href} href={item.href} className="text-sm text-muted transition-colors hover:text-fg">
                 {item.label}
               </Link>
             ))}
+          </div>
+
+          {/* right: socials + resume + theme (desktop) */}
+          <div className="hidden items-center gap-3.5 sm:flex">
+            <SocialLinks />
             <a href={site.links.resume} target="_blank" rel="noopener noreferrer" className="text-sm text-muted transition-colors hover:text-fg">
               Resume
             </a>
@@ -50,7 +88,7 @@ export function Nav() {
           </div>
         </div>
 
-        {/* mobile menu: open/close animates; items do not animate on click */}
+        {/* mobile menu: open/close animates; item clicks are animation-free */}
         <AnimatePresence>
           {open && (
             <motion.div
@@ -70,6 +108,9 @@ export function Nav() {
                 <a href={site.links.resume} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="py-2 text-sm text-muted hover:text-fg">
                   Resume
                 </a>
+                <div className="mt-2 flex items-center gap-4 border-t border-border pt-3 text-muted">
+                  <SocialLinks />
+                </div>
               </div>
             </motion.div>
           )}

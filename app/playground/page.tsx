@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { site } from "@/lib/site";
 import { Reveal } from "@/components/reveal";
 import { Placeholder } from "@/components/placeholder";
+import { CommandMenuButton } from "@/components/command-palette";
 
 export const metadata: Metadata = { title: `Playground — ${site.name}` };
 
@@ -20,6 +21,13 @@ export default function Playground() {
         <p className="mt-4 max-w-[680px] text-[15px] leading-7 text-muted">
           Side explorations, motion studies, and things I make for fun. [Replace with real content.]
         </p>
+      </Reveal>
+
+      <Reveal delay={0.03} className="mt-10">
+        <p className="mb-3 font-mono text-xs uppercase tracking-widest text-muted">
+          ⌘K command menu — built with cmdk
+        </p>
+        <CommandMenuButton />
       </Reveal>
 
       <Reveal delay={0.05} className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

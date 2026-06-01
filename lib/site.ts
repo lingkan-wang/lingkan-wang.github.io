@@ -13,8 +13,8 @@ export const site = {
       "https://f25e664d-0de6-4453-b79e-acf199c878cf.filesusr.com/ugd/d19660_905b470ad44147a3abd29a3f35925ce6.pdf",
   },
   nav: [
-    { label: "Work", href: "/" },
+    { label: "Coded Work", href: "/coded" },
+    { label: "Research", href: "/research" },
     { label: "About", href: "/about" },
-    { label: "Playground", href: "/playground" },
   ],
 } as const;

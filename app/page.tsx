@@ -1,33 +1,53 @@
+import Link from "next/link";
 import { getAllProjects } from "@/lib/projects";
-import { ProjectIndex, type IndexItem } from "@/components/project-index";
-import { site } from "@/lib/site";
+import { codedWork } from "@/lib/coded";
+import { GridHero } from "@/components/grid-hero";
+import { ProjectList, type ListItem } from "@/components/project-list";
 import { Reveal } from "@/components/reveal";
 
+function SectionHead({ label, href, cta }: { label: string; href: string; cta: string }) {
+  return (
+    <div className="mb-2 flex items-baseline justify-between">
+      <h2 className="font-mono text-xs uppercase tracking-widest text-muted">{label}</h2>
+      <Link href={href} className="font-mono text-[11px] uppercase tracking-widest text-muted transition-colors hover:text-fg">
+        {cta} →
+      </Link>
+    </div>
+  );
+}
+
 export default function Home() {
-  const projects = getAllProjects();
-  const items: IndexItem[] = projects.map((p) => ({
-    slug: p.slug,
+  const codedItems: ListItem[] = codedWork.map((c) => ({
+    title: c.title,
+    tags: c.tags,
+    outcome: c.outcome,
+    year: c.year,
+    href: c.href,
+  }));
+
+  const researchItems: ListItem[] = getAllProjects().map((p) => ({
     title: p.title,
-    company: p.company,
-    year: p.year,
     tags: p.tags,
-    thumbnail: p.thumbnail || undefined,
+    outcome: p.summary,
+    year: p.year,
+    href: `/work/${p.slug}`,
   }));
 
   return (
-    <div className="mx-auto max-w-[680px] px-6 pb-32 pt-24 sm:pt-32">
-      <Reveal>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{site.name}</h1>
-        <p className="mt-4 text-[15px] leading-7 text-muted">{site.intro}</p>
-        <p className="mt-3 font-mono text-xs uppercase tracking-widest text-muted">
-          Previously @ {site.previously.join(" · ")}
-        </p>
-      </Reveal>
+    <>
+      <GridHero />
 
-      <Reveal delay={0.05} className="mt-16">
-        <h2 className="mb-2 font-mono text-xs uppercase tracking-widest text-muted">Selected work</h2>
-        <ProjectIndex projects={items} />
-      </Reveal>
-    </div>
+      <div className="mx-auto max-w-[760px] px-6 pb-28">
+        <Reveal className="mt-6">
+          <SectionHead label="Coded Work" href="/coded" cta="See all coded work" />
+          <ProjectList items={codedItems} />
+        </Reveal>
+
+        <Reveal className="mt-20">
+          <SectionHead label="Research Projects" href="/research" cta="See all research" />
+          <ProjectList items={researchItems} />
+        </Reveal>
+      </div>
+    </>
   );
 }

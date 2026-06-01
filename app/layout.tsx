@@ -5,11 +5,13 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { CommandPalette } from "@/components/command-palette";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: `${site.name} — ${site.role}`,
   description: site.intro,
+  icons: { icon: "/logo.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Nav />
           <main className="flex-1">{children}</main>
           <Footer />
+          <CommandPalette />
         </ThemeProvider>
       </body>
     </html>
