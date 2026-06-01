@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => setMounted(true), []); // eslint-disable-line react-hooks/set-state-in-effect
 
   // Avoid hydration mismatch: render a same-size placeholder until mounted.
   if (!mounted) {
