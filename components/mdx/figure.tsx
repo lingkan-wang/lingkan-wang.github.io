@@ -25,6 +25,7 @@ export function Figure({
           width={1080}
           height={675}
           className="w-full rounded-xl border border-border"
+          sizes={breakout ? "(max-width: 1080px) 92vw, 1080px" : "(max-width: 680px) 100vw, 680px"}
         />
       ) : (
         <Placeholder label={alt} />

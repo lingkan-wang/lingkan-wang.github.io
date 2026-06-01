@@ -24,8 +24,10 @@ export type LoadedProject = { meta: Project; content: string };
 function readProjectFile(slug: string): LoadedProject {
   const full = path.join(WORK_DIR, `${slug}.mdx`);
   const raw = fs.readFileSync(full, "utf8");
-  const { data, content } = matter(raw);
-  return { meta: { slug, ...(data as Omit<Project, "slug">) }, content };
+  const parsed = matter(raw);
+  const data = parsed.data as Partial<Project>;
+  delete data.slug;
+  return { meta: { slug, ...data } as Project, content: parsed.content };
 }
 
 export function getProjectSlugs(): string[] {
@@ -42,6 +44,10 @@ export function getAllProjects(): Project[] {
 }
 
 export function getProject(slug: string): LoadedProject {
+  const resolved = path.join(WORK_DIR, `${slug}.mdx`);
+  if (!resolved.startsWith(WORK_DIR + path.sep)) {
+    throw new Error(`Invalid slug: ${slug}`);
+  }
   return readProjectFile(slug);
 }
 
