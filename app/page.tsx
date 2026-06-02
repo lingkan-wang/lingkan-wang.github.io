@@ -1,5 +1,5 @@
 import { getAllProjects } from "@/lib/projects";
-import { GridHero } from "@/components/grid-hero";
+import { CubeHero } from "@/components/cube-hero";
 import { ProjectCard, type CardItem } from "@/components/project-card";
 import { Reveal } from "@/components/reveal";
 
@@ -15,7 +15,7 @@ export default function Home() {
 
   return (
     <>
-      <GridHero />
+      <CubeHero />
 
       <div className="mx-auto max-w-[1080px] px-6 pb-28">
         <Reveal className="mt-4">
