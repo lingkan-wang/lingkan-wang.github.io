@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { gallery, galleryCategories, type Category } from "@/lib/about";
+import { sfx } from "@/lib/sfx";
 
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
 
@@ -48,7 +49,10 @@ export function PhotoCard() {
 
       <button
         type="button"
-        onClick={() => setI((v) => (v + 1) % items.length)}
+        onClick={() => {
+          sfx.flip();
+          setI((v) => (v + 1) % items.length);
+        }}
         aria-label="Next photo"
         className="group relative mt-3 aspect-[4/3] w-full overflow-hidden rounded-xl border border-border focus-visible:outline-2 focus-visible:outline-accent"
       >
@@ -77,6 +81,7 @@ export function PhotoCard() {
               key={c.key}
               type="button"
               onClick={() => {
+                sfx.tab();
                 setCat(c.key);
                 setI(0);
               }}
