@@ -64,7 +64,7 @@ export function ShowcaseItem({
           muted
           loop
           playsInline
-          preload="none"
+          preload="metadata"
           className="block w-full bg-[color-mix(in_srgb,var(--color-fg)_4%,transparent)]"
         />
       ) : (
