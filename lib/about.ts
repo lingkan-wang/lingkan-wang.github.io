@@ -2,12 +2,12 @@
 // photos curated from her library into public/about/. Swap freely.
 
 export const intro =
-  "Hi, I'm Lingkan \u{1F44B} — or call me Wendy. A product designer who loves turning complex ideas into clean, thoughtful experiences.";
+  "Hi, I'm Lingkan \u{1F44B} — or call me Wendy. A product builder who loves turning complex ideas into clean, thoughtful experiences.";
 
 export const bio: { heading: string; body: string }[] = [
   {
     heading: "Who I am",
-    body: "I'm a product designer who came up through digital media and design, so I sit between the creative side and the figure-it-out side. What I like most is taking something messy (a pile of data, a tangled flow, a fuzzy product goal) and shaping it into something that feels right and actually works. That comes from an old habit of taking things apart to see how they tick, which is pretty much why I landed in design. It's where systems thinking and empathy get to work on the same problem.",
+    body: "I'm a product builder who came up through digital media and design, so I sit between the creative side and the figure-it-out side. What I like most is taking something messy (a pile of data, a tangled flow, a fuzzy product goal) and shaping it into something that feels right and actually works. That comes from an old habit of taking things apart to see how they tick, which is pretty much why I landed in design. It's where systems thinking and empathy get to work on the same problem.",
   },
   {
     heading: "Where I came from",
@@ -44,14 +44,14 @@ export const experience: Job[] = [
   },
   {
     org: "KuaiShou (Kwai)",
-    role: "Product Designer",
+    role: "Product Builder",
     period: "May – Aug 2024",
     blurb: "Designed a B2B growth-intelligence platform for 300+ global guilds, improving data visibility and decision efficiency.",
     tags: ["B2B", "Data Platform", "Growth"],
   },
   {
     org: "Ecovacs Robotics",
-    role: "Product Designer",
+    role: "Product Builder",
     period: "Mar – May 2024",
     blurb: "Designed AI Smart Hosting and real-time feedback systems, simplifying complex automation into intuitive user experiences.",
     tags: ["B2C", "Smart Home", "AI Product"],
@@ -95,7 +95,7 @@ export const wechat = {
 export const xCard = {
   handle: "@WangLingkan",
   // matches the real X profile
-  bio: "Product Designer ✦ build something interesting",
+  bio: "Product Builder ✦ build something interesting",
   meta: "📍 San Jose · joined Nov 2022",
   cta: "Follow on X",
 };

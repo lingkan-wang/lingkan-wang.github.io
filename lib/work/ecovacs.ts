@@ -23,7 +23,7 @@ export const ecovacs = {
     image: `${IMG}/hero.webp`,
     imageAlt: "Four DEEBOT X2 app screens — mapping, AI Smart Hosting, logs, and Lab features",
     meta: [
-      { label: "Role", items: ["Product Designer"] },
+      { label: "Role", items: ["Product Builder"] },
       {
         label: "Team",
         items: ["Product Design", "Software Eng", "Machine Learning", "Hardware R&D", "Product Mgmt"],
