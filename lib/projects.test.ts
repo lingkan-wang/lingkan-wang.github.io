@@ -17,4 +17,11 @@ describe("projects loader", () => {
     expect(prev?.slug).toBe(all[0].slug);
     expect(next?.slug).toBe(all[2].slug);
   });
+
+  it("parses optional at-a-glance fields when present", () => {
+    const bumble = getAllProjects().find((p) => p.slug === "bumble-interest-cards");
+    expect(bumble?.timeline).toBe("5 weeks");
+    expect(bumble?.platform).toBeTruthy();
+    expect(bumble?.tools).toBe("Figma");
+  });
 });

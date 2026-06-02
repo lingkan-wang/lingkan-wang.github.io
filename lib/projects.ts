@@ -10,6 +10,9 @@ export type Project = {
   year: number;
   role: string;
   company?: string;
+  timeline?: string;
+  platform?: string;
+  tools?: string;
   tags: string[];
   summary: string;
   cover?: string;
