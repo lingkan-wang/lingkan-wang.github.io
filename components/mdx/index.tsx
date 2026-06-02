@@ -3,6 +3,10 @@ import { Figure } from "./figure";
 import { Gallery } from "./gallery";
 import { MetricCallout } from "./metric-callout";
 import { Quote } from "./quote";
+import { Stats } from "./stats";
+import { Pillars } from "./pillars";
+import { Personas } from "./personas";
+import { DataNote } from "./data-note";
 
 export function Prose({ children }: { children: ReactNode }) {
   return <div className="mx-auto max-w-[680px] px-6">{children}</div>;
@@ -32,4 +36,8 @@ export const mdxComponents = {
   Gallery,
   MetricCallout,
   Quote,
+  Stats,
+  Pillars,
+  Personas,
+  DataNote,
 };
