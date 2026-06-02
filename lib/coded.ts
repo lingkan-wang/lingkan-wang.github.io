@@ -19,7 +19,7 @@ export const codedWork: CodedWork[] = [
     blurb:
       "A faithful vanilla HTML/CSS/JS recreation of Sonner — stacking toasts, hover-to-expand, swipe-to-dismiss, plus promise & action toasts. Zero dependencies.",
     tags: ["Vanilla JS", "Animation", "Toast"],
-    year: 2025,
+    year: 2026,
     live: "https://lingkan-wang.github.io/toast_component/",
     offset: 150,
   },
@@ -29,7 +29,7 @@ export const codedWork: CodedWork[] = [
     blurb:
       "A feedback button that morphs into a popover and celebrates with a confetti burst on submit. Spring-based layout animation.",
     tags: ["Popover", "Morph", "Confetti"],
-    year: 2025,
+    year: 2026,
     live: "https://lingkan-wang.github.io/feedback-popover/",
     offset: 0,
   },
