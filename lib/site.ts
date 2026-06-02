@@ -11,7 +11,6 @@ export const site = {
     x: "https://x.com/WangLingkan",
     // kept so the (untouched) command palette still compiles; not shown in the header
     instagram: "https://www.instagram.com/wanglingkan183/",
-    resume: "/Lingkan-Wang-Resume.pdf",
   },
   nav: [
     { label: "Home", href: "/" },

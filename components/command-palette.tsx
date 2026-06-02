@@ -192,7 +192,6 @@ export function CommandPalette() {
                   {[
                     { label: "LinkedIn", href: site.links.linkedin },
                     { label: "Instagram", href: site.links.instagram },
-                    { label: "Resume", href: site.links.resume },
                   ].map((link) => (
                     <Item
                       key={link.label}
