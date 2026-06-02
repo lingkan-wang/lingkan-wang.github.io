@@ -12,7 +12,7 @@ export function Footer() {
         </a>
         <div className="mt-8 flex items-center justify-center gap-6 text-sm text-muted">
           <a href={site.links.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-fg">LinkedIn</a>
-          <a href={site.links.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-fg">Instagram</a>
+          <a href={site.links.x} target="_blank" rel="noopener noreferrer" className="hover:text-fg">X</a>
           <a href={site.links.resume} target="_blank" rel="noopener noreferrer" className="hover:text-fg">Resume</a>
         </div>
         <p className="mt-10 font-mono text-xs uppercase tracking-widest text-muted">

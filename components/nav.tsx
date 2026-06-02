@@ -18,17 +18,22 @@ function SocialLinks() {
           <path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.5 8h4.96v15.5H.5zM8.5 8h4.75v2.12h.07c.66-1.18 2.28-2.42 4.69-2.42 5.02 0 5.95 3.18 5.95 7.3v8.5h-4.96v-7.53c0-1.8-.03-4.1-2.62-4.1-2.62 0-3.02 1.95-3.02 3.97v7.66H8.5z" />
         </svg>
       </a>
-      <a href={site.links.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={iconLink}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-          <rect x="3" y="3" width="18" height="18" rx="5" />
-          <circle cx="12" cy="12" r="4" />
-          <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
+      <a href={site.links.x} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className={iconLink}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
       </a>
       <a href={`mailto:${site.email}`} aria-label="Email" className={iconLink}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <rect x="3" y="5" width="18" height="14" rx="2" />
           <path d="m3 7 9 6 9-6" />
+        </svg>
+      </a>
+      <a href={site.links.resume} target="_blank" rel="noopener noreferrer" aria-label="Resume" className={iconLink}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <path d="M14 2v6h6" />
+          <path d="M8 13h8M8 17h6" />
         </svg>
       </a>
     </>
@@ -61,12 +66,9 @@ export function Nav() {
             ))}
           </div>
 
-          {/* right: socials + resume + theme (desktop) */}
+          {/* right: social icons + theme (desktop) */}
           <div className="hidden items-center gap-3.5 sm:flex">
             <SocialLinks />
-            <a href={site.links.resume} target="_blank" rel="noopener noreferrer" className="text-sm text-muted transition-colors hover:text-fg">
-              Resume
-            </a>
             <ThemeToggle />
           </div>
 
@@ -105,9 +107,6 @@ export function Nav() {
                     {item.label}
                   </Link>
                 ))}
-                <a href={site.links.resume} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="py-2 text-sm text-muted hover:text-fg">
-                  Resume
-                </a>
                 <div className="mt-2 flex items-center gap-4 border-t border-border pt-3 text-muted">
                   <SocialLinks />
                 </div>
