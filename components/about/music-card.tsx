@@ -1,44 +1,85 @@
-import { spotify } from "@/lib/about";
+"use client";
+
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { track } from "@/lib/about";
 import { SpotifyGlyph } from "./app-icons";
 
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
 
 export function MusicCard() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  function toggle() {
+    const a = audioRef.current;
+    if (!a) return;
+    if (a.paused) void a.play();
+    else a.pause();
+  }
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between">
         <span className={label}>On repeat</span>
-        <SpotifyGlyph />
+        <a href={track.href} target="_blank" rel="noopener noreferrer" aria-label="Open in Spotify" className="rounded-[8px] focus-visible:outline-2 focus-visible:outline-accent">
+          <SpotifyGlyph />
+        </a>
       </div>
 
-      {spotify.embed ? (
-        <iframe
-          src={spotify.embed}
-          title="Spotify player"
-          loading="lazy"
-          height={152}
-          className="mt-3 w-full flex-1 rounded-xl"
-          style={{ border: 0, minHeight: 152 }}
-          allow="encrypted-media; clipboard-write"
+      <div className="mt-5 flex items-center gap-3.5">
+        <Image
+          src={track.cover}
+          alt={`${track.title} cover`}
+          width={120}
+          height={120}
+          className="size-14 shrink-0 rounded-lg border border-border object-cover"
         />
-      ) : (
-        <a
-          href={spotify.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-auto flex items-center gap-3 rounded-xl border border-border p-3 transition-colors hover:border-fg/30"
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-sm font-medium text-fg">{track.title}</div>
+          <div className="truncate text-[13px] text-muted">{track.artist}</div>
+        </div>
+        <button
+          type="button"
+          onClick={toggle}
+          aria-label={playing ? "Pause" : "Play"}
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-fg text-bg transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#1DB954] text-white">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 14.43a.62.62 0 0 1-.86.21c-2.35-1.44-5.3-1.76-8.79-.96a.62.62 0 1 1-.28-1.22c3.8-.87 7.08-.5 9.72 1.11.3.18.39.57.21.86zm1.23-2.74a.78.78 0 0 1-1.07.26c-2.69-1.65-6.79-2.13-9.97-1.17a.78.78 0 1 1-.45-1.49c3.63-1.1 8.15-.56 11.23 1.33.37.23.49.71.26 1.07zm.11-2.85C14.83 8.95 9.3 8.77 6.2 9.71a.93.93 0 1 1-.54-1.79c3.56-1.08 9.66-.87 13.48 1.4a.94.94 0 0 1-.96 1.6z" />
+          {playing ? (
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <rect x="6" y="5" width="4" height="14" rx="1" />
+              <rect x="14" y="5" width="4" height="14" rx="1" />
             </svg>
-          </span>
-          <span className="min-w-0">
-            <span className="block text-sm font-medium text-fg">My Spotify</span>
-            <span className="block text-xs text-muted">Liked songs &amp; playlists ↗</span>
-          </span>
-        </a>
-      )}
+          ) : (
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M8 5.5v13l10-6.5z" />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      <div className="mt-auto pt-5">
+        <div className="h-[3px] w-full overflow-hidden rounded-full bg-fg/10">
+          <div className="h-full rounded-full bg-fg" style={{ width: `${progress * 100}%` }} />
+        </div>
+      </div>
+
+      <audio
+        ref={audioRef}
+        src={track.src}
+        preload="metadata"
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={() => {
+          setPlaying(false);
+          setProgress(0);
+        }}
+        onTimeUpdate={(e) => {
+          const a = e.currentTarget;
+          setProgress(a.duration ? a.currentTime / a.duration : 0);
+        }}
+      />
     </div>
   );
 }
