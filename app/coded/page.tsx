@@ -5,6 +5,8 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: `Coded Work — ${site.name}` };
 
+const FRAME_H = 420; // uniform visible height for every project frame
+
 export default function CodedWorkPage() {
   return (
     <div className="mx-auto max-w-[1080px] px-6 pb-28 pt-20 sm:pt-28">
@@ -19,13 +21,14 @@ export default function CodedWorkPage() {
         {codedWork.map((p, i) => (
           <Reveal key={p.slug} delay={(i % 2) * 0.05}>
             <article>
-              {/* live, fully-playable demo — all interaction happens inside the frame */}
-              <div className="overflow-hidden rounded-xl border border-border bg-[#fafafa]">
+              {/* live, fully-playable demo — all interaction happens inside the frame.
+                  Uniform height; `offset` crops the demo's own heading off the top. */}
+              <div className="overflow-hidden rounded-xl border border-border bg-[#fafafa]" style={{ height: FRAME_H }}>
                 <iframe
                   src={p.live}
                   title={`${p.title} — live demo`}
                   loading="lazy"
-                  style={{ height: p.height }}
+                  style={{ height: FRAME_H + p.offset, marginTop: -p.offset }}
                   className="block w-full"
                 />
               </div>

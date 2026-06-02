@@ -1,5 +1,7 @@
 // Coded Work = things you design AND build. Each is shown as a live, fully-playable
 // demo embedded from its GitHub Pages URL (all interaction happens inside the frame).
+// `offset` crops that many px off the TOP of the embed (to hide a demo's own redundant
+// heading); every card uses the same visible frame height.
 export type CodedWork = {
   slug: string;
   title: string;
@@ -7,7 +9,7 @@ export type CodedWork = {
   tags: string[];
   year: number;
   live: string;
-  height: number; // embed height (px) tuned to the demo
+  offset: number;
 };
 
 export const codedWork: CodedWork[] = [
@@ -19,7 +21,7 @@ export const codedWork: CodedWork[] = [
     tags: ["Vanilla JS", "Animation", "Toast"],
     year: 2025,
     live: "https://lingkan-wang.github.io/toast_component/",
-    height: 560,
+    offset: 150,
   },
   {
     slug: "feedback-popover",
@@ -29,6 +31,6 @@ export const codedWork: CodedWork[] = [
     tags: ["Popover", "Morph", "Confetti"],
     year: 2025,
     live: "https://lingkan-wang.github.io/feedback-popover/",
-    height: 460,
+    offset: 0,
   },
 ];
