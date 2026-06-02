@@ -12,8 +12,7 @@ export const site = {
     x: "https://x.com/",
     // kept so the (untouched) command palette still compiles; not shown in the header
     instagram: "https://www.instagram.com/wanglingkan183/",
-    resume:
-      "https://f25e664d-0de6-4453-b79e-acf199c878cf.filesusr.com/ugd/d19660_905b470ad44147a3abd29a3f35925ce6.pdf",
+    resume: "/Lingkan-Wang-Resume.pdf",
   },
   nav: [
     { label: "Home", href: "/" },
