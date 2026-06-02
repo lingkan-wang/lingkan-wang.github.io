@@ -19,14 +19,14 @@ export default function CodedWorkPage() {
         {codedWork.map((p, i) => (
           <Reveal key={p.slug} delay={(i % 2) * 0.05}>
             <article>
-              {/* live, playable demo */}
+              {/* live, fully-playable demo — all interaction happens inside the frame */}
               <div className="overflow-hidden rounded-xl border border-border bg-[#fafafa]">
                 <iframe
                   src={p.live}
                   title={`${p.title} — live demo`}
                   loading="lazy"
-                  sandbox="allow-scripts allow-same-origin allow-popups"
-                  className="block h-[380px] w-full"
+                  style={{ height: p.height }}
+                  className="block w-full"
                 />
               </div>
 
@@ -44,15 +44,6 @@ export default function CodedWorkPage() {
               </div>
 
               <p className="mt-2 max-w-prose text-[13px] leading-snug text-muted">{p.blurb}</p>
-
-              <div className="mt-3 flex items-center gap-5 text-sm">
-                <a href={p.live} target="_blank" rel="noopener noreferrer" className="text-accent underline-offset-4 hover:underline">
-                  Live ↗
-                </a>
-                <a href={p.code} target="_blank" rel="noopener noreferrer" className="text-muted transition-colors hover:text-fg">
-                  Code ↗
-                </a>
-              </div>
             </article>
           </Reveal>
         ))}
