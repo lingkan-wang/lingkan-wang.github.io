@@ -93,8 +93,10 @@ export const wechat = {
 
 export const xCard = {
   handle: "@WangLingkan",
-  blurb: "designing AI-powered products ✦",
-  prev: "prev @Ecovacs · @Kwai · @Varsity Tutors · CMU",
+  // matches the real X profile
+  bio: "Product Designer ✦ build something interesting",
+  meta: "📍 San Jose · joined Nov 2022",
+  cta: "Follow on X",
 };
 
 export type Category = "people" | "landscape" | "food" | "pets";

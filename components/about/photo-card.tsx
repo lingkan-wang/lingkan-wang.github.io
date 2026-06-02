@@ -8,16 +8,16 @@ import { gallery, galleryCategories, type Category } from "@/lib/about";
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
 
 function PhotosIcon() {
-  // little Apple-Photos-style pinwheel
+  // Apple Photos flower (8 colored petals radiating from the center)
+  const colors = ["#FCC419", "#FF922B", "#F76707", "#F03E3E", "#E64980", "#BE4BDB", "#4C6EF5", "#3BC9DB"];
   return (
-    <span
-      className="size-5 shrink-0 rounded-[5px]"
-      style={{
-        background:
-          "conic-gradient(#fbbf24, #fb7185, #c084fc, #60a5fa, #34d399, #fbbf24)",
-      }}
-      aria-hidden
-    />
+    <span className="grid size-6 shrink-0 place-items-center rounded-[6px] bg-white shadow-sm" aria-hidden>
+      <svg viewBox="0 0 24 24" className="size-[19px] overflow-visible">
+        {colors.map((c, i) => (
+          <ellipse key={i} cx="12" cy="7.4" rx="2.7" ry="5" fill={c} opacity="0.82" transform={`rotate(${i * 45} 12 12)`} />
+        ))}
+      </svg>
+    </span>
   );
 }
 

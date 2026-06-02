@@ -18,8 +18,8 @@ export function XCard() {
         </svg>
       </div>
 
-      <p className="mt-3 text-[15px] leading-snug text-fg">{xCard.blurb}</p>
-      <p className="mt-1 text-[13px] leading-snug text-muted">{xCard.prev}</p>
+      <p className="mt-3 text-[15px] leading-snug text-fg">{xCard.bio}</p>
+      <p className="mt-1 text-[13px] leading-snug text-muted">{xCard.meta}</p>
 
       <a
         href={site.links.x}
@@ -27,7 +27,7 @@ export function XCard() {
         rel="noopener noreferrer"
         className="mt-auto inline-flex w-fit items-center gap-1 rounded-full border border-border px-3 py-1.5 text-sm text-fg transition-colors hover:border-fg/30"
       >
-        Read my posts ↗
+        {xCard.cta} ↗
       </a>
     </div>
   );
