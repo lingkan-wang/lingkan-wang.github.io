@@ -8,13 +8,23 @@ import { gallery, galleryCategories, type Category } from "@/lib/about";
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
 
 function PhotosIcon() {
-  // Apple Photos flower (8 colored petals radiating from the center)
-  const colors = ["#FCC419", "#FF922B", "#F76707", "#F03E3E", "#E64980", "#BE4BDB", "#4C6EF5", "#3BC9DB"];
+  // Apple Photos flower — 8 translucent pill petals, multiply-blended, white center
+  const colors = ["#FCA000", "#9FC93C", "#4FB748", "#17B6C6", "#3FA2F7", "#B05CD6", "#F186B7", "#FF5247"];
   return (
-    <span className="grid size-6 shrink-0 place-items-center rounded-[6px] bg-white shadow-sm" aria-hidden>
-      <svg viewBox="0 0 24 24" className="size-[19px] overflow-visible">
+    <span className="grid size-6 shrink-0 place-items-center overflow-hidden rounded-[6px] bg-white" aria-hidden>
+      <svg viewBox="0 0 24 24" className="size-[21px]">
         {colors.map((c, i) => (
-          <ellipse key={i} cx="12" cy="7.4" rx="2.7" ry="5" fill={c} opacity="0.82" transform={`rotate(${i * 45} 12 12)`} />
+          <rect
+            key={i}
+            x="9.8"
+            y="2.4"
+            width="4.4"
+            height="8.4"
+            rx="2.2"
+            fill={c}
+            style={{ mixBlendMode: "multiply" }}
+            transform={`rotate(${i * 45} 12 12)`}
+          />
         ))}
       </svg>
     </span>
