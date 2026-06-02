@@ -111,7 +111,7 @@ export function CubeHero() {
                     onClick={() => reveal(id, item.label)}
                     aria-label={isOpen ? `Hide: ${item.label}` : `Reveal illustration: ${item.label}`}
                     className="relative overflow-hidden rounded-[5px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
-                    style={{ ...preserve, ...hideBack }}
+                    style={{ ...preserve, ...hideBack, boxShadow: "0 2px 7px rgba(0,0,0,.32)" }}
                   >
                     {/* illustration layer (revealed) */}
                     <span className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: "#f4f4f4" }}>
@@ -125,7 +125,12 @@ export function CubeHero() {
                     {/* black cover — crossfades away on click */}
                     <motion.span
                       className="absolute inset-0"
-                      style={{ ...hideBack, backgroundColor: "#101010", boxShadow: "inset 0 0 0 1px rgba(255,255,255,.05)" }}
+                      style={{
+                        ...hideBack,
+                        background: "linear-gradient(152deg, #2b2b2b 0%, #181818 52%, #0a0a0a 100%)",
+                        boxShadow:
+                          "inset 0 1px 1px rgba(255,255,255,.10), inset 0 -2px 5px rgba(0,0,0,.5)",
+                      }}
                       animate={{ opacity: isOpen ? 0 : 1 }}
                       transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
                     />
