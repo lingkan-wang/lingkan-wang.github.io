@@ -1,33 +1,62 @@
 import type { Metadata } from "next";
 import { codedWork } from "@/lib/coded";
-import { ProjectList, type ListItem } from "@/components/project-list";
 import { Reveal } from "@/components/reveal";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: `Coded Work — ${site.name}` };
 
 export default function CodedWorkPage() {
-  const items: ListItem[] = codedWork.map((c) => ({
-    title: c.title,
-    tags: c.tags,
-    outcome: c.outcome,
-    year: c.year,
-    href: c.href,
-  }));
-
   return (
-    <div className="mx-auto max-w-[760px] px-6 pb-28 pt-20 sm:pt-28">
+    <div className="mx-auto max-w-[1080px] px-6 pb-28 pt-20 sm:pt-28">
       <Reveal>
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Coded Work</h1>
-        <p className="mt-4 max-w-prose text-[15px] leading-7 text-muted">
-          Small things I vibe-code — components, interactions, and UI experiments I design and build.
-          [Replace with your own intro.]
+        <p className="mt-4 max-w-[640px] text-[15px] leading-7 text-muted">
+          Interactive components I design and build — live and playable right here. Have a click.
         </p>
       </Reveal>
 
-      <Reveal delay={0.05} className="mt-12">
-        <ProjectList items={items} />
-      </Reveal>
+      <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2">
+        {codedWork.map((p, i) => (
+          <Reveal key={p.slug} delay={(i % 2) * 0.05}>
+            <article>
+              {/* live, playable demo */}
+              <div className="overflow-hidden rounded-xl border border-border bg-[#fafafa]">
+                <iframe
+                  src={p.live}
+                  title={`${p.title} — live demo`}
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin allow-popups"
+                  className="block h-[380px] w-full"
+                />
+              </div>
+
+              <div className="mt-4 flex items-baseline justify-between gap-4">
+                <h2 className="text-lg font-medium tracking-tight">{p.title}</h2>
+                <span className="shrink-0 font-mono text-xs text-muted">{p.year}</span>
+              </div>
+
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {p.tags.map((t) => (
+                  <span key={t} className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <p className="mt-2 max-w-prose text-[13px] leading-snug text-muted">{p.blurb}</p>
+
+              <div className="mt-3 flex items-center gap-5 text-sm">
+                <a href={p.live} target="_blank" rel="noopener noreferrer" className="text-accent underline-offset-4 hover:underline">
+                  Live ↗
+                </a>
+                <a href={p.code} target="_blank" rel="noopener noreferrer" className="text-muted transition-colors hover:text-fg">
+                  Code ↗
+                </a>
+              </div>
+            </article>
+          </Reveal>
+        ))}
+      </div>
     </div>
   );
 }
