@@ -4,7 +4,6 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
-import { Footer } from "@/components/footer";
 import { CommandPalette } from "@/components/command-palette";
 import { site } from "@/lib/site";
 
@@ -21,7 +20,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <Nav />
           <main className="flex-1">{children}</main>
-          <Footer />
           <CommandPalette />
         </ThemeProvider>
       </body>
