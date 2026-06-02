@@ -8,7 +8,7 @@ import { AppleMusicGlyph } from "./app-icons";
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
 // secondary (ghost) transport controls — muted, lift to fg on hover
 const ghost =
-  "grid size-8 place-items-center rounded-full text-muted transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+  "grid size-7 place-items-center rounded-full text-muted transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 export function MusicCard() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -60,7 +60,7 @@ export function MusicCard() {
       </div>
 
       {/* transport control bar */}
-      <div className="mt-auto flex items-center justify-between rounded-full border border-border px-3.5 py-1.5">
+      <div className="mt-auto flex items-center justify-between rounded-full border border-border px-2.5 py-1">
         <a
           href={track.href}
           target="_blank"
@@ -88,15 +88,15 @@ export function MusicCard() {
           type="button"
           onClick={toggle}
           aria-label={playing ? "Pause" : "Play"}
-          className="grid size-10 place-items-center rounded-full bg-fg text-bg transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="grid size-8 place-items-center rounded-full bg-fg text-bg transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {playing ? (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <rect x="6" y="5" width="4" height="14" rx="1" />
               <rect x="14" y="5" width="4" height="14" rx="1" />
             </svg>
           ) : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <path d="M8 5v14l11-7z" />
             </svg>
           )}
