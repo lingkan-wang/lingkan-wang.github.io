@@ -10,7 +10,7 @@ export function WechatCard() {
     <div className="flex h-full flex-col">
       <span className="font-mono text-[10px] uppercase tracking-widest text-muted">WeChat</span>
       <div className="mt-3 flex flex-1 flex-col items-center justify-center gap-2 text-center">
-        <div className="grid size-28 place-items-center overflow-hidden rounded-xl border border-border bg-bg">
+        <div className="grid aspect-square w-full max-w-[190px] place-items-center overflow-hidden rounded-xl border border-border bg-white p-1.5">
           {ok ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={wechat.qr} alt="WeChat QR code" className="size-full object-contain" onError={() => setOk(false)} />
