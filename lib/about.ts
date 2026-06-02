@@ -81,8 +81,8 @@ export const location = "United States";
 // visitors. Leave `embed` empty to show a link card; set it to a PUBLIC playlist embed
 // (open.spotify.com/embed/playlist/<id>) to render an inline player.
 export const spotify = {
-  embed: "",
-  url: "https://open.spotify.com/collection/tracks",
+  embed: "https://open.spotify.com/embed/playlist/3qoECMXj5TWW5k3pZigU2U?utm_source=generator",
+  url: "https://open.spotify.com/playlist/3qoECMXj5TWW5k3pZigU2U",
 };
 
 export const wechat = {
@@ -92,7 +92,7 @@ export const wechat = {
 };
 
 export const xCard = {
-  handle: "@lingkan", // TODO: your real X handle
+  handle: "@WangLingkan",
   blurb: "designing AI-powered products ✦",
   prev: "prev @Ecovacs · @Kwai · @Varsity Tutors · CMU",
 };

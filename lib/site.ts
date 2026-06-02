@@ -8,8 +8,7 @@ export const site = {
   email: "wanglingkan614@gmail.com",
   links: {
     linkedin: "https://www.linkedin.com/in/lingkanwang/",
-    // TODO: replace with your real X (Twitter) handle, e.g. https://x.com/yourhandle
-    x: "https://x.com/",
+    x: "https://x.com/WangLingkan",
     // kept so the (untouched) command palette still compiles; not shown in the header
     instagram: "https://www.instagram.com/wanglingkan183/",
     resume: "/Lingkan-Wang-Resume.pdf",
