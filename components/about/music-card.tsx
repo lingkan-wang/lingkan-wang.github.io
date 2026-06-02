@@ -1,21 +1,14 @@
 import { spotify } from "@/lib/about";
+import { SpotifyGlyph } from "./app-icons";
 
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
-
-function SpotifyIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="#1DB954" className="size-5 shrink-0" aria-hidden>
-      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 14.43a.62.62 0 0 1-.86.21c-2.35-1.44-5.3-1.76-8.79-.96a.62.62 0 1 1-.28-1.22c3.8-.87 7.08-.5 9.72 1.11.3.18.39.57.21.86zm1.23-2.74a.78.78 0 0 1-1.07.26c-2.69-1.65-6.79-2.13-9.97-1.17a.78.78 0 1 1-.45-1.49c3.63-1.1 8.15-.56 11.23 1.33.37.23.49.71.26 1.07zm.11-2.85C14.83 8.95 9.3 8.77 6.2 9.71a.93.93 0 1 1-.54-1.79c3.56-1.08 9.66-.87 13.48 1.4a.94.94 0 0 1-.96 1.6z" />
-    </svg>
-  );
-}
 
 export function MusicCard() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between">
         <span className={label}>On repeat</span>
-        <SpotifyIcon />
+        <SpotifyGlyph />
       </div>
 
       {spotify.embed ? (

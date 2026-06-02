@@ -2,13 +2,17 @@
 
 import { useState } from "react";
 import { wechat } from "@/lib/about";
+import { WechatGlyph } from "./app-icons";
 
 export function WechatCard() {
   const [ok, setOk] = useState(true);
 
   return (
     <div className="flex h-full flex-col">
-      <span className="font-mono text-[10px] uppercase tracking-widest text-muted">WeChat</span>
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[10px] uppercase tracking-widest text-muted">WeChat</span>
+        <WechatGlyph />
+      </div>
       <div className="mt-3 flex flex-1 flex-col items-center justify-center gap-2 text-center">
         <div className="grid aspect-square w-full max-w-[190px] place-items-center overflow-hidden rounded-xl border border-border bg-white p-1.5">
           {ok ? (

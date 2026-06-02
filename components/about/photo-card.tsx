@@ -5,32 +5,9 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { gallery, galleryCategories, type Category } from "@/lib/about";
 import { sfx } from "@/lib/sfx";
+import { PhotosGlyph } from "./app-icons";
 
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
-
-function PhotosIcon() {
-  // Apple Photos flower — 8 translucent pill petals, multiply-blended, white center
-  const colors = ["#FCA000", "#9FC93C", "#4FB748", "#17B6C6", "#3FA2F7", "#B05CD6", "#F186B7", "#FF5247"];
-  return (
-    <span className="grid size-6 shrink-0 place-items-center overflow-hidden rounded-[6px] bg-white" aria-hidden>
-      <svg viewBox="0 0 24 24" className="size-[21px]">
-        {colors.map((c, i) => (
-          <rect
-            key={i}
-            x="9.8"
-            y="2.4"
-            width="4.4"
-            height="8.4"
-            rx="2.2"
-            fill={c}
-            style={{ mixBlendMode: "multiply" }}
-            transform={`rotate(${i * 45} 12 12)`}
-          />
-        ))}
-      </svg>
-    </span>
-  );
-}
 
 export function PhotoCard() {
   const reduce = useReducedMotion();
@@ -44,7 +21,7 @@ export function PhotoCard() {
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between">
         <span className={label}>Life · tap to flip</span>
-        <PhotosIcon />
+        <PhotosGlyph />
       </div>
 
       <div className="group relative mt-3 aspect-[4/5] w-full flex-1 overflow-hidden rounded-xl border border-border">

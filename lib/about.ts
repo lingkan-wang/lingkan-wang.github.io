@@ -81,7 +81,9 @@ export const location = "United States";
 // visitors. Leave `embed` empty to show a link card; set it to a PUBLIC playlist embed
 // (open.spotify.com/embed/playlist/<id>) to render an inline player.
 export const spotify = {
-  embed: "https://open.spotify.com/embed/playlist/3qoECMXj5TWW5k3pZigU2U?utm_source=generator",
+  // single track (first song of the playlist) — a clean one-song player like Marco's.
+  // swap the track id to feature a different song.
+  embed: "https://open.spotify.com/embed/track/7hh9thCsJKYLXYsFG3bstY?utm_source=generator",
   url: "https://open.spotify.com/playlist/3qoECMXj5TWW5k3pZigU2U",
 };
 
