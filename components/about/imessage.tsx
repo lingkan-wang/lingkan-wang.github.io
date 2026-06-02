@@ -43,6 +43,7 @@ export function IMessage() {
           value={msg}
           onChange={(e) => setMsg(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
+          onPointerDownCapture={(e) => e.stopPropagation()}
           placeholder="iMessage…"
           aria-label="Your message"
           className="min-w-0 flex-1 rounded-full border border-border bg-bg px-4 py-2 text-sm outline-none transition-colors focus-visible:border-fg/40"
@@ -50,6 +51,7 @@ export function IMessage() {
         <button
           type="button"
           onClick={send}
+          onPointerDownCapture={(e) => e.stopPropagation()}
           aria-label="Send"
           className="grid size-8 shrink-0 place-items-center rounded-full bg-accent text-white transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-accent"
         >
