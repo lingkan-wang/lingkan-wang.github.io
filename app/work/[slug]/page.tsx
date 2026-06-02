@@ -7,6 +7,7 @@ import { getProjectSlugs, getProject, getAdjacent, type LoadedProject } from "@/
 import { site } from "@/lib/site";
 import { mdxComponents, Prose } from "@/components/mdx";
 import { Placeholder } from "@/components/placeholder";
+import { ProjectMeta } from "@/components/project-meta";
 import { Reveal } from "@/components/reveal";
 
 export function generateStaticParams() {
@@ -53,6 +54,7 @@ export default async function CaseStudy({
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{meta.title}</h1>
           <p className="mt-4 text-lg text-muted">{meta.summary}</p>
+          <ProjectMeta meta={meta} />
         </Reveal>
       </header>
 

@@ -5,12 +5,12 @@ import { MetricCallout } from "./metric-callout";
 import { Quote } from "./quote";
 
 export function Prose({ children }: { children: ReactNode }) {
-  return <div className="mx-auto max-w-[680px] px-6">{children}</div>;
+  return <div className="case-prose mx-auto max-w-[680px] px-6">{children}</div>;
 }
 
 export const mdxComponents = {
   h2: (props: React.ComponentProps<"h2">) => (
-    <h2 className="mt-16 mb-4 text-2xl font-semibold tracking-tight" {...props} />
+    <h2 className="mt-16 mb-4 border-t border-border pt-8 text-2xl font-semibold tracking-tight" {...props} />
   ),
   h3: (props: React.ComponentProps<"h3">) => (
     <h3 className="mt-10 mb-3 text-lg font-semibold" {...props} />
