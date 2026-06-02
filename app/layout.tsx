@@ -11,7 +11,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: `${site.name} — ${site.role}`,
   description: site.intro,
-  icons: { icon: "/logo.png" },
+  // favicon is served from app/favicon.ico + app/icon.png (full-bleed square avatar)
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
