@@ -35,8 +35,8 @@ function tone({ freq, type = "sine", dur = 0.09, vol = 0.1, drop = 0.6 }: Tone) 
 }
 
 export const sfx = {
-  /** soft "tock" — photo flip */
-  flip: () => tone({ freq: 520, type: "sine", dur: 0.1, vol: 0.12, drop: 0.55 }),
+  /** crisp "di" — photo flip */
+  flip: () => tone({ freq: 1046, type: "sine", dur: 0.055, vol: 0.1, drop: 1 }),
   /** brighter "tick" — category select */
   tab: () => tone({ freq: 880, type: "triangle", dur: 0.07, vol: 0.09, drop: 0.85 }),
 };
