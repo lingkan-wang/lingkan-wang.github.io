@@ -49,10 +49,27 @@ export default async function CaseStudy({
       <header className="mx-auto max-w-[680px] px-6">
         <Reveal>
           <p className="font-mono text-xs uppercase tracking-widest text-muted">
-            {meta.role} · {meta.year} · {meta.tags.join(", ")}
+            {meta.company ?? meta.role} · {meta.year}
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{meta.title}</h1>
           <p className="mt-4 text-lg text-muted">{meta.summary}</p>
+
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {meta.tags.map((t) => (
+              <span key={t} className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted">
+                {t}
+              </span>
+            ))}
+          </div>
+
+          <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-border pt-6 text-sm sm:grid-cols-4">
+            <MetaItem label="Role" value={meta.role} />
+            {meta.duration && <MetaItem label="Duration" value={meta.duration} />}
+            {meta.skills && <MetaItem label="Skills" value={meta.skills.join(" · ")} />}
+            {meta.tools && <MetaItem label="Tools" value={meta.tools.join(" · ")} />}
+          </dl>
+
+          {meta.context && <p className="mt-5 text-xs text-muted">{meta.context}</p>}
         </Reveal>
       </header>
 
@@ -95,5 +112,14 @@ export default async function CaseStudy({
         )}
       </nav>
     </article>
+  );
+}
+
+function MetaItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="font-mono text-[10px] uppercase tracking-widest text-muted">{label}</dt>
+      <dd className="mt-1 text-sm text-fg/90">{value}</dd>
+    </div>
   );
 }
