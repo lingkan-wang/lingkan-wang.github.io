@@ -87,15 +87,15 @@ export function CubeHero() {
           {FACES.map((face) => (
             <div
               key={face.key}
-              className="absolute grid grid-cols-3 gap-1.5 rounded-xl p-1.5"
-              style={{ ...preserve, ...hideBack, width: SIZE, height: SIZE, transform: face.t, backgroundColor: "#8c8c8c" }}
+              className="absolute grid grid-cols-3 gap-[2px] rounded-lg p-[3px]"
+              style={{ ...preserve, ...hideBack, width: SIZE, height: SIZE, transform: face.t, backgroundColor: "#9a9a9a" }}
             >
               {BLACK.map((isBlack, i) => {
                 if (!isBlack) {
                   return (
                     <div
                       key={i}
-                      className="rounded-md"
+                      className="rounded-[5px]"
                       style={{ ...hideBack, backgroundColor: "#f4f4f4", boxShadow: "inset 0 0 0 1px rgba(0,0,0,.12)" }}
                     />
                   );
@@ -110,7 +110,7 @@ export function CubeHero() {
                     type="button"
                     onClick={() => reveal(id, item.label)}
                     aria-label={isOpen ? `Hide: ${item.label}` : `Reveal illustration: ${item.label}`}
-                    className="relative overflow-hidden rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+                    className="relative overflow-hidden rounded-[5px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
                     style={{ ...preserve, ...hideBack }}
                   >
                     {/* illustration layer (revealed) */}
