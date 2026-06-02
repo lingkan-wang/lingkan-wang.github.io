@@ -1,45 +1,248 @@
 ---
-title: "Varsity Tutors Parent Dashboard"
+title: "A Trackable Parent Dashboard"
 slug: "varsity-tutors-parent-dashboard"
 year: 2025
 role: "Product Designer"
 company: "Varsity Tutors"
+duration: "8 weeks"
+skills: ["UX/UI Design", "Data Analysis", "User Research"]
+tools: ["Figma"]
+context: "CMU METALS Capstone × Varsity Tutors"
 tags: ["EdTech", "AI", "B2C"]
-summary: "A parent dashboard that translates session data into clear visualizations of student progress and personalized action steps."
-cover: ""
-thumbnail: ""
+summary: "Transforming raw tutoring data into clear, actionable progress insights that help parents understand, support, and stay engaged in their child's learning journey."
+cover: "/work/varsity/cover-homepage.png"
+thumbnail: "/work/varsity/cover-homepage.png"
 order: 2
 featured: false
 confidential: false
 ---
 
-## Overview
+## Brief
 
-[One paragraph: the context, the product, and the problem this project set out to solve. Replace with real copy.]
+As part of CMU's METALS Capstone, I worked with Varsity Tutors to improve how parents stay informed about their child's academic progress. The goal was a transparent, engaging parent experience that turns tutoring session data into meaningful, actionable updates. I contributed to research synthesis, data strategy, and the MVP design of a parent-facing progress dashboard, now in the development pipeline.
 
-<Figure alt="Project overview" breakout caption="Overview — replace with a real image" />
+## Background
 
-## Problem & Insight
+Varsity Tutors is expanding its personalized tutoring for high school students preparing for SAT/ACT/AP. But current parent reports lack depth, making it hard for families to stay engaged. After COVID-19, remote and hybrid learning became the norm, raising the need for data-driven, trust-building tools that support learning beyond grades.
 
-[What you learned from research and the key insight that shaped the direction.]
+Our research revealed that parents want clearer evidence of progress, personalized next steps, and more visibility into what their child is actually learning.
 
-## Process
+## Discovery workshop
 
-[Explorations, the decisions you made, and how the work evolved.]
+Before defining research questions, our team ran a collaborative workshop to understand what parents struggle with across the tutoring experience. We mapped a full Parent Blueprint — emotional states, actions, and pain points across searching for a platform, matching with a tutor, ongoing sessions, and reviewing progress — then ran a Crazy 8 ideation session, clustered the ideas, and prioritized the most critical opportunities.
 
 <Gallery>
-  <Figure alt="Exploration 1" />
-  <Figure alt="Exploration 2" />
+  <Figure src="/work/varsity/workshop.png" alt="Team discovery workshop session" caption="Collaborative discovery workshop" />
+  <Figure src="/work/varsity/parent-blueprint.png" alt="Parent Blueprint mapped on a whiteboard" caption="Mapping the Parent Blueprint" />
 </Gallery>
 
-## Solution
+### Research questions
 
-[The final design. Walk through the core flows and screens.]
+<Pillars items={[
+  { title: "RQ1", body: "What methodologies can effectively assess skill mastery in tutoring sessions?" },
+  { title: "RQ2", body: "How can AI accurately identify and map skills from transcribed tutoring sessions to common standards?" },
+]} />
 
-<Figure alt="Final solution" breakout />
+## Methods
 
-## Impact
+<Stats items={[
+  { value: "8 wks", label: "Duration" },
+  { value: "104", label: "Survey responses" },
+  { value: "4", label: "Parent interviews" },
+]} />
 
-<MetricCallout value="—" label="Replace with a real result or remove" />
+We used a mixed-methods approach combining academic research with real-world user input:
 
-[Outcomes and what you learned. For confidential projects, keep this qualitative.]
+- **Literature review** — learning-science frameworks to define "progress" across behavioral, cognitive, and emotional dimensions.
+- **Expert interview** — a UX researcher at Varsity Tutors, to understand workflows, data trust points, and internal metrics.
+- **Parent survey (N = 104)** — how parents assess tutoring effectiveness and which signals they prioritize.
+- **Parent interviews (×4)** — semi-structured sessions with parents who are also educators, to uncover deeper needs and mental models.
+
+## Synthesizing insights
+
+To make sense of the qualitative data, we used affinity diagramming — each team member extracted observations from the raw data, and together we clustered recurring themes around pain points, expectations, and decision cues. This distilled a large volume of input into four core insights.
+
+<Figure src="/work/varsity/affinity.png" alt="Affinity diagram clustering interview and survey insights" width="wide" caption="Affinity diagramming the research data" />
+
+### Key findings
+
+<Quote cite="Parent interview">The content my child produces is more important than letter grades.</Quote>
+
+Parents value qualitative and quantitative indicators together, preferring real evidence — learning artifacts or tutor notes — over abstract grades alone.
+
+<Quote cite="Parent interview">I want to know whether they're independently taking responsibility for their tasks.</Quote>
+
+Parents care about engagement but struggle to track it. Behavioral signals — persistence, retries, emotional shifts — make engagement tangible.
+
+<Quote cite="Parent interview">Being able to see past work, like a portfolio of progress, would be helpful.</Quote>
+
+Generic or inconsistent updates reduce confidence. Parents want transparent, tailored communication that is easy to access and act on.
+
+<Quote cite="Parent interview">After understanding progress, I want clear next steps and how I can help at home.</Quote>
+
+Parents' goals vary — from catching up to getting ahead — but all want to know what's next and how to support learning at home.
+
+## User personas
+
+<Personas people={[
+  {
+    name: "Proactive Daisy",
+    meta: "45 · Female · Housewife",
+    avatar: "/work/varsity/persona-daisy.png",
+    motivation: [
+      "Daughter excels academically — a perfect 1600 SAT and 5s across AP courses",
+      "Get into a prestigious university and stay ahead of peers",
+    ],
+    needs: [
+      "Highly qualified, hand-selected tutors",
+      "Personalized learning plans",
+      "An easy-to-understand way to check progress",
+    ],
+  },
+  {
+    name: "Reactive David",
+    meta: "48 · Male · Busy business man",
+    avatar: "/work/varsity/persona-david.png",
+    motivation: [
+      "Son is struggling in math and needs immediate help",
+      "Boost his son's confidence at school",
+    ],
+    needs: [
+      "Noticeable improvement before the upcoming exam",
+      "Monitor progress effortlessly without daily involvement",
+    ],
+  },
+]} />
+
+These patterns correlate with the child's age and the family's time availability.
+
+## Service blueprint
+
+We mapped the full parent experience across four stages — Search → Matching → Tutoring Sessions → Renew Subscription — and surfaced four pain points.
+
+<Figure src="/work/varsity/service-blueprint.png" alt="Service blueprint across four parent journey stages" width="full" caption="Parent journey blueprint — Search, Matching, Sessions, Renew" />
+
+- Parents feel disconnected from their child's mindset and motivation
+- Non-standardized tutoring process
+- Updates are inconsistent or hard to interpret
+- Lack of visibility into student learning
+
+### Co-creation workshop
+
+We hosted a co-creation workshop with Varsity Tutors to align on priorities, and agreed on two MVP focus areas: **build more emotional transparency** and **make student learning visible beyond grades** — the areas with the greatest potential to build long-term trust.
+
+### Competitive analysis
+
+We benchmarked Khan Academy, Wyzant, and Google Classroom. Most platforms offer progress reports but lack personalization or standards alignment; few connect tutoring sessions to actual learning frameworks; and most are either student-facing or parent-facing, not both.
+
+<Figure src="/work/varsity/competitive.png" alt="Competitive analysis of Khan Academy, Wyzant, and Google Classroom" width="wide" />
+
+## Design opportunities
+
+We reframed the insights into How-Might-We questions to guide the MVP.
+
+<Pillars items={[
+  { title: "Show mastery with evidence", body: "HMW show learning mastery using both data and real student examples?" },
+  { title: "Make engagement visible", body: "HMW visualize engagement through behavioral and emotional signals?" },
+  { title: "Consistent, personalized updates", body: "HMW create a consistent and personalized update system for parents?" },
+  { title: "Guide next steps", body: "HMW guide parents with clear, tailored actions and resources?" },
+]} />
+
+## From lo-fi to a testable MVP
+
+We started with a low-fidelity dashboard to validate the basic content and structure, then built a more robust Spring MVP with two key views: a Progress & Engagement tab and a progress detail page.
+
+<Gallery>
+  <Figure src="/work/varsity/spring-progress.png" alt="Spring MVP — Progress & Engagement tab" caption="Progress & Engagement" />
+  <Figure src="/work/varsity/spring-detail.png" alt="Spring MVP — progress detail page" caption="Progress detail" />
+</Gallery>
+
+### User testing
+
+We ran 1:1 think-aloud sessions with 4 parents (kids in 5–8th grade) to evaluate whether the dashboard was clear, understandable, and actionable. We mapped quotes in FigJam, grouping by design issues, feature confusion, and next-step suggestions.
+
+<Quote cite="Matthew">I don't know where to look.</Quote>
+<Quote cite="Jessica">Charts and terms are too technical.</Quote>
+<Quote cite="Ken">I don't know what to do with this.</Quote>
+
+**What we learned:** parents didn't need more data — they needed the right data, surfaced with better structure and language. The design had to show progress in plain terms, guide parents to what matters most, and offer next steps in context.
+
+### Summer MVP goals
+
+<Pillars items={[
+  { title: "Find", body: "Help parents quickly locate key information." },
+  { title: "Understand", body: "Simplify data to support easy comprehension." },
+  { title: "Act", body: "Suggest meaningful, actionable steps for at-home support." },
+]} />
+
+## Final MVP
+
+### Homepage
+
+The homepage gives parents a quick snapshot of their child's progress and makes it easy to act or follow up — an opening message, individual session progress, overall subject progress, a service-support entry, learning history, and schedule reminders.
+
+<Figure src="/work/varsity/homepage-final.png" alt="Final parent dashboard homepage" width="full" caption="Final homepage — a calm, scannable snapshot" />
+
+### Session overview
+
+The session report helps parents understand what their child accomplished in a specific session.
+
+<Figure src="/work/varsity/session-report.png" alt="Session overview report" width="full" caption="Session report — accuracy, effective time, and skills covered" />
+
+<DataNote
+  principleName="Formative Assessment"
+  logic={<>Accuracy rate is detected from transcript keywords and problem-solving phrases; effective learning time comes from removing opening/closing chatter and isolating focused exchanges.</>}
+  principle={<>Skill-level feedback after each session enables ongoing instructional adjustment based on performance.</>}
+/>
+
+<DataNote
+  principleName="Dual Channels"
+  logic={<>Identify practiced skills via subject-specific keywords mapped to Knowledge Components, analyze tutor-student dialogue to determine learning status, and generate matched visual examples.</>}
+  principle={<>Text and visual examples together strengthen memory and comprehension through dual-channel processing.</>}
+/>
+
+<DataNote
+  principleName="Goal Setting"
+  logic={<>Aggregate skill mastery across sessions, compare with platform-wide averages, and highlight cumulative growth for trend analysis.</>}
+  principle={<>Progress visualization and platform comparison help parents and students set realistic learning goals.</>}
+/>
+
+<Figure src="/work/varsity/progress-over-sessions.png" alt="Skill mastery progression across sessions" width="wide" caption="Long-term progression across sessions" />
+
+<DataNote
+  principleName="Growth Mindset"
+  logic={<>Recommend support cards based on recently practiced skills, tailor messages with session-level performance and behavior cues, and let parents download relevant materials.</>}
+  principle={<>The "Celebrate Every Win" card encourages positive reinforcement and a mindset of continuous growth.</>}
+/>
+
+### Skill breakdown
+
+An AI agent breaks each practice segment down — extracting the question, analyzing student thinking, evaluating feedback, and classifying the attempt. Mastery is **Mastered** (3+ practices, ≥90% accuracy), **Familiar** (70–89%), or **Need Support** (<70%). Parents can filter by mastery level to zoom in on where their child excels or struggles.
+
+<Gallery>
+  <Figure src="/work/varsity/skill-overview.png" alt="Skill breakdown overview with mastery badges" caption="Mastery overview" />
+  <Figure src="/work/varsity/skill-detail.png" alt="Detailed skill list with filtering" caption="Skill list & filtering" />
+</Gallery>
+
+## Explorations & iterations
+
+Directions we tried that didn't quite work:
+
+**01 · Session skills highlight** — showing example problems on hover plus a next-step suggestion. Informative, but the layout felt heavy and required too much interaction. We chose a cleaner design that prioritized scanning.
+
+**02 · Homepage** — the first version gave too many options equal weight, with no clear path or hierarchy, increasing cognitive load. The update added personalized entry points and clear next steps.
+
+**03 · Defining skill levels** — early "Mastered / Familiar / Need Support" labels weren't self-explanatory. We added quantitative thresholds via microcopy and tooltips so parents could interpret progress confidently.
+
+<Gallery>
+  <Figure src="/work/varsity/explore-before.png" alt="Exploration — earlier direction" caption="Earlier direction" />
+  <Figure src="/work/varsity/explore-after.png" alt="Exploration — refined direction" caption="Refined direction" />
+</Gallery>
+
+## What I learned
+
+**Useful ≠ feel-good.** Some parents liked the idea of kids self-reporting emotions after each session, but a happy emoji doesn't mean the child understood the content. Not every feature that feels meaningful is actually useful — we removed it and prioritized clearer indicators of real learning.
+
+**Designing with (limited) data.** A limited dataset pushed us to clean, organize, and make the most of what we had — and to help parents understand what the numbers mean, not just show metrics.
+
+**AI as a design partner.** We used AI for data cleaning, interview synthesis, and parts of the UI process — a collaborator that sped up workflows so we could focus on the decisions that matter.
