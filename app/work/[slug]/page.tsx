@@ -92,7 +92,10 @@ export default async function CaseStudy({
       {/* body */}
       <div className="mt-16">
         <Prose>
-          <MDXRemote source={content} components={mdxComponents} />
+          {/* blockJS:false lets our own case-study MDX pass object/JSX props
+              (e.g. <Personas people={[...]} />). Dangerous-call blocking stays on.
+              Safe because this content is authored in-repo, not user-supplied. */}
+          <MDXRemote source={content} components={mdxComponents} options={{ blockJS: false }} />
         </Prose>
       </div>
 
