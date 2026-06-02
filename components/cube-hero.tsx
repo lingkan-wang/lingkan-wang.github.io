@@ -87,8 +87,8 @@ export function CubeHero() {
           {FACES.map((face) => (
             <div
               key={face.key}
-              className="absolute grid grid-cols-3 gap-[2px] rounded-lg p-[3px]"
-              style={{ ...preserve, ...hideBack, width: SIZE, height: SIZE, transform: face.t, backgroundColor: "#9a9a9a" }}
+              className="absolute grid grid-cols-3 gap-[1px] rounded-lg p-[2px]"
+              style={{ ...preserve, ...hideBack, width: SIZE, height: SIZE, transform: face.t, backgroundColor: "#b4b4b4" }}
             >
               {BLACK.map((isBlack, i) => {
                 if (!isBlack) {
