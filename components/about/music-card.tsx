@@ -6,8 +6,9 @@ import { track } from "@/lib/about";
 import { AppleMusicGlyph } from "./app-icons";
 
 const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
-const ctrl =
-  "grid place-items-center rounded-full text-muted transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+// secondary (ghost) transport controls — muted, lift to fg on hover
+const ghost =
+  "grid size-8 place-items-center rounded-full text-muted transition-colors hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 export function MusicCard() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -59,27 +60,27 @@ export function MusicCard() {
       </div>
 
       {/* transport control bar */}
-      <div className="mt-auto flex items-center justify-between gap-1 rounded-full border border-border px-3 py-2">
+      <div className="mt-auto flex items-center justify-between rounded-full border border-border px-3.5 py-1.5">
         <a
           href={track.href}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Open playlist"
-          className={`${ctrl} size-7`}
+          className={ghost}
         >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
-            <line x1="9" y1="6" x2="21" y2="6" />
-            <line x1="9" y1="12" x2="21" y2="12" />
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <line x1="9" y1="6" x2="20" y2="6" />
+            <line x1="9" y1="12" x2="20" y2="12" />
             <line x1="9" y1="18" x2="15" y2="18" />
-            <circle cx="4" cy="6" r="0.6" fill="currentColor" />
-            <circle cx="4" cy="12" r="0.6" fill="currentColor" />
-            <circle cx="4" cy="18" r="0.6" fill="currentColor" />
+            <circle cx="4.5" cy="6" r="0.7" fill="currentColor" stroke="none" />
+            <circle cx="4.5" cy="12" r="0.7" fill="currentColor" stroke="none" />
+            <circle cx="4.5" cy="18" r="0.7" fill="currentColor" stroke="none" />
           </svg>
         </a>
 
-        <button type="button" onClick={restart} aria-label="Restart" className={`${ctrl} size-7`}>
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-            <path d="M11 19V5l-9 7 9 7zM22 19V5l-9 7 9 7z" />
+        <button type="button" onClick={restart} aria-label="Restart" className={ghost}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M11 18.5V5.5l-8 6.5zM21 18.5V5.5l-8 6.5z" />
           </svg>
         </button>
 
@@ -87,35 +88,35 @@ export function MusicCard() {
           type="button"
           onClick={toggle}
           aria-label={playing ? "Pause" : "Play"}
-          className={`${ctrl} size-9 text-fg`}
+          className="grid size-10 place-items-center rounded-full bg-fg text-bg transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {playing ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <rect x="6" y="5" width="4" height="14" rx="1" />
               <rect x="14" y="5" width="4" height="14" rx="1" />
             </svg>
           ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <path d="M8 5v14l11-7z" />
             </svg>
           )}
         </button>
 
-        <button type="button" onClick={skip} aria-label="Skip forward" className={`${ctrl} size-7`}>
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-            <path d="M13 5v14l9-7zM2 5v14l9-7z" />
+        <button type="button" onClick={skip} aria-label="Skip forward" className={ghost}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M13 5.5v13l8-6.5zM3 5.5v13l8-6.5z" />
           </svg>
         </button>
 
-        <button type="button" onClick={toggleMute} aria-label={muted ? "Unmute" : "Mute"} className={`${ctrl} size-7`}>
+        <button type="button" onClick={toggleMute} aria-label={muted ? "Unmute" : "Mute"} className={ghost}>
           {muted ? (
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none" />
               <line x1="16" y1="9" x2="22" y2="15" />
               <line x1="22" y1="9" x2="16" y2="15" />
             </svg>
           ) : (
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none" />
               <path d="M15.5 8.5a5 5 0 0 1 0 7" />
               <path d="M18.5 6a8.5 8.5 0 0 1 0 12" />
