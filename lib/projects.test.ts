@@ -17,4 +17,12 @@ describe("projects loader", () => {
     expect(prev?.slug).toBe(all[0].slug);
     expect(next?.slug).toBe(all[2].slug);
   });
+
+  it("loads optional case-study meta on varsity project", () => {
+    const p = getAllProjects().find((x) => x.slug === "varsity-tutors-parent-dashboard");
+    expect(p).toBeTruthy();
+    expect(p!.duration).toBe("8 weeks");
+    expect(p!.skills).toContain("User Research");
+    expect(p!.tools).toContain("Figma");
+  });
 });

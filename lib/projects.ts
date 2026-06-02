@@ -17,6 +17,10 @@ export type Project = {
   order: number;
   featured: boolean;
   confidential: boolean;
+  duration?: string;
+  skills?: string[];
+  tools?: string[];
+  context?: string;
 };
 
 export type LoadedProject = { meta: Project; content: string };
