@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useMotionValue, useAnimationFrame, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useAnimationFrame, useReducedMotion } from "framer-motion";
 import { cubeItems } from "@/lib/home";
 
 const SIZE = 216; // cube edge (px) — bigger so the illustrations read
@@ -23,6 +23,8 @@ const preserve = { transformStyle: "preserve-3d" } as React.CSSProperties;
 const hideBack = { backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" } as React.CSSProperties;
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
+type Bubble = { x: number; y: number; text: string };
+
 export function CubeHero() {
   const reduce = useReducedMotion();
   const rx = useMotionValue(-24);
@@ -31,7 +33,7 @@ export function CubeHero() {
   const dragRef = useRef<{ x: number; y: number; rx: number; ry: number; moved: boolean } | null>(null);
   const wasDrag = useRef(false);
   const [open, setOpen] = useState<string | null>(null);
-  const [activeLabel, setActiveLabel] = useState<string | null>(null);
+  const [bubble, setBubble] = useState<Bubble | null>(null);
 
   // calm auto-spin while idle (not hovering, not dragging, not reduced-motion)
   useAnimationFrame((_, delta) => {
@@ -47,7 +49,10 @@ export function CubeHero() {
     if (!d) return;
     const dx = e.clientX - d.x;
     const dy = e.clientY - d.y;
-    if (Math.abs(dx) + Math.abs(dy) > 5) d.moved = true;
+    if (Math.abs(dx) + Math.abs(dy) > 5 && !d.moved) {
+      d.moved = true;
+      setBubble(null); // dragging dismisses the bubble
+    }
     ry.set(d.ry + dx * 0.5);
     rx.set(clamp(d.rx - dy * 0.5, -85, 85));
   }
@@ -56,14 +61,19 @@ export function CubeHero() {
     dragRef.current = null;
   }
 
-  function reveal(id: string, label: string) {
+  function reveal(id: string, label: string, el: HTMLElement) {
     if (wasDrag.current) {
       wasDrag.current = false; // this pointerup was a drag, not a click
       return;
     }
     const willOpen = open !== id;
     setOpen(willOpen ? id : null);
-    setActiveLabel(willOpen ? label : null);
+    if (willOpen) {
+      const r = el.getBoundingClientRect();
+      setBubble({ x: r.left + r.width / 2, y: r.top, text: label });
+    } else {
+      setBubble(null);
+    }
   }
 
   let blackCount = 0; // deterministic mapping of cubeItems → black cells
@@ -77,6 +87,7 @@ export function CubeHero() {
         onPointerLeave={() => {
           hovering.current = false;
           dragRef.current = null;
+          setBubble(null);
         }}
         onPointerDown={onDown}
         onPointerMove={onMove}
@@ -108,7 +119,7 @@ export function CubeHero() {
                   <button
                     key={i}
                     type="button"
-                    onClick={() => reveal(id, item.label)}
+                    onClick={(e) => reveal(id, item.label, e.currentTarget)}
                     aria-label={isOpen ? `Hide: ${item.label}` : `Reveal illustration: ${item.label}`}
                     className="relative overflow-hidden rounded-[5px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
                     style={{ ...preserve, ...hideBack, boxShadow: "0 2px 7px rgba(0,0,0,.32)" }}
@@ -128,8 +139,7 @@ export function CubeHero() {
                       style={{
                         ...hideBack,
                         background: "linear-gradient(152deg, #2b2b2b 0%, #181818 52%, #0a0a0a 100%)",
-                        boxShadow:
-                          "inset 0 1px 1px rgba(255,255,255,.10), inset 0 -2px 5px rgba(0,0,0,.5)",
+                        boxShadow: "inset 0 1px 1px rgba(255,255,255,.10), inset 0 -2px 5px rgba(0,0,0,.5)",
                       }}
                       animate={{ opacity: isOpen ? 0 : 1 }}
                       transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -142,8 +152,29 @@ export function CubeHero() {
         </motion.div>
       </div>
 
+      {/* floating description bubble (Georgia-style) — frosted, beside the clicked square */}
+      <AnimatePresence>
+        {bubble && (
+          <div className="pointer-events-none fixed z-50" style={{ left: bubble.x, top: bubble.y }}>
+            <div className="absolute bottom-3 left-0 -translate-x-1/2">
+              <motion.div
+                style={{ transformOrigin: "bottom center" }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.9, filter: "blur(6px)" }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0, y: 4, scale: 0.96, filter: "blur(4px)" }}
+                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                className="relative max-w-[200px] whitespace-nowrap rounded-full border border-border bg-bg/70 px-3.5 py-1.5 text-center text-[13px] font-medium text-fg shadow-lg backdrop-blur-md"
+              >
+                {bubble.text}
+                <span className="absolute left-1/2 top-full size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[2px] border-b border-r border-border bg-bg/70 backdrop-blur-md" />
+              </motion.div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <p className="mt-7 text-center font-mono text-[11px] uppercase tracking-widest text-muted">
-        {activeLabel ?? "drag to rotate · click a black square"}
+        drag to rotate · click a black square
       </p>
     </section>
   );
