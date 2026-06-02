@@ -22,6 +22,18 @@ export function SpotifyGlyph() {
   );
 }
 
+export function AppleMusicGlyph() {
+  return (
+    <span className={chip} style={{ background: "linear-gradient(150deg, #FB5C74 0%, #FA233B 100%)" }} aria-hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden>
+        <path d="M9 17.2V7.7l8.5-1.7V15" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinejoin="round" strokeLinecap="round" />
+        <ellipse cx="6.9" cy="17.2" rx="2.3" ry="2" fill="#fff" />
+        <ellipse cx="15.4" cy="15" rx="2.3" ry="2" fill="#fff" />
+      </svg>
+    </span>
+  );
+}
+
 export function PhotosGlyph() {
   const colors = ["#FCA000", "#9FC93C", "#4FB748", "#17B6C6", "#3FA2F7", "#B05CD6", "#F186B7", "#FF5247"];
   return (
