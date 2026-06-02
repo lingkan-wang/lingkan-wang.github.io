@@ -10,6 +10,9 @@ export type Project = {
   year: number;
   role: string;
   company?: string;
+  timeline?: string;
+  platform?: string;
+  tools?: string;
   tags: string[];
   summary: string;
   cover?: string;
@@ -17,10 +20,6 @@ export type Project = {
   order: number;
   featured: boolean;
   confidential: boolean;
-  duration?: string;
-  skills?: string[];
-  tools?: string[];
-  context?: string;
 };
 
 export type LoadedProject = { meta: Project; content: string };

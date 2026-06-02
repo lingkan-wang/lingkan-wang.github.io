@@ -80,9 +80,14 @@ export const location = "United States";
 // Spotify: "Liked Songs" (/collection/tracks) is private and can't be embedded for
 // visitors. Leave `embed` empty to show a link card; set it to a PUBLIC playlist embed
 // (open.spotify.com/embed/playlist/<id>) to render an inline player.
-export const spotify = {
-  embed: "https://open.spotify.com/embed/playlist/3qoECMXj5TWW5k3pZigU2U?utm_source=generator",
-  url: "https://open.spotify.com/playlist/3qoECMXj5TWW5k3pZigU2U",
+// Featured track for the custom (Emil-style) music player — cover + 30s preview
+// are hosted locally in public/about/. Swap these to feature a different song.
+export const track = {
+  title: "若生命等候",
+  artist: "黄凯芹",
+  cover: "/about/track-cover.jpg",
+  src: "/about/track.mp3",
+  href: "https://open.spotify.com/playlist/3qoECMXj5TWW5k3pZigU2U",
 };
 
 export const wechat = {

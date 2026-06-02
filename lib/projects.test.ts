@@ -18,11 +18,17 @@ describe("projects loader", () => {
     expect(next?.slug).toBe(all[2].slug);
   });
 
-  it("loads optional case-study meta on varsity project", () => {
+  it("parses optional at-a-glance fields when present", () => {
+    const bumble = getAllProjects().find((p) => p.slug === "bumble-interest-cards");
+    expect(bumble?.timeline).toBe("5 weeks");
+    expect(bumble?.platform).toBeTruthy();
+    expect(bumble?.tools).toBe("Figma");
+  });
+
+  it("loads at-a-glance meta on the varsity project", () => {
     const p = getAllProjects().find((x) => x.slug === "varsity-tutors-parent-dashboard");
     expect(p).toBeTruthy();
-    expect(p!.duration).toBe("8 weeks");
-    expect(p!.skills).toContain("User Research");
-    expect(p!.tools).toContain("Figma");
+    expect(p!.timeline).toBe("8 weeks");
+    expect(p!.tools).toBe("Figma");
   });
 });

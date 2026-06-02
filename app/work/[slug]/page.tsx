@@ -4,9 +4,11 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getProjectSlugs, getProject, getAdjacent, type LoadedProject } from "@/lib/projects";
+import { richCaseStudies } from "@/lib/work/registry";
 import { site } from "@/lib/site";
 import { mdxComponents, Prose } from "@/components/mdx";
 import { Placeholder } from "@/components/placeholder";
+import { ProjectMeta } from "@/components/project-meta";
 import { Reveal } from "@/components/reveal";
 
 export function generateStaticParams() {
@@ -42,62 +44,52 @@ export default async function CaseStudy({
   }
   const { meta, content } = loaded;
   const { prev, next } = getAdjacent(slug);
+  const Rich = richCaseStudies[slug];
 
   return (
-    <article className="pb-32 pt-20 sm:pt-28">
-      {/* hero */}
-      <header className="mx-auto max-w-[680px] px-6">
-        <Reveal>
-          <p className="font-mono text-xs uppercase tracking-widest text-muted">
-            {meta.company ?? meta.role} · {meta.year}
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{meta.title}</h1>
-          <p className="mt-4 text-lg text-muted">{meta.summary}</p>
+    <article className="pb-32">
+      {Rich ? (
+        <Rich meta={meta} />
+      ) : (
+        <div className="pt-20 sm:pt-28">
+          {/* hero */}
+          <header className="mx-auto max-w-[680px] px-6">
+            <Reveal>
+              <p className="font-mono text-xs uppercase tracking-widest text-muted">
+                {meta.role} · {meta.year} · {meta.tags.join(", ")}
+              </p>
+              <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{meta.title}</h1>
+              <p className="mt-4 text-lg text-muted">{meta.summary}</p>
+              <ProjectMeta meta={meta} />
+            </Reveal>
+          </header>
 
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {meta.tags.map((t) => (
-              <span key={t} className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted">
-                {t}
-              </span>
-            ))}
+          <Reveal className="mx-auto mt-12 w-[min(1080px,92vw)]">
+            {meta.cover ? (
+              <Image
+                src={meta.cover}
+                alt={meta.title}
+                width={1080}
+                height={675}
+                className="w-full rounded-xl border border-border"
+                priority
+                sizes="(max-width: 1180px) 92vw, 1080px"
+              />
+            ) : (
+              <Placeholder label={`${meta.company ?? meta.title} — cover`} blur={meta.confidential} />
+            )}
+          </Reveal>
+
+          {/* body */}
+          <div className="mt-16">
+            <Prose>
+              {/* blockJS:false lets in-repo case-study MDX pass object/JSX props
+                  (e.g. <Personas people={[...]} />). Dangerous-call blocking stays on. */}
+              <MDXRemote source={content} components={mdxComponents} options={{ blockJS: false }} />
+            </Prose>
           </div>
-
-          <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-border pt-6 text-sm sm:grid-cols-4">
-            <MetaItem label="Role" value={meta.role} />
-            {meta.duration && <MetaItem label="Duration" value={meta.duration} />}
-            {meta.skills && <MetaItem label="Skills" value={meta.skills.join(" · ")} />}
-            {meta.tools && <MetaItem label="Tools" value={meta.tools.join(" · ")} />}
-          </dl>
-
-          {meta.context && <p className="mt-5 text-xs text-muted">{meta.context}</p>}
-        </Reveal>
-      </header>
-
-      <Reveal className="mx-auto mt-12 w-[min(1080px,92vw)]">
-        {meta.cover ? (
-          <Image
-            src={meta.cover}
-            alt={meta.title}
-            width={1080}
-            height={675}
-            className="w-full rounded-xl border border-border"
-            priority
-            sizes="(max-width: 1180px) 92vw, 1080px"
-          />
-        ) : (
-          <Placeholder label={`${meta.company ?? meta.title} — cover`} blur={meta.confidential} />
-        )}
-      </Reveal>
-
-      {/* body */}
-      <div className="mt-16">
-        <Prose>
-          {/* blockJS:false lets our own case-study MDX pass object/JSX props
-              (e.g. <Personas people={[...]} />). Dangerous-call blocking stays on.
-              Safe because this content is authored in-repo, not user-supplied. */}
-          <MDXRemote source={content} components={mdxComponents} options={{ blockJS: false }} />
-        </Prose>
-      </div>
+        </div>
+      )}
 
       {/* prev / next */}
       <nav aria-label="Case study navigation" className="mx-auto mt-24 flex max-w-[680px] items-center justify-between gap-4 border-t border-border px-6 pt-8 text-sm">
@@ -115,14 +107,5 @@ export default async function CaseStudy({
         )}
       </nav>
     </article>
-  );
-}
-
-function MetaItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="font-mono text-[10px] uppercase tracking-widest text-muted">{label}</dt>
-      <dd className="mt-1 text-sm text-fg/90">{value}</dd>
-    </div>
   );
 }
