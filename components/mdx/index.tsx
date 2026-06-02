@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import { Figure } from "./figure";
 import { Gallery } from "./gallery";
 import { MetricCallout } from "./metric-callout";
+import { Metrics, Metric } from "./metrics";
+import { Compare, CompareRow } from "./compare";
+import { Showcase, ShowcaseItem } from "./showcase";
 import { Quote } from "./quote";
 
 export function Prose({ children }: { children: ReactNode }) {
@@ -31,5 +34,11 @@ export const mdxComponents = {
   Figure,
   Gallery,
   MetricCallout,
+  Metrics,
+  Metric,
+  Compare,
+  CompareRow,
+  Showcase,
+  ShowcaseItem,
   Quote,
 };
