@@ -1,0 +1,53 @@
+import { spotify } from "@/lib/about";
+
+const label = "font-mono text-[10px] uppercase tracking-widest text-muted";
+
+function AppleMusicIcon() {
+  return (
+    <span className="grid size-5 shrink-0 place-items-center rounded-[5px] bg-gradient-to-b from-[#fb5c74] to-[#fa233b] text-white" aria-hidden>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M9 17.5a2.5 2.5 0 1 1-2.5-2.5c.53 0 1.02.16 1.43.44V6.3l9-1.8v9.5a2.5 2.5 0 1 1-2.5-2.5c.53 0 1.02.16 1.43.44V7.2l-6 1.2v7.1c0 .67-.14 1.36-.86 2z" />
+      </svg>
+    </span>
+  );
+}
+
+export function MusicCard() {
+  return (
+    <div className="flex h-full flex-col">
+      <div className="flex items-center justify-between">
+        <span className={label}>On repeat</span>
+        <AppleMusicIcon />
+      </div>
+
+      {spotify.embed ? (
+        <iframe
+          src={spotify.embed}
+          title="Spotify player"
+          loading="lazy"
+          height={152}
+          className="mt-3 w-full flex-1 rounded-xl"
+          style={{ border: 0, minHeight: 152 }}
+          allow="encrypted-media; clipboard-write"
+        />
+      ) : (
+        <a
+          href={spotify.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-auto flex items-center gap-3 rounded-xl border border-border p-3 transition-colors hover:border-fg/30"
+        >
+          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#1DB954] text-white">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 14.43a.62.62 0 0 1-.86.21c-2.35-1.44-5.3-1.76-8.79-.96a.62.62 0 1 1-.28-1.22c3.8-.87 7.08-.5 9.72 1.11.3.18.39.57.21.86zm1.23-2.74a.78.78 0 0 1-1.07.26c-2.69-1.65-6.79-2.13-9.97-1.17a.78.78 0 1 1-.45-1.49c3.63-1.1 8.15-.56 11.23 1.33.37.23.49.71.26 1.07zm.11-2.85C14.83 8.95 9.3 8.77 6.2 9.71a.93.93 0 1 1-.54-1.79c3.56-1.08 9.66-.87 13.48 1.4a.94.94 0 0 1-.96 1.6z" />
+            </svg>
+          </span>
+          <span className="min-w-0">
+            <span className="block text-sm font-medium text-fg">My Spotify</span>
+            <span className="block text-xs text-muted">Liked songs &amp; playlists ↗</span>
+          </span>
+        </a>
+      )}
+    </div>
+  );
+}

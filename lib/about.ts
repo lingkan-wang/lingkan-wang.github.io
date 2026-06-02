@@ -91,6 +91,12 @@ export const wechat = {
   qr: "/about/wechat-qr.png", // drop your QR here
 };
 
+export const xCard = {
+  handle: "@lingkan", // TODO: your real X handle
+  blurb: "designing AI-powered products ✦",
+  prev: "prev @Ecovacs · @Kwai · @Varsity Tutors · CMU",
+};
+
 export type Category = "people" | "landscape" | "food" | "pets";
 export const galleryCategories: { key: Category; label: string }[] = [
   { key: "people", label: "People" },
@@ -100,6 +106,7 @@ export const galleryCategories: { key: Category; label: string }[] = [
 ];
 
 export const gallery: { src: string; category: Category; alt: string }[] = [
+  { src: "/about/portrait.jpg", category: "people", alt: "Hi 👋" },
   { src: "/about/people/1.jpg", category: "people", alt: "Graduation day" },
   { src: "/about/people/2.jpg", category: "people", alt: "A candid moment" },
   { src: "/about/people/3.jpg", category: "people", alt: "Portrait" },
