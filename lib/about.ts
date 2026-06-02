@@ -7,19 +7,15 @@ export const intro =
 export const bio: { heading: string; body: string }[] = [
   {
     heading: "Who I am",
-    body: "I come from a background in digital media and design, so I live somewhere between creative thinking and logical problem-solving. I enjoy making sense of messy stuff — data, user flows, product goals — and turning it into something that just feels right and works well.",
+    body: "I'm a product designer who came up through digital media and design, so I sit between the creative side and the figure-it-out side. What I like most is taking something messy (a pile of data, a tangled flow, a fuzzy product goal) and shaping it into something that feels right and actually works. That comes from an old habit of taking things apart to see how they tick, which is pretty much why I landed in design. It's where systems thinking and empathy get to work on the same problem.",
   },
   {
-    heading: "What I've done",
-    body: "I recently finished my M.S. at Carnegie Mellon (HCII · METALS). Before that I was a product designer at Ecovacs, Kwai, and a generative-AI startup, leading 0→1 design across B2B and B2C — from smart cleaning systems to AI data dashboards. Most recently I led UX for Varsity Tutors' parent dashboard.",
+    heading: "Where I came from",
+    body: "I just finished my master's at Carnegie Mellon, in the HCII METALS program. Before that I designed products at Ecovacs, Kwai, and a generative-AI startup, usually as the person taking things from zero to one across both B2B and B2C. The work spanned smart-home cleaning systems and AI data dashboards. Most recently I led the UX for Varsity Tutors' parent dashboard.",
   },
   {
-    heading: "Why design",
-    body: "I've always loved breaking things down to understand how they work. Design is where I get to connect systems thinking with empathy — solving real problems and making ideas feel intuitive and accessible.",
-  },
-  {
-    heading: "Off the clock",
-    body: "Design competitions, mentoring designers just getting started, traveling everywhere, chasing whales with my Scottie, and serious food hunting.",
+    heading: "Where I'm headed",
+    body: "Right now I'm looking for a full-time role where I can keep doing this. The direction I'm most drawn to is design engineering: I want to design something and then build it myself, so the craft survives all the way to the real screen. I still love the early, build-it-from-scratch stage of a product, and further out I'd like to grow into leading design and bringing other designers up with me. This site is part of that. I coded it myself.",
   },
 ];
 
