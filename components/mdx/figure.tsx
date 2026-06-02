@@ -76,7 +76,6 @@ export function Figure({
             aria-modal="true"
             aria-label={alt}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <motion.img
               src={src}
               alt={alt}
