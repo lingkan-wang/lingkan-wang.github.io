@@ -33,7 +33,7 @@ export function ResearchCard({ p }: { p: Paper }) {
           className="absolute left-1/2 top-1/3 w-[68%] overflow-hidden rounded-t-[4px] bg-white ring-1 ring-black/[0.06]"
           initial={false}
           style={{ x: "-50%", aspectRatio: "773 / 1000", boxShadow: REST }}
-          animate={reduce ? { boxShadow: hovered ? LIFT : REST } : { y: hovered ? -12 : 0, boxShadow: hovered ? LIFT : REST }}
+          animate={reduce ? { boxShadow: hovered ? LIFT : REST } : { y: hovered ? -18 : 0, boxShadow: hovered ? LIFT : REST }}
           transition={{ type: "spring", stiffness: 320, damping: 26, mass: 0.7 }}
         >
           <Image
@@ -63,7 +63,7 @@ export function ResearchCard({ p }: { p: Paper }) {
       </div>
 
       <div className="mt-4 flex items-baseline justify-between gap-4">
-        <h2 className="text-lg font-medium leading-snug tracking-tight transition-colors group-hover/card:text-accent">{p.title}</h2>
+        <h2 className="text-lg font-medium leading-snug tracking-tight">{p.title}</h2>
         <span className="shrink-0 font-mono text-xs text-muted">{p.year}</span>
       </div>
 
