@@ -33,7 +33,7 @@ export const research: Paper[] = [
     cover: "/research/ectel.png",
   },
   {
-    title: "Language Preferences and Practices in Multilingual EdTech",
+    title: "Improving Accessibility and Quality of Learning through Multilingual Instruction in EdTech",
     venue: "Learning Sciences",
     year: 2026,
     status: "Under review",
