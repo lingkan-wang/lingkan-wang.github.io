@@ -7,6 +7,7 @@ import { MusicCard } from "@/components/about/music-card";
 import { PhotoCard } from "@/components/about/photo-card";
 import { WechatCard } from "@/components/about/wechat-card";
 import { IMessage } from "@/components/about/imessage";
+import { HoverKeyword } from "@/components/hover-keyword";
 
 export const metadata: Metadata = { title: `About — ${site.name}` };
 
@@ -22,12 +23,30 @@ export default function About() {
         <Reveal>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">What I&apos;m about.</h1>
           <div className="mt-8 space-y-7">
-            {bio.map((b) => (
-              <section key={b.heading}>
-                <h2 className={label}>{b.heading}</h2>
-                <p className="mt-2 text-[15px] leading-7 text-fg/90">{b.body}</p>
-              </section>
-            ))}
+            {bio.map((b) => {
+              let body: React.ReactNode = b.body;
+              if (b.keyword) {
+                const { word, emoji, href, external } = b.keyword;
+                const i = b.body.indexOf(word);
+                if (i !== -1) {
+                  body = (
+                    <>
+                      {b.body.slice(0, i)}
+                      <HoverKeyword emoji={emoji} href={href} external={external}>
+                        {word}
+                      </HoverKeyword>
+                      {b.body.slice(i + word.length)}
+                    </>
+                  );
+                }
+              }
+              return (
+                <section key={b.heading}>
+                  <h2 className={label}>{b.heading}</h2>
+                  <p className="mt-2 text-[15px] leading-7 text-fg/90">{body}</p>
+                </section>
+              );
+            })}
           </div>
 
           <div className="mt-9 flex items-center gap-5 text-muted">
