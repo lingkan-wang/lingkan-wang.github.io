@@ -30,7 +30,7 @@ export function ResearchCard({ p }: { p: Paper }) {
           below the frame. On hover it floats up like it's pulled out a touch. */}
       <div className="relative h-[420px] overflow-hidden rounded-xl border border-border bg-[#fafafa]">
         <motion.div
-          className="absolute left-1/2 top-14 w-[68%] overflow-hidden rounded-t-[4px] bg-white ring-1 ring-black/[0.06]"
+          className="absolute left-1/2 top-1/3 w-[68%] overflow-hidden rounded-t-[4px] bg-white ring-1 ring-black/[0.06]"
           initial={false}
           style={{ x: "-50%", aspectRatio: "773 / 1000", boxShadow: REST }}
           animate={reduce ? { boxShadow: hovered ? LIFT : REST } : { y: hovered ? -12 : 0, boxShadow: hovered ? LIFT : REST }}
@@ -49,7 +49,7 @@ export function ResearchCard({ p }: { p: Paper }) {
         <AnimatePresence>
           {hint && (
             <motion.span
-              className="pointer-events-none absolute left-1/2 top-[22%] z-10 whitespace-nowrap rounded-full border border-border bg-bg/85 px-3 py-1 text-[11px] font-medium text-fg shadow-lg backdrop-blur-md"
+              className="pointer-events-none absolute left-1/2 top-14 z-10 whitespace-nowrap rounded-full border border-border bg-bg/85 px-3 py-1 text-[11px] font-medium text-fg shadow-lg backdrop-blur-md"
               style={{ x: "-50%" }}
               initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
