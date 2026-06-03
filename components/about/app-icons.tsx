@@ -24,11 +24,20 @@ export function SpotifyGlyph() {
 
 export function AppleMusicGlyph() {
   return (
-    <span className={chip} style={{ background: "linear-gradient(150deg, #FB5C74 0%, #FA233B 100%)" }} aria-hidden>
-      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden>
-        <path d="M9 17.2V7.7l8.5-1.7V15" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinejoin="round" strokeLinecap="round" />
-        <ellipse cx="6.9" cy="17.2" rx="2.3" ry="2" fill="#fff" />
-        <ellipse cx="15.4" cy="15" rx="2.3" ry="2" fill="#fff" />
+    <span className={chip} style={{ background: "linear-gradient(170deg, #FC576B 0%, #FA2D48 55%, #F61E3C 100%)" }} aria-hidden>
+      <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden>
+        {/* stems + curved beam */}
+        <path
+          d="M10.4 17V7.3c0-.6.4-1 .95-1.12l6.05-1.2c.62-.12 1.05.27 1.05.9V14"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        {/* note heads */}
+        <ellipse cx="7.8" cy="17.05" rx="2.95" ry="2.5" fill="#fff" />
+        <ellipse cx="16.35" cy="14.05" rx="2.95" ry="2.5" fill="#fff" />
       </svg>
     </span>
   );
