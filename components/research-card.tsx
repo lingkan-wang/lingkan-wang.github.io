@@ -28,9 +28,9 @@ export function ResearchCard({ p }: { p: Paper }) {
     <>
       {/* grey "pocket": the paper sits in it showing ~2/3, bottom third clipped
           below the frame. On hover it floats up like it's pulled out a touch. */}
-      <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-[#fafafa]">
+      <div className="relative aspect-[7/5] overflow-hidden rounded-xl border border-border bg-[#fafafa]">
         <motion.div
-          className="absolute left-1/2 top-6 w-[88%] overflow-hidden rounded-t-[4px] bg-white ring-1 ring-black/[0.06]"
+          className="absolute left-1/2 top-5 w-[82%] overflow-hidden rounded-t-[4px] bg-white ring-1 ring-black/[0.06]"
           initial={false}
           style={{ x: "-50%", aspectRatio: "773 / 1000", boxShadow: REST }}
           animate={reduce ? { boxShadow: hovered ? LIFT : REST } : { y: hovered ? -12 : 0, boxShadow: hovered ? LIFT : REST }}
