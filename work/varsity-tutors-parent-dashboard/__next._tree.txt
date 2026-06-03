@@ -1,4 +1,4 @@
-:HL["/_next/static/chunks/17c.x52kar91n.css","style"]
+:HL["/_next/static/chunks/03x753j5r9ius.css","style"]
 :HL["/_next/static/media/GeistMono_Variable.p.0f6hsxe9py8pr.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/Geist_Variable-s.p.0tfjw0g40zzvd.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"work","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"varsity-tutors-parent-dashboard","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"Vg2gCahz6ji9arLNh4Hg7"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"work","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"varsity-tutors-parent-dashboard","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"yzjSAgJdELGYjx7nPNUGm"}
