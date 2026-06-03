@@ -23,16 +23,6 @@ export const research: Paper[] = [
     cover: "/research/chi.png",
   },
   {
-    title: "Reconceptualizing Activity Theory for Human-AI Teaming in CSCL",
-    venue: "ICLS",
-    year: 2026,
-    status: "Under review",
-    tags: ["Learning Sciences", "Human-AI", "Theory", "CSCL"],
-    summary:
-      "When AI stops being a tool and starts acting like a teammate, our theories need to catch up. This paper extends Engeström's Activity Theory to treat AI as both tool and quasi-subject, giving collaborative learning a framework for the human-AI era.",
-    cover: "/research/icls.png",
-  },
-  {
     title: "High- and Low-Performing Groups in Collaborative VR Video-Based Learning",
     venue: "EC-TEL",
     year: 2026,
