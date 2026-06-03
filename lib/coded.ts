@@ -14,6 +14,16 @@ export type CodedWork = {
 
 export const codedWork: CodedWork[] = [
   {
+    slug: "bubble-todo",
+    title: "Bubble To-do — a blow-a-bubble sticky note",
+    blurb:
+      "An illustrated girl blows watercolor bubbles you fill with to-dos. Type a task, double-click her to puff it off to the corner, then click a bubble to pop it done — with synthesized Web Audio sounds. Originally an Electron desktop widget.",
+    tags: ["Vanilla JS", "Web Audio", "Animation"],
+    year: 2026,
+    live: "https://lingkan-wang.github.io/bubble-todo/",
+    offset: 0,
+  },
+  {
     slug: "toast-sonner",
     title: "Toast — a Sonner recreation",
     blurb:
