@@ -47,7 +47,7 @@ export const experience: Job[] = [
     org: "Carnegie Mellon University",
     role: "M.S. · HCII METALS",
     period: "Aug 2024 – Dec 2025",
-    blurb: "Interaction design, learning sciences, and human-AI interaction, applied through CMU research labs. Published at ACM CHI 2026 and ICLS 2026.",
+    blurb: "Interaction design, learning sciences, and human-AI interaction, applied through CMU research labs, with work under review at CHI and EC-TEL 2026.",
     tags: ["HCI", "Research", "AI + Learning"],
   },
   {
