@@ -20,16 +20,18 @@ export default function ResearchPage() {
         {research.map((p, i) => (
           <Reveal key={p.title} delay={(i % 2) * 0.05}>
             <article>
-              {/* first-page paper preview — cropped to the top (title + abstract) */}
-              <div className="overflow-hidden rounded-xl border border-border bg-[#fafafa]">
-                <Image
-                  src={p.cover}
-                  alt={`${p.title} — first page`}
-                  width={772}
-                  height={1000}
-                  sizes="(max-width: 760px) 100vw, 500px"
-                  className="aspect-[4/3] w-full object-cover object-top"
-                />
+              {/* the paper sits on a grey mat as a single sheet — ~2/3 of the
+                  frame — and floats up a touch on hover. */}
+              <div className="group flex items-center justify-center rounded-xl border border-border bg-[#fafafa] px-6 py-10 sm:py-12">
+                <div className="relative aspect-[773/1000] w-2/3 overflow-hidden rounded-[3px] bg-white shadow-[0_1px_1px_rgba(0,0,0,0.04),0_6px_16px_-6px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.06] transition-[transform,box-shadow] duration-300 ease-out group-hover:-translate-y-2.5 group-hover:shadow-[0_2px_3px_rgba(0,0,0,0.05),0_22px_40px_-12px_rgba(0,0,0,0.25)] motion-reduce:group-hover:translate-y-0">
+                  <Image
+                    src={p.cover}
+                    alt={`${p.title} — first page`}
+                    fill
+                    sizes="(max-width: 640px) 66vw, 340px"
+                    className="object-cover object-top"
+                  />
+                </div>
               </div>
 
               <div className="mt-4 flex items-baseline justify-between gap-4">
