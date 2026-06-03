@@ -36,7 +36,7 @@ export function HoverKeyword({ children, href, external, emoji, logo, logoEm = 1
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}
     >
-      <span className="font-medium text-fg underline decoration-accent/40 decoration-2 underline-offset-[3px] transition-colors group-hover/kw:text-accent">
+      <span className="font-medium text-fg underline decoration-[#1469f3] decoration-2 underline-offset-[3px] transition-colors group-hover/kw:text-[#1469f3]">
         {children}
       </span>
       {/* slot opens (pushes following text); content slides in from the right */}

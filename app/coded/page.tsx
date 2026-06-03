@@ -11,9 +11,9 @@ export default function CodedWorkPage() {
   return (
     <div className="mx-auto max-w-[1080px] px-6 pb-28 pt-20 sm:pt-28">
       <Reveal>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">AI + Code</h1>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Coded Work</h1>
         <p className="mt-4 max-w-[640px] text-[15px] leading-7 text-muted">
-          Small, working prototypes I designed and built to test interaction logic, component behavior, motion, and product workflows.
+          Interactive components I design and build — live and playable right here. Have a click.
         </p>
       </Reveal>
 
