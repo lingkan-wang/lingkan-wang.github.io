@@ -16,7 +16,7 @@ export const research: Paper[] = [
     title: "EdTech for Last Mile Learners in the Global South",
     venue: "CHI",
     year: 2026,
-    status: "Under review",
+    status: "Published",
     tags: ["HCI", "EdTech", "Global South", "Field Study"],
     summary:
       "How do you teach engineering with no internet? A study of 81 learners in rural Uganda taking an offline course over radio and basic phones — surfacing the motivational and technological realities of low-infrastructure EdTech for last-mile communities.",
@@ -41,6 +41,16 @@ export const research: Paper[] = [
     summary:
       "The first empirical look at learner agency in bilingual remote EdTech: how Ugandan learners chose between English and Leb-Lango in a radio-and-phone course, and what that reveals about designing inclusive multilingual learning.",
     cover: "/research/multilingual.png",
+  },
+  {
+    title: "Language Preferences and Practices in Multilingual EdTech",
+    venue: "ICLS",
+    year: 2026,
+    status: "Under review",
+    tags: ["EdTech", "Multilingual", "Language Choice", "Uganda"],
+    summary:
+      "When a remote course lets Ugandan learners pick English, Leb-Lango, or a hybrid of both, how do they actually use language? Hybrid learners who genuinely drew on both persisted longer — early evidence for flexible primary-language use with secondary-language support.",
+    cover: "/research/language-preferences.png",
   },
   {
     title: "Auto-generating Road Trip Vlogs While Safe-driving",
