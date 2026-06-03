@@ -20,8 +20,11 @@ export function HoverKeyword({ children, href, external, emoji, logo }: Props) {
   const spring = { type: "spring", stiffness: 420, damping: 26, mass: 0.6 } as const;
 
   const reveal = logo ? (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={logo} alt="" className="ml-[0.4em] inline-block h-[1.8em] w-auto object-contain align-middle" />
+    // light: transparent logo inline. dark: sit it on a white chip so dark wordmarks stay legible.
+    <span className="ml-[0.4em] inline-flex items-center rounded-md align-middle dark:bg-white dark:px-1.5 dark:py-1 dark:shadow-sm">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={logo} alt="" className="h-[1.8em] w-auto object-contain dark:h-[1.5em]" />
+    </span>
   ) : (
     <span className="inline-block pl-[0.3em] align-middle text-[1.6em] leading-none">{emoji}</span>
   );
