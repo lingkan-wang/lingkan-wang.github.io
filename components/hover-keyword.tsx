@@ -20,12 +20,10 @@ export function HoverKeyword({ children, href, external, emoji, logo }: Props) {
   const spring = { type: "spring", stiffness: 420, damping: 26, mass: 0.6 } as const;
 
   const reveal = logo ? (
-    <span className="ml-[0.35em] inline-flex h-[1.5em] items-center rounded-[6px] border border-border bg-white px-1 align-middle shadow-sm">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={logo} alt="" className="h-[1.05em] w-auto object-contain" />
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={logo} alt="" className="ml-[0.4em] inline-block h-[1.8em] w-auto object-contain align-middle" />
   ) : (
-    <span className="inline-block pl-[0.3em] align-middle text-[1.5em] leading-none">{emoji}</span>
+    <span className="inline-block pl-[0.3em] align-middle text-[1.6em] leading-none">{emoji}</span>
   );
 
   const inner = (
