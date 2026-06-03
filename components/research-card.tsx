@@ -26,13 +26,15 @@ export function ResearchCard({ p }: { p: Paper }) {
 
   const body = (
     <>
-      <div className="relative flex items-center justify-center rounded-xl border border-border bg-[#fafafa] px-6 py-10 sm:py-12">
+      {/* grey "pocket": the paper sits in it showing ~2/3, bottom third clipped
+          below the frame. On hover it floats up like it's pulled out a touch. */}
+      <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border bg-[#fafafa]">
         <motion.div
-          className="relative aspect-[773/1000] w-2/3 overflow-hidden rounded-[3px] bg-white ring-1 ring-black/[0.06]"
+          className="absolute left-1/2 top-7 w-[66%] overflow-hidden rounded-t-[4px] bg-white ring-1 ring-black/[0.06]"
           initial={false}
-          style={{ boxShadow: REST }}
+          style={{ x: "-50%", aspectRatio: "773 / 1000", boxShadow: REST }}
           animate={reduce ? { boxShadow: hovered ? LIFT : REST } : { y: hovered ? -12 : 0, boxShadow: hovered ? LIFT : REST }}
-          transition={{ type: "spring", stiffness: 320, damping: 24, mass: 0.7 }}
+          transition={{ type: "spring", stiffness: 320, damping: 26, mass: 0.7 }}
         >
           <Image
             src={p.cover}
@@ -43,14 +45,15 @@ export function ResearchCard({ p }: { p: Paper }) {
           />
         </motion.div>
 
-        {/* under-review hint (unlinked papers only) */}
+        {/* under-review hint (unlinked papers only) — upper half of the pocket */}
         <AnimatePresence>
           {hint && (
             <motion.span
-              className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-border bg-bg/80 px-3 py-1 text-[11px] font-medium text-fg shadow-lg backdrop-blur-md"
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={reduce ? { opacity: 0 } : { opacity: 0, y: 4, scale: 0.96 }}
+              className="pointer-events-none absolute left-1/2 top-[22%] z-10 whitespace-nowrap rounded-full border border-border bg-bg/85 px-3 py-1 text-[11px] font-medium text-fg shadow-lg backdrop-blur-md"
+              style={{ x: "-50%" }}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: 4 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
               Under review — not public yet
