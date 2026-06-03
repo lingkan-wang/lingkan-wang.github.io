@@ -10,6 +10,8 @@ export type CodedWork = {
   year: number;
   live: string;
   offset: number;
+  /** Optional download link (e.g. a desktop build) shown in the description. */
+  download?: string;
 };
 
 export const codedWork: CodedWork[] = [
@@ -22,6 +24,7 @@ export const codedWork: CodedWork[] = [
     year: 2026,
     live: "https://lingkan-wang.github.io/bubble-todo/",
     offset: 0,
+    download: "https://github.com/lingkan-wang/bubble-todo/releases/download/v1.0/Bubble-To-do-macOS-AppleSilicon.zip",
   },
   {
     slug: "toast-sonner",

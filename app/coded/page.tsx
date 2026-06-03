@@ -47,6 +47,15 @@ export default function CodedWorkPage() {
               </div>
 
               <p className="mt-2 max-w-prose text-[13px] leading-snug text-muted">{p.blurb}</p>
+
+              {p.download && (
+                <a
+                  href={p.download}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-muted transition-colors hover:border-foreground/30 hover:text-foreground"
+                >
+                  ↓ Download desktop app (macOS)
+                </a>
+              )}
             </article>
           </Reveal>
         ))}
