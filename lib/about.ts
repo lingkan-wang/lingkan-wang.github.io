@@ -4,22 +4,23 @@
 export const intro =
   "Hi, I'm Lingkan \u{1F44B} — or call me Wendy. A product builder who loves turning complex ideas into clean, thoughtful experiences.";
 
-export type Keyword = { word: string; emoji: string; href: string; external?: boolean };
-export const bio: { heading: string; body: string; keyword?: Keyword }[] = [
+export type Keyword = { word: string; href: string; external?: boolean; emoji?: string; logo?: string };
+export const bio: { heading: string; body: string; keywords?: Keyword[] }[] = [
   {
     heading: "Who I am",
     body: "I'm a product builder who came up through digital media and design, so I sit between the creative side and the figure-it-out side. What I like most is taking something messy (a pile of data, a tangled flow, a fuzzy product goal) and shaping it into something that feels right and actually works. Alongside that, I've always done HCI research, digging into how people learn, collaborate, and interact with the things we build. That habit of taking things apart to see how they tick is pretty much why I landed in design, where systems thinking and empathy get to work on the same problem.",
-    keyword: { word: "research", emoji: "\u{1F4C4}", href: "/research" },
+    keywords: [{ word: "research", emoji: "\u{1F4C4}", href: "/research" }],
   },
   {
     heading: "Where I came from",
     body: "I just finished my master's at Carnegie Mellon, in the HCII METALS program. Before that I designed products at Ecovacs, Kwai, and a generative-AI startup, usually as the person taking things from zero to one across both B2B and B2C, and I picked up a fair few design awards along the way. The work spanned smart-home cleaning systems and AI data dashboards. Most recently I led the UX for Varsity Tutors' parent dashboard.",
-    keyword: {
-      word: "awards",
-      emoji: "\u{1F3C6}",
-      href: "https://docs.google.com/document/d/16h6wR99qktZfZvx2X5az3UGnWGP1qoOB2Yx3bzt8_xU/edit",
-      external: true,
-    },
+    keywords: [
+      { word: "HCII", logo: "/about/logos/hcii.png", href: "https://hcii.cmu.edu/", external: true },
+      { word: "Ecovacs", logo: "/about/logos/ecovacs.png", href: "https://www.ecovacs.com/us", external: true },
+      { word: "Kwai", logo: "/about/logos/kwai.png", href: "https://www.kwai.com/", external: true },
+      { word: "awards", emoji: "\u{1F3C6}", href: "https://docs.google.com/document/d/16h6wR99qktZfZvx2X5az3UGnWGP1qoOB2Yx3bzt8_xU/edit", external: true },
+      { word: "Varsity Tutors", logo: "/about/logos/varsity.png", href: "https://www.varsitytutors.com/", external: true },
+    ],
   },
   {
     heading: "Where I'm headed",

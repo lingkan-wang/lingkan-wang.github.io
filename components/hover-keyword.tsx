@@ -6,17 +6,27 @@ import { motion, useReducedMotion } from "framer-motion";
 
 type Props = {
   children: string;
-  emoji: string;
   href: string;
   external?: boolean;
+  emoji?: string; // emoji reveal (research, awards)
+  logo?: string; // image reveal on a white chip (company / school logos)
 };
 
 // An inline keyword that, on hover, opens a slot to its right and slides a big
-// emoji in from the right (reboot.studio-style inline reveal). Click navigates.
-export function HoverKeyword({ children, emoji, href, external }: Props) {
+// emoji or logo chip in from the right (reboot.studio-style inline reveal).
+export function HoverKeyword({ children, href, external, emoji, logo }: Props) {
   const reduce = useReducedMotion();
   const [hover, setHover] = useState(false);
   const spring = { type: "spring", stiffness: 420, damping: 26, mass: 0.6 } as const;
+
+  const reveal = logo ? (
+    <span className="ml-[0.35em] inline-flex h-[1.5em] items-center rounded-[6px] border border-border bg-white px-1 align-middle shadow-sm">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={logo} alt="" className="h-[1.05em] w-auto object-contain" />
+    </span>
+  ) : (
+    <span className="inline-block pl-[0.3em] align-middle text-[1.5em] leading-none">{emoji}</span>
+  );
 
   const inner = (
     <span
@@ -27,25 +37,24 @@ export function HoverKeyword({ children, emoji, href, external }: Props) {
       <span className="font-medium text-fg underline decoration-accent/40 decoration-2 underline-offset-[3px] transition-colors group-hover/kw:text-accent">
         {children}
       </span>
-      {/* slot that opens to make room (pushes following text), emoji slides in from the right */}
+      {/* slot opens (pushes following text); content slides in from the right */}
       <motion.span
         aria-hidden
         className="inline-block overflow-hidden align-middle"
         initial={false}
-        animate={{ width: hover ? 32 : 0 }}
+        animate={{ maxWidth: hover ? 260 : 0 }}
         transition={reduce ? { duration: 0 } : spring}
+        style={{ maxWidth: 0 }}
       >
         <motion.span
-          className="inline-block pl-[0.3em] text-[1.5em] leading-none"
+          className="inline-block whitespace-nowrap"
           initial={false}
           animate={
-            reduce
-              ? { opacity: hover ? 1 : 0 }
-              : { x: hover ? 0 : 16, opacity: hover ? 1 : 0, rotate: hover ? 0 : -16 }
+            reduce ? { opacity: hover ? 1 : 0 } : { x: hover ? 0 : 18, opacity: hover ? 1 : 0 }
           }
-          transition={reduce ? { duration: 0 } : { ...spring, stiffness: 500, damping: 20 }}
+          transition={reduce ? { duration: 0 } : { ...spring, stiffness: 500, damping: 22 }}
         >
-          {emoji}
+          {reveal}
         </motion.span>
       </motion.span>
     </span>

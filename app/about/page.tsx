@@ -25,20 +25,25 @@ export default function About() {
           <div className="mt-8 space-y-7">
             {bio.map((b) => {
               let body: React.ReactNode = b.body;
-              if (b.keyword) {
-                const { word, emoji, href, external } = b.keyword;
-                const i = b.body.indexOf(word);
-                if (i !== -1) {
-                  body = (
-                    <>
-                      {b.body.slice(0, i)}
-                      <HoverKeyword emoji={emoji} href={href} external={external}>
-                        {word}
-                      </HoverKeyword>
-                      {b.body.slice(i + word.length)}
-                    </>
+              if (b.keywords?.length) {
+                const marks = b.keywords
+                  .map((k) => ({ k, i: b.body.indexOf(k.word) }))
+                  .filter((m) => m.i !== -1)
+                  .sort((a, z) => a.i - z.i);
+                const nodes: React.ReactNode[] = [];
+                let cur = 0;
+                marks.forEach((m, idx) => {
+                  if (m.i < cur) return; // skip overlaps
+                  if (m.i > cur) nodes.push(<span key={`t${idx}`}>{b.body.slice(cur, m.i)}</span>);
+                  nodes.push(
+                    <HoverKeyword key={`k${idx}`} emoji={m.k.emoji} logo={m.k.logo} href={m.k.href} external={m.k.external}>
+                      {m.k.word}
+                    </HoverKeyword>,
                   );
-                }
+                  cur = m.i + m.k.word.length;
+                });
+                nodes.push(<span key="tail">{b.body.slice(cur)}</span>);
+                body = nodes;
               }
               return (
                 <section key={b.heading}>
