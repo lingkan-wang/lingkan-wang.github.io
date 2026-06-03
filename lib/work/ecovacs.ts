@@ -23,7 +23,7 @@ export const ecovacs = {
     image: `${IMG}/hero.webp`,
     imageAlt: "Four DEEBOT X2 app screens — mapping, AI Smart Hosting, logs, and Lab features",
     meta: [
-      { label: "Role", items: ["Product Builder"] },
+      { label: "Role", items: ["AI Product Designer"] },
       {
         label: "Team",
         items: ["Product Design", "Software Eng", "Machine Learning", "Hardware R&D", "Product Mgmt"],
@@ -31,12 +31,12 @@ export const ecovacs = {
       {
         label: "Skills",
         items: [
-          "Product Strategy",
+          "AI Workflow Design",
           "Research Synthesis",
           "Interaction Design",
           "System Logic",
+          "Design-to-Engineering Handoff",
           "Cross-functional",
-          "Prototyping",
         ],
       },
       { label: "Timeline", items: ["May–Aug 2024", "12 weeks"] },
@@ -55,7 +55,7 @@ export const ecovacs = {
       { value: 33, suffix: "%", label: "of runs failed to avoid high-risk obstacles in pet-home tests" },
     ] as Stat[],
     ownership: [
-      "Defined success metrics + guardrails and aligned teams on one “product contract”",
+      "Defined success metrics, AI behavior guardrails, and one shared product contract",
       "Turned usability findings into a prioritized roadmap, MVP scope, and acceptance criteria",
       "Partnered with Robotics/ML/Eng to align UI with real robot constraints, model confidence, and failure modes",
       "Shipped an Autopilot system that cut configuration without sacrificing safety or cleaning quality",

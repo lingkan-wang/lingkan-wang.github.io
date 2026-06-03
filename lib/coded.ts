@@ -17,8 +17,8 @@ export const codedWork: CodedWork[] = [
     slug: "toast-sonner",
     title: "Toast — a Sonner recreation",
     blurb:
-      "A faithful vanilla HTML/CSS/JS recreation of Sonner — stacking toasts, hover-to-expand, swipe-to-dismiss, plus promise & action toasts. Zero dependencies.",
-    tags: ["Vanilla JS", "Animation", "Toast"],
+      "A coded component study focused on interaction fidelity: stacking logic, hover-to-expand behavior, swipe-to-dismiss, promise states, and action feedback with zero dependencies.",
+    tags: ["AI Coding", "Interaction Spec", "Component Logic"],
     year: 2026,
     live: "https://lingkan-wang.github.io/toast_component/",
     offset: 150,
@@ -27,8 +27,8 @@ export const codedWork: CodedWork[] = [
     slug: "feedback-popover",
     title: "Feedback — morphing popover + confetti",
     blurb:
-      "A feedback button that morphs into a popover and celebrates with a confetti burst on submit. Spring-based layout animation.",
-    tags: ["Popover", "Morph", "Confetti"],
+      "A live prototype for a compact feedback workflow, using motion and state transitions to make submit, success, and recovery moments feel clear.",
+    tags: ["Prototype", "Workflow UX", "Motion"],
     year: 2026,
     live: "https://lingkan-wang.github.io/feedback-popover/",
     offset: 0,

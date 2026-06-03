@@ -36,7 +36,7 @@ export default function About() {
                   if (m.i < cur) return; // skip overlaps
                   if (m.i > cur) nodes.push(<span key={`t${idx}`}>{b.body.slice(cur, m.i)}</span>);
                   nodes.push(
-                    <HoverKeyword key={`k${idx}`} emoji={m.k.emoji} logo={m.k.logo} href={m.k.href} external={m.k.external}>
+                    <HoverKeyword key={`k${idx}`} emoji={m.k.emoji} logo={m.k.logo} logoEm={m.k.logoEm} href={m.k.href} external={m.k.external}>
                       {m.k.word}
                     </HoverKeyword>,
                   );

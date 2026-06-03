@@ -10,20 +10,21 @@ type Props = {
   external?: boolean;
   emoji?: string; // emoji reveal (research, awards)
   logo?: string; // image reveal on a white chip (company / school logos)
+  logoEm?: number; // logo height in em (default 1.8) — bump for stacked/multi-line marks
 };
 
 // An inline keyword that, on hover, opens a slot to its right and slides a big
 // emoji or logo chip in from the right (reboot.studio-style inline reveal).
-export function HoverKeyword({ children, href, external, emoji, logo }: Props) {
+export function HoverKeyword({ children, href, external, emoji, logo, logoEm = 1.8 }: Props) {
   const reduce = useReducedMotion();
   const [hover, setHover] = useState(false);
   const spring = { type: "spring", stiffness: 420, damping: 26, mass: 0.6 } as const;
 
   const reveal = logo ? (
     // light: transparent logo inline. dark: sit it on a white chip so dark wordmarks stay legible.
-    <span className="ml-[0.4em] inline-flex items-center rounded-md align-middle dark:bg-white dark:px-1.5 dark:py-1 dark:shadow-sm">
+    <span className="ml-[0.4em] inline-flex items-center rounded-md align-middle dark:bg-white dark:px-1.5 dark:py-0.5 dark:shadow-sm">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={logo} alt="" className="h-[1.8em] w-auto object-contain dark:h-[1.5em]" />
+      <img src={logo} alt="" className="w-auto object-contain" style={{ height: `${logoEm}em` }} />
     </span>
   ) : (
     <span className="inline-block pl-[0.3em] align-middle text-[1.6em] leading-none">{emoji}</span>
