@@ -24,21 +24,9 @@ export function SpotifyGlyph() {
 
 export function AppleMusicGlyph() {
   return (
-    <span className={chip} style={{ background: "linear-gradient(170deg, #FC576B 0%, #FA2D48 55%, #F61E3C 100%)" }} aria-hidden>
-      <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden>
-        {/* stems + curved beam */}
-        <path
-          d="M10.4 17V7.3c0-.6.4-1 .95-1.12l6.05-1.2c.62-.12 1.05.27 1.05.9V14"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* note heads */}
-        <ellipse cx="7.8" cy="17.05" rx="2.95" ry="2.5" fill="#fff" />
-        <ellipse cx="16.35" cy="14.05" rx="2.95" ry="2.5" fill="#fff" />
-      </svg>
+    <span className={chip} aria-hidden>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/about/apple-music.png" alt="" className="size-full object-cover" />
     </span>
   );
 }
@@ -58,11 +46,9 @@ export function PhotosGlyph() {
 
 export function WechatGlyph() {
   return (
-    <span className={`${chip} bg-[#07C160]`} aria-hidden>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
-        <path d="M8.69 4.5C4.74 4.5 1.5 7.16 1.5 10.45c0 1.9 1.07 3.6 2.74 4.7l-.68 2.05 2.4-1.2c.86.24 1.55.39 2.73.39.21 0 .42-.01.62-.03a4.86 4.86 0 0 1-.2-1.36c0-2.9 2.8-5.25 6.27-5.25.23 0 .46.02.68.04C15.45 6.53 12.43 4.5 8.69 4.5zM6.36 8.72a.92.92 0 1 1 0-1.84.92.92 0 0 1 0 1.84zm4.78 0a.92.92 0 1 1 0-1.84.92.92 0 0 1 0 1.84z" />
-        <path d="M22.5 14.86c0-2.77-2.77-5.02-5.88-5.02-3.31 0-5.91 2.25-5.91 5.02 0 2.78 2.6 5.02 5.91 5.02.69 0 1.39-.17 2.08-.34l1.9 1.04-.52-1.73c1.46-1.1 2.42-2.55 2.42-3.99zM14.7 13.7a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm3.87 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z" />
-      </svg>
+    <span className={chip} aria-hidden>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/about/wechat.png" alt="" className="size-full object-cover" />
     </span>
   );
 }
