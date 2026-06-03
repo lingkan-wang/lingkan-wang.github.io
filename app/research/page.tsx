@@ -11,7 +11,7 @@ export default function ResearchPage() {
     <div className="mx-auto max-w-[1080px] px-6 pb-28 pt-20 sm:pt-28">
       <Reveal>
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Research</h1>
-        <p className="mt-4 max-w-[640px] text-[15px] leading-7 text-muted">
+        <p className="mt-4 text-[15px] leading-7 text-muted">
           Alongside design, I do HCI and learning-sciences research — exploring how people learn, collaborate, and interact with the things we build.
         </p>
       </Reveal>
