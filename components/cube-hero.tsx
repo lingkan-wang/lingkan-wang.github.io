@@ -157,25 +157,17 @@ export function CubeHero() {
         {bubble && (
           <div className="pointer-events-none fixed z-50" style={{ left: bubble.x, top: bubble.y }}>
             <div className="absolute bottom-3 left-0 -translate-x-1/2">
+              {/* Plain rounded pill, no pointer tail (Georgia-style) — just a frosted
+                  capsule floating above the clicked square. */}
               <motion.div
                 style={{ transformOrigin: "bottom center" }}
                 initial={reduce ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.9, filter: "blur(6px)" }}
                 animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                 exit={reduce ? { opacity: 0 } : { opacity: 0, y: 4, scale: 0.96, filter: "blur(4px)" }}
                 transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                className="relative"
+                className="max-w-[200px] whitespace-nowrap rounded-full border border-border bg-bg/70 px-3.5 py-1.5 text-center text-[13px] font-medium text-fg shadow-lg backdrop-blur-md"
               >
-                {/* Tail sits BEHIND the pill (-z-10): the frosted body covers + blurs its
-                    top half, so only a clean downward V-tip shows, continuing the pill's
-                    border. (Before, the tail painted on top of the pill, so the whole
-                    diamond + a seam where the pill border crossed it were visible.) */}
-                <span
-                  aria-hidden
-                  className="absolute left-1/2 top-full -z-10 size-2.5 -translate-x-1/2 -translate-y-[70%] rotate-45 border-b border-r border-border bg-bg/70 backdrop-blur-md"
-                />
-                <div className="max-w-[200px] whitespace-nowrap rounded-full border border-border bg-bg/70 px-3.5 py-1.5 text-center text-[13px] font-medium text-fg shadow-lg backdrop-blur-md">
-                  {bubble.text}
-                </div>
+                {bubble.text}
               </motion.div>
             </div>
           </div>
