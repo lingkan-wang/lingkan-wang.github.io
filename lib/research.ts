@@ -21,6 +21,7 @@ export const research: Paper[] = [
     summary:
       "How do you teach engineering with no internet? A study of 81 learners in rural Uganda taking an offline course over radio and basic phones — surfacing the motivational and technological realities of low-infrastructure EdTech for last-mile communities.",
     cover: "/research/chi.png",
+    href: "https://dl.acm.org/doi/full/10.1145/3772318.3790312",
   },
   {
     title: "High- and Low-Performing Groups in Collaborative VR Video-Based Learning",
@@ -51,6 +52,7 @@ export const research: Paper[] = [
     summary:
       "When a remote course lets Ugandan learners pick English, Leb-Lango, or a hybrid of both, how do they actually use language? Hybrid learners who genuinely drew on both persisted longer — early evidence for flexible primary-language use with secondary-language support.",
     cover: "/research/language-preferences.png",
+    href: "https://arxiv.org/abs/2604.07843",
   },
   {
     title: "Auto-generating Road Trip Vlogs While Safe-driving",
@@ -61,6 +63,7 @@ export const research: Paper[] = [
     summary:
       "A Human-Vehicle-Environment system that auto-captures and edits scenic road-trip footage, so drivers can get the vlog without picking up their phone at the wheel.",
     cover: "/research/ahfe.png",
+    href: "https://www.researchgate.net/publication/385645719_Auto-generating_Road_Trip_Vlogs_While_Safe-driving_a_Human-Vehicle-Environment_System_for_Capturing_and_Editing_Scenic_Views_En_Route",
   },
   {
     title: "Savior: An Interactive Game Device for Environmental Protection",
@@ -71,5 +74,6 @@ export const research: Paper[] = [
     summary:
       "An interactive art installation and serious game — Arduino sensors and 3D-printed models let people feel how their everyday behavior reshapes a fragile planet, from grim to thriving.",
     cover: "/research/icot.png",
+    href: "https://ieeexplore.ieee.org/abstract/document/9680643",
   },
 ];
