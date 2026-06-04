@@ -7,14 +7,20 @@ const IMG = "/work/ecovacs";
 export type Meta = { label: string; items: string[] };
 export type Quote = { name: string; quote: string; avatar: string };
 export type Card = { title: string; body: string };
-export type Shot = { src: string; alt: string; framed?: boolean };
+// A before/after media unit. `placeholder` = footage not yet supplied (shows a
+// labelled box); `video` = a real demo clip with a poster frame.
+export type Media =
+  | { kind: "placeholder"; label: string; caption: string }
+  | { kind: "video"; src: string; poster: string; alt: string; caption: string };
+
 export type Chapter = {
   kicker: string;
   title: string;
   problem: string;
   solution: string;
-  video: string; // placeholder label until a real clip is wired
-  shots: Shot[];
+  before: Media;
+  after: Media;
+  extras?: Media[]; // additional "after" clips (e.g. the result screen)
   note?: { title: string; body: string };
 };
 
@@ -78,11 +84,14 @@ export const ecovacs = {
       problem: "Manual room-splitting and virtual walls turned setup into a chore.",
       solution:
         "Now the robot generates the map, divides rooms, and labels each room type on its own. Users only review and make small tweaks — setup goes from a task to a glance.",
-      video: "Demo · Auto Mapping",
-      shots: [
-        { src: `${IMG}/mapping-rooms.png`, alt: "Automatic room recognition and labels" },
-        { src: `${IMG}/mapping-split.png`, alt: "Room split and boundary editing" },
-      ],
+      before: { kind: "placeholder", label: "Manual room-splitting & virtual walls", caption: "How mapping setup used to feel" },
+      after: {
+        kind: "video",
+        src: `${IMG}/demo-mapping.mp4`,
+        poster: `${IMG}/demo-mapping-poster.jpg`,
+        alt: "Auto mapping — the robot draws and labels the map on its own",
+        caption: "The map draws and labels itself",
+      },
     },
     {
       kicker: "Solution 02 · AI Auto-Cleaning",
@@ -90,8 +99,23 @@ export const ecovacs = {
       problem: "A dozen cleaning settings users didn't know how to choose.",
       solution:
         "Tap Start, and the system reads each room's type and floor material to pick the strategy itself — suction, water, passes. The experience shifts from manual control to something that behaves like an agent working on your behalf.",
-      video: "Demo · AI Auto-Cleaning",
-      shots: [{ src: `${IMG}/hosting-intro.jpg`, alt: "AI Smart Hosting explained on first run", framed: true }],
+      before: { kind: "placeholder", label: "A dozen settings to choose", caption: "Configuring every clean by hand" },
+      after: {
+        kind: "video",
+        src: `${IMG}/demo-ai-cleaning.mp4`,
+        poster: `${IMG}/demo-ai-cleaning-poster.jpg`,
+        alt: "AI auto-cleaning — one tap and the robot picks the strategy",
+        caption: "One tap — AI picks the strategy",
+      },
+      extras: [
+        {
+          kind: "video",
+          src: `${IMG}/demo-ai-cleaning-result.mp4`,
+          poster: `${IMG}/demo-ai-cleaning-result-poster.jpg`,
+          alt: "Cleaning complete — the robot hands back a clear report",
+          caption: "…and hands back a clear cleaning report",
+        },
+      ],
     },
     {
       kicker: "Solution 03 · Pet-Safe Navigation",
@@ -99,8 +123,14 @@ export const ecovacs = {
       problem: "A single pet-waste accident was enough to lose a user for good.",
       solution:
         "We retrained the recognition system to reliably detect pet waste and steer around it mid-clean — turning the scariest failure mode into a non-event.",
-      video: "Demo · Pet-Waste Avoidance",
-      shots: [{ src: `${IMG}/petmode.jpg`, alt: "Pet Mode onboarding for homes with pets", framed: true }],
+      before: { kind: "placeholder", label: "Robot runs over pet waste", caption: "The failure that broke trust" },
+      after: {
+        kind: "video",
+        src: `${IMG}/demo-pet.mp4`,
+        poster: `${IMG}/demo-pet-poster.jpg`,
+        alt: "Pet-waste avoidance — the robot detects waste and steers around it",
+        caption: "Detects waste and steers around it",
+      },
       note: {
         title: "An honest trade-off",
         body: "In build, a real constraint surfaced: pet-waste detection and fine-particle cleaning couldn't run at the same time. Rather than silently pick one, we designed a clear toggle with an explanation — so users make an informed choice for their own home.",

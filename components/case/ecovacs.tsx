@@ -1,12 +1,36 @@
 import type { Project } from "@/lib/projects";
-import { ecovacs } from "@/lib/work/ecovacs";
+import { ecovacs, type Media } from "@/lib/work/ecovacs";
 import { Reveal } from "@/components/reveal";
-import { Phone, Mockup, Plate } from "./shots";
-import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway, VideoSlot } from "./elements";
+import { Plate } from "./shots";
+import { ShotVideo } from "./shot-video";
+import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway, MediaPlaceholder } from "./elements";
 
 const NARROW = "mx-auto max-w-[680px] px-6";
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
 const GAP = "mt-24 sm:mt-36";
+
+/** One labelled before/after tile: a chip + caption over a portrait media. */
+function MediaTile({ media, chip, accent = false }: { media: Media; chip: string; accent?: boolean }) {
+  return (
+    <figure className="mx-auto w-full max-w-[300px]">
+      <figcaption className="mb-3 flex items-center gap-2.5">
+        <span
+          className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${
+            accent ? "border-accent/40 bg-accent/[0.06] text-accent" : "border-border text-muted"
+          }`}
+        >
+          {chip}
+        </span>
+        <span className="text-xs leading-tight text-muted">{media.caption}</span>
+      </figcaption>
+      {media.kind === "video" ? (
+        <ShotVideo src={media.src} poster={media.poster} alt={media.alt} />
+      ) : (
+        <MediaPlaceholder portrait label={media.label} caption="footage to come" />
+      )}
+    </figure>
+  );
+}
 
 export function EcovacsCaseStudy(_props: { meta: Project }) {
   const { hero, problem, priorities, chapters, rollout, impact, takeaways } = ecovacs;
@@ -94,38 +118,20 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
             </div>
           </Reveal>
 
-          {/* demo video (placeholder until exported) */}
-          <Reveal className="mt-10">
-            <VideoSlot label={ch.video} />
+          {/* before / after comparison */}
+          <Reveal className="mt-9">
+            <div className="grid items-start gap-8 sm:grid-cols-2">
+              <MediaTile media={ch.before} chip="Before" />
+              <MediaTile media={ch.after} chip="After" accent />
+            </div>
+            {ch.extras && ch.extras.length > 0 && (
+              <div className="mt-8 flex flex-wrap justify-center gap-8">
+                {ch.extras.map((m, i) => (
+                  <MediaTile key={i} media={m} chip="Then" />
+                ))}
+              </div>
+            )}
           </Reveal>
-
-          {/* supporting app screens */}
-          {ch.shots.length > 0 &&
-            (ch.shots.every((s) => s.framed) ? (
-              // pre-framed mockups already sit on their own background — show as-is
-              <Reveal className="mt-5">
-                <div className="flex flex-wrap items-start justify-center gap-6">
-                  {ch.shots.map((s) => (
-                    <div key={s.src} className="w-[240px] sm:w-[300px]">
-                      <Mockup src={s.src} alt={s.alt} />
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-            ) : (
-              // raw app screens — framed as phone cards on a tinted plate
-              <Reveal className="mt-5">
-                <div className="rounded-3xl bg-[#eaeefb] p-6 dark:bg-fg/[0.04] sm:p-10">
-                  <div className="flex flex-wrap items-start justify-center gap-5 sm:gap-7">
-                    {ch.shots.map((s) => (
-                      <div key={s.src} className="w-[160px] sm:w-[220px]">
-                        <Phone src={s.src} alt={s.alt} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Reveal>
-            ))}
 
           {/* optional trade-off callout */}
           {ch.note && (
