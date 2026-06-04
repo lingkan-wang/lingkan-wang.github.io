@@ -1,147 +1,123 @@
-import Image from "next/image";
 import type { Project } from "@/lib/projects";
 import { ecovacs } from "@/lib/work/ecovacs";
 import { Reveal } from "@/components/reveal";
-import { StatCounter } from "./stat-counter";
-import { Phone, Plate } from "./shots";
-import { SectionLabel, Emph, MetaGrid, QuoteCard, NumberedCard, Takeaway } from "./elements";
+import { Phone, Mockup, Plate } from "./shots";
+import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway, VideoSlot } from "./elements";
 
 const NARROW = "mx-auto max-w-[680px] px-6";
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
-const GAP = "mt-20 sm:mt-28";
+const GAP = "mt-24 sm:mt-36";
 
-function featureCols(n: number) {
-  return n >= 3 ? "sm:grid-cols-3" : n === 2 ? "sm:grid-cols-2" : "";
-}
-
-export function EcovacsCaseStudy({ meta }: { meta: Project }) {
-  const { hero, brief, research, voices, problems, mission, opportunities, pillars, productOverview, impact, nextSteps, takeaways } = ecovacs;
+export function EcovacsCaseStudy(_props: { meta: Project }) {
+  const { hero, problem, priorities, chapters, rollout, impact, takeaways } = ecovacs;
 
   return (
     <div className="pt-20 sm:pt-28">
-      {/* HERO */}
+      {/* ───────────── HERO ───────────── */}
       <header className={WIDE}>
         <Reveal>
-          <SectionLabel>
-            {meta.role} · {meta.year} · {meta.company}
-          </SectionLabel>
-          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
-            {meta.title}
+          <SectionLabel>{hero.kicker}</SectionLabel>
+          <h1 className="mt-5 max-w-4xl text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
+            {hero.headline}
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-muted">{meta.summary}</p>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">{hero.sub}</p>
         </Reveal>
-        <Reveal delay={0.05} className="mt-10 border-t border-border pt-8">
+        <Reveal delay={0.05} className="mt-12 border-t border-border pt-8">
           <MetaGrid meta={hero.meta} />
         </Reveal>
       </header>
 
       <Reveal className={`${WIDE} mt-12`}>
-        <Plate src={hero.image} alt={hero.imageAlt} />
+        <Plate src={hero.media} alt={hero.mediaAlt} />
       </Reveal>
 
-      {/* BRIEF */}
+      {/* ───────────── PROBLEM ───────────── */}
       <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Brief</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">
-          <Emph text={brief} />
-        </p>
+        <SectionLabel>The problem</SectionLabel>
+        <p className="mt-5 text-[15px] leading-7 text-fg/90">{problem.intro}</p>
       </Reveal>
-
-      {/* RESEARCH + STATS */}
-      <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Research</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">{research.intro}</p>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-12`}>
-        <div className="grid gap-x-8 gap-y-10 border-y border-border py-10 sm:grid-cols-3">
-          {research.stats.map((s) => (
-            <div key={s.label}>
-              <div className="text-4xl font-semibold tracking-tight text-accent sm:text-5xl">
-                <StatCounter value={s.value} suffix={s.suffix} />
-              </div>
-              <p className="mt-3 text-sm leading-6 text-muted">{s.label}</p>
-            </div>
+      <Reveal className={`${WIDE} mt-8`}>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {problem.cards.map((c, i) => (
+            <NumberedCard key={c.title} n={`0${i + 1}`} title={c.title} body={c.body} />
           ))}
         </div>
       </Reveal>
-      <Reveal className={`${NARROW} mt-12`}>
-        <h3 className="text-lg font-semibold tracking-tight">My ownership &amp; scope</h3>
-        <ul className="mt-4 space-y-3">
-          {research.ownership.map((o) => (
-            <li key={o} className="flex gap-3 text-[15px] leading-7 text-fg/90">
-              <span className="mt-[11px] size-1.5 shrink-0 rounded-full bg-accent" />
-              <span>{o}</span>
-            </li>
-          ))}
-        </ul>
-      </Reveal>
-
-      {/* VOICES */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <SectionLabel>What we heard</SectionLabel>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {voices.map((q) => (
+      <Reveal className={`${WIDE} mt-10`}>
+        <p className="mb-6 font-mono text-xs uppercase tracking-widest text-muted">In their words</p>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {problem.voices.map((q) => (
             <QuoteCard key={q.name} {...q} />
           ))}
         </div>
       </Reveal>
 
-      {/* PROBLEM */}
+      {/* ───────────── PRIORITIES ───────────── */}
       <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Problem statement</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">
-          Although DEEBOT X2 is positioned as fully autonomous, users still hit friction in setup, decision-making, and
-          high-risk scenarios. The system functions — but it doesn’t consistently feel effortless or trustworthy.
-        </p>
+        <SectionLabel>How we chose what to build</SectionLabel>
+        <p className="mt-5 text-[15px] leading-7 text-fg/90">{priorities.intro}</p>
+        <ul className="mt-5 space-y-3">
+          {priorities.criteria.map((c) => (
+            <li key={c} className="flex gap-3 text-[15px] leading-7 text-fg/90">
+              <span className="mt-[11px] size-1.5 shrink-0 rounded-full bg-accent" />
+              <span>{c}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-[15px] leading-7 text-fg/90">Three bets rose to the top:</p>
       </Reveal>
-      <Reveal className={`${WIDE} mt-6`}>
+      <Reveal className={`${WIDE} mt-8`}>
         <div className="grid gap-4 sm:grid-cols-3">
-          {problems.map((p) => (
-            <NumberedCard key={p.n} {...p} />
+          {priorities.bets.map((b, i) => (
+            <NumberedCard key={b.title} n={`0${i + 1}`} title={b.title} body={b.body} />
           ))}
         </div>
       </Reveal>
 
-      {/* MISSION */}
-      <Reveal className={`mx-auto max-w-[860px] px-6 ${GAP}`}>
-        <p className="text-center font-mono text-xs uppercase tracking-widest text-muted">The mission</p>
-        <p className="mt-5 text-balance text-center text-2xl font-medium leading-snug tracking-tight sm:text-[2rem]">
-          {mission}
-        </p>
-      </Reveal>
-
-      {/* OPPORTUNITIES */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <SectionLabel>Opportunities</SectionLabel>
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {opportunities.map((o, i) => (
-            <NumberedCard key={o.title} n={`0${i + 1}`} title={o.title} body={o.body} />
-          ))}
-        </div>
-      </Reveal>
-
-      {/* SOLUTION PILLARS */}
-      {pillars.map((p) => {
-        const phones = p.shots.filter((s) => s.kind === "phone");
-        const plates = p.shots.filter((s) => s.kind === "plate");
-        return (
-          <section key={p.title} className={`${WIDE} ${GAP}`}>
-            <Reveal>
-              <div className="flex items-center gap-3">
-                <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#edf0fb]">
-                  <Image src={p.icon} alt="" width={18} height={18} className="size-[18px]" />
-                </span>
-                <SectionLabel>{p.kicker}</SectionLabel>
+      {/* ───────────── FEATURE CHAPTERS ───────────── */}
+      {chapters.map((ch) => (
+        <section key={ch.kicker} className={`${WIDE} ${GAP}`}>
+          <Reveal>
+            <SectionLabel>{ch.kicker}</SectionLabel>
+            <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+              {ch.title}
+            </h2>
+            <div className="mt-7 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The problem</p>
+                <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.problem}</p>
               </div>
-              <h2 className="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">{p.title}</h2>
-              <p className="mt-3 max-w-2xl text-[15px] leading-7 text-fg/90">{p.whatIsIt}</p>
-            </Reveal>
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The solution</p>
+                <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.solution}</p>
+              </div>
+            </div>
+          </Reveal>
 
-            {phones.length > 0 && (
-              <Reveal className="mt-8">
-                <div className="rounded-3xl bg-[#eaeefb] p-6 sm:p-10">
+          {/* demo video (placeholder until exported) */}
+          <Reveal className="mt-10">
+            <VideoSlot label={ch.video} />
+          </Reveal>
+
+          {/* supporting app screens */}
+          {ch.shots.length > 0 &&
+            (ch.shots.every((s) => s.framed) ? (
+              // pre-framed mockups already sit on their own background — show as-is
+              <Reveal className="mt-5">
+                <div className="flex flex-wrap items-start justify-center gap-6">
+                  {ch.shots.map((s) => (
+                    <div key={s.src} className="w-[240px] sm:w-[300px]">
+                      <Mockup src={s.src} alt={s.alt} />
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+            ) : (
+              // raw app screens — framed as phone cards on a tinted plate
+              <Reveal className="mt-5">
+                <div className="rounded-3xl bg-[#eaeefb] p-6 dark:bg-fg/[0.04] sm:p-10">
                   <div className="flex flex-wrap items-start justify-center gap-5 sm:gap-7">
-                    {phones.map((s) => (
+                    {ch.shots.map((s) => (
                       <div key={s.src} className="w-[160px] sm:w-[220px]">
                         <Phone src={s.src} alt={s.alt} />
                       </div>
@@ -149,59 +125,54 @@ export function EcovacsCaseStudy({ meta }: { meta: Project }) {
                   </div>
                 </div>
               </Reveal>
-            )}
-            {plates.map((s) => (
-              <Reveal key={s.src} className="mt-5">
-                <Plate src={s.src} alt={s.alt} />
-              </Reveal>
             ))}
 
-            <Reveal className="mt-10">
-              <div className={`grid gap-x-8 gap-y-7 ${featureCols(p.features.length)}`}>
-                {p.features.map((f) => (
-                  <div key={f.title} className="border-t border-border pt-4">
-                    <h3 className="text-sm font-semibold tracking-tight">{f.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted">{f.body}</p>
-                  </div>
-                ))}
+          {/* optional trade-off callout */}
+          {ch.note && (
+            <Reveal className="mt-6">
+              <div className="rounded-2xl border border-border bg-fg/[0.02] p-6 sm:p-7">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{ch.note.title}</p>
+                <p className="mt-3 text-[15px] leading-7 text-fg/90">{ch.note.body}</p>
               </div>
             </Reveal>
-          </section>
-        );
-      })}
+          )}
+        </section>
+      ))}
 
-      {/* PRODUCT OVERVIEW */}
+      {/* ───────────── ROLLOUT ───────────── */}
       <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Product overview</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">{productOverview.body}</p>
+        <SectionLabel>Rollout</SectionLabel>
+        <h2 className="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">{rollout.title}</h2>
+        <p className="mt-5 text-[15px] leading-7 text-fg/90">{rollout.intro}</p>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {productOverview.shots.map((s) => (
-            <div key={s.src} className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
-              <Plate src={s.src} alt={s.alt} />
-            </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {rollout.reasons.map((r, i) => (
+            <NumberedCard key={r.title} n={`0${i + 1}`} title={r.title} body={r.body} />
           ))}
         </div>
       </Reveal>
-
-      {/* IMPACT */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <SectionLabel>Impact</SectionLabel>
-        <div className="mt-8 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {impact.map((s) => (
-            <div key={s.label}>
-              <div className="text-5xl font-semibold tracking-tight sm:text-6xl">
-                <StatCounter value={s.value} suffix={s.suffix} />
-              </div>
-              <p className="mt-3 text-sm leading-6 text-muted">{s.label}</p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-10 max-w-2xl text-[15px] leading-7 text-muted">{nextSteps}</p>
+      <Reveal className={`${NARROW} mt-8`}>
+        <p className="text-[15px] leading-7 text-muted">{rollout.outro}</p>
       </Reveal>
 
-      {/* TAKEAWAYS */}
+      {/* ───────────── IMPACT (qualitative) ───────────── */}
+      <Reveal className={`mx-auto max-w-[860px] px-6 ${GAP}`}>
+        <p className="text-center font-mono text-xs uppercase tracking-widest text-muted">Impact</p>
+        <p className="mt-5 text-balance text-center text-2xl font-medium leading-snug tracking-tight sm:text-[2rem]">
+          {impact.headline}
+        </p>
+        <ul className="mx-auto mt-10 max-w-2xl space-y-4">
+          {impact.results.map((r) => (
+            <li key={r} className="flex gap-3 text-[15px] leading-7 text-fg/90">
+              <span className="mt-[10px] size-1.5 shrink-0 rounded-full bg-accent" />
+              <span>{r}</span>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+
+      {/* ───────────── TAKEAWAYS ───────────── */}
       <Reveal className={`${NARROW} ${GAP}`}>
         <SectionLabel>Takeaways</SectionLabel>
         <div className="mt-6 space-y-8">

@@ -71,3 +71,37 @@ export function Takeaway({ n, title, body }: { n: string; title: string; body: s
     </div>
   );
 }
+
+/**
+ * A 16:9 media slot for a feature demo. With `src` it renders a looping, muted
+ * autoplay <video>; without one it shows a labelled placeholder (play glyph +
+ * caption) so the layout reads correctly before the real clip is exported in.
+ */
+export function VideoSlot({ label, src, poster }: { label: string; src?: string; poster?: string }) {
+  if (src) {
+    return (
+      <video
+        src={src}
+        poster={poster}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="aspect-video w-full rounded-2xl border border-border object-cover"
+      />
+    );
+  }
+  return (
+    <div className="grid aspect-video w-full place-items-center rounded-2xl border border-dashed border-border bg-fg/[0.025]">
+      <div className="flex flex-col items-center gap-3 text-muted">
+        <span className="grid size-14 place-items-center rounded-full border border-border bg-bg/70 text-fg/70">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+        <span className="font-mono text-[11px] uppercase tracking-widest text-fg/70">{label}</span>
+        <span className="text-[11px] text-muted/70">video placeholder</span>
+      </div>
+    </div>
+  );
+}
