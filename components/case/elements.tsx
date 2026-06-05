@@ -111,7 +111,18 @@ export function MediaPlaceholder({
  * autoplay <video>; without one it shows a labelled placeholder (play glyph +
  * caption) so the layout reads correctly before the real clip is exported in.
  */
-export function VideoSlot({ label, src, poster }: { label: string; src?: string; poster?: string }) {
+export function VideoSlot({
+  label,
+  src,
+  poster,
+  portrait = false,
+}: {
+  label: string;
+  src?: string;
+  poster?: string;
+  portrait?: boolean;
+}) {
+  const aspect = portrait ? "aspect-[404/838]" : "aspect-video";
   if (src) {
     return (
       <video
@@ -121,12 +132,12 @@ export function VideoSlot({ label, src, poster }: { label: string; src?: string;
         loop
         muted
         playsInline
-        className="aspect-video w-full rounded-2xl border border-border object-cover"
+        className={`${aspect} w-full rounded-2xl border border-border object-cover`}
       />
     );
   }
   return (
-    <div className="grid aspect-video w-full place-items-center rounded-2xl border border-dashed border-border bg-fg/[0.025]">
+    <div className={`grid ${aspect} w-full place-items-center rounded-2xl border border-dashed border-border bg-fg/[0.025]`}>
       <div className="flex flex-col items-center gap-3 text-muted">
         <span className="grid size-14 place-items-center rounded-full border border-border bg-bg/70 text-fg/70">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>

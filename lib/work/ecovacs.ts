@@ -181,6 +181,21 @@ export const ecovacs = {
     ],
   },
 
+  improvements: {
+    intro:
+      "Beyond the three headline features, a handful of smaller refinements rounded out the X2 experience.",
+    yiko: {
+      kicker: "Yiko · Voice",
+      title: "Just say it out loud.",
+      body: "We refined Yiko, the on-device voice assistant — start a clean, send the robot to a specific room, or pause it, all hands-free without ever opening the app.",
+      // video placeholder until the Yiko demo clip is exported in
+    },
+    others: [
+      { title: "Improvement (to fill in)", body: "Short description of what changed and why it mattered — placeholder for now." },
+      { title: "Improvement (to fill in)", body: "Short description of what changed and why it mattered — placeholder for now." },
+    ] as Card[],
+  },
+
   takeaways: [
     {
       title: "Start with real household behavior",

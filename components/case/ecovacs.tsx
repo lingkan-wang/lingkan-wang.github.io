@@ -4,7 +4,7 @@ import { ecovacs, type Media } from "@/lib/work/ecovacs";
 import { Reveal } from "@/components/reveal";
 import { Plate } from "./shots";
 import { ShotVideo } from "./shot-video";
-import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway } from "./elements";
+import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway, MediaPlaceholder, VideoSlot } from "./elements";
 
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
 const PROSE = "max-w-[680px]"; // readable text width, left-aligned to the WIDE edge
@@ -24,7 +24,7 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
         </span>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
       </figcaption>
-      <div className="relative aspect-[378/740] w-full overflow-hidden rounded-2xl border border-border bg-fg/[0.02]">
+      <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.75rem] border border-border bg-fg/[0.02]">
         {media.kind === "video" ? (
           <ShotVideo src={media.src} poster={media.poster} alt={media.alt} />
         ) : media.kind === "image" ? (
@@ -40,7 +40,7 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
 }
 
 export function EcovacsCaseStudy(_props: { meta: Project }) {
-  const { hero, problem, priorities, chapters, rollout, impact, takeaways } = ecovacs;
+  const { hero, problem, priorities, chapters, rollout, impact, improvements, takeaways } = ecovacs;
 
   return (
     <div className="pt-20 sm:pt-28">
@@ -189,6 +189,41 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
             </li>
           ))}
         </ul>
+      </Reveal>
+
+      {/* ───────────── MORE IMPROVEMENTS ───────────── */}
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <div className={PROSE}>
+          <SectionLabel>More improvements</SectionLabel>
+          <p className="mt-5 text-[15px] leading-7 text-fg/90">{improvements.intro}</p>
+        </div>
+      </Reveal>
+
+      {/* Yiko — featured */}
+      <Reveal className={`${WIDE} mt-10`}>
+        <div className="grid items-center gap-8 sm:grid-cols-2 sm:gap-12">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{improvements.yiko.kicker}</p>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[1.7rem]">{improvements.yiko.title}</h3>
+            <p className="mt-4 max-w-prose text-[15px] leading-7 text-fg/90">{improvements.yiko.body}</p>
+          </div>
+          <div className="mx-auto w-full max-w-[300px]">
+            <VideoSlot label="Demo · Yiko voice" portrait />
+          </div>
+        </div>
+      </Reveal>
+
+      {/* other improvements — placeholders to fill in */}
+      <Reveal className={`${WIDE} mt-12`}>
+        <div className="grid gap-8 sm:grid-cols-2">
+          {improvements.others.map((o, i) => (
+            <div key={i}>
+              <MediaPlaceholder label={`Improvement ${String(i + 1).padStart(2, "0")}`} caption="image / video to come" />
+              <h3 className="mt-4 text-base font-semibold tracking-tight">{o.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{o.body}</p>
+            </div>
+          ))}
+        </div>
       </Reveal>
 
       {/* ───────────── TAKEAWAYS ───────────── */}
