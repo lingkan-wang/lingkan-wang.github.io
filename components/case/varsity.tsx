@@ -3,6 +3,7 @@ import type { Project } from "@/lib/projects";
 import { varsity, type Shot as ShotT, type TradeOff } from "@/lib/work/varsity";
 import { Reveal } from "@/components/reveal";
 import { Placeholder } from "@/components/placeholder";
+import { Carousel } from "./carousel";
 import { StatCounter } from "./stat-counter";
 import { SectionLabel, Emph, MetaGrid, NumberedCard, Takeaway } from "./elements";
 
@@ -25,6 +26,31 @@ function Shot({ shot, className = "" }: { shot: ShotT; className?: string }) {
       sizes="(max-width: 1080px) 92vw, 1080px"
       className={`h-auto w-full rounded-2xl border border-border bg-white shadow-sm ring-1 ring-black/[0.03] ${className}`}
     />
+  );
+}
+
+/** One carousel slide — a full screen contained in a fixed-height frame, with a caption. */
+function ExplorationSlide({ shot }: { shot: ShotT }) {
+  const FRAME = "h-[clamp(300px,54vh,560px)] rounded-2xl bg-fg/[0.03]";
+  return (
+    <div className="px-1">
+      {shot.placeholder || !shot.src ? (
+        <div className={`flex items-center justify-center border border-dashed border-border ${FRAME}`}>
+          <span className="px-8 text-center font-mono text-[10px] uppercase tracking-widest text-muted">{shot.alt}</span>
+        </div>
+      ) : (
+        <div className={`relative ${FRAME}`}>
+          <Image
+            src={shot.src}
+            alt={shot.alt}
+            fill
+            sizes="(max-width: 1080px) 92vw, 1080px"
+            className="object-contain p-5 sm:p-8"
+          />
+        </div>
+      )}
+      {shot.caption && <p className="mt-3 text-center text-xs text-muted">{shot.caption}</p>}
+    </div>
   );
 }
 
@@ -286,14 +312,15 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{explorations.body}</p>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid items-start gap-4 sm:grid-cols-2">
-          {explorations.shots.map((s) => (
-            <figure key={s.src ?? s.alt} className="rounded-2xl bg-fg/[0.025] p-5">
-              <Shot shot={s} />
-              {s.caption && <figcaption className="mt-3 text-center text-xs text-muted">{s.caption}</figcaption>}
-            </figure>
-          ))}
-        </div>
+        <Carousel
+          slides={explorations.shots.map((s) => ({
+            key: s.src ?? s.alt,
+            node: <ExplorationSlide shot={s} />,
+          }))}
+        />
+        <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
+          Drag, swipe, or use ← → to browse
+        </p>
       </Reveal>
 
       {/* OUTCOME */}
