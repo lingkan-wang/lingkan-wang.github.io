@@ -25,16 +25,13 @@ export type Chapter = {
   note?: { title: string; body: string };
 };
 
-// A "more improvements" row: a feature with either a demo video or a screenshot.
+// A "more improvements" row: a feature with one or more media (demo video or screenshots).
+export type ImprovementMedia = { video?: string; poster?: string; img?: string; w?: number; h?: number };
 export type ImprovementItem = {
   kicker: string;
   title: string;
   body: string;
-  video?: string;
-  poster?: string;
-  img?: string;
-  w?: number;
-  h?: number;
+  media: ImprovementMedia[];
 };
 
 export const ecovacs = {
@@ -201,24 +198,25 @@ export const ecovacs = {
         kicker: "Yiko · Voice",
         title: "Just say it out loud.",
         body: "We refined Yiko, the on-device voice assistant — start a clean, send the robot to a specific room, or pause it, all hands-free without ever opening the app.",
-        video: `${IMG}/demo-yiko.mp4`,
-        poster: `${IMG}/demo-yiko-poster.jpg`,
+        media: [{ video: `${IMG}/demo-yiko.mp4`, poster: `${IMG}/demo-yiko-poster.jpg` }],
       },
       {
         kicker: "Onboarding",
         title: "Guided Custom Cleaning Experience",
         body: "Guided onboarding was introduced to help users learn how to add custom cleaning areas, select zones on the map, and activate AI-assisted cleaning. With contextual instructions embedded directly in the interface, advanced cleaning features become easier to understand and more approachable for new users.",
-        img: `${IMG}/improvement-guided.png`,
-        w: 1332,
-        h: 2896,
+        media: [
+          { img: `${IMG}/improvement-guided.png`, w: 1332, h: 2896 },
+          { img: `${IMG}/improvement-guided-2.png`, w: 1332, h: 2896 },
+        ],
       },
       {
         kicker: "Scheduling",
         title: "Smarter Scheduling Across Cleaning Modes",
         body: "The scheduling flow was expanded to support full-home, custom, and zone-based cleaning with repeat options and reusable presets. This gives users greater flexibility to plan routines in advance and tailor cleaning tasks to different rooms, floors, and household scenarios.",
-        img: `${IMG}/improvement-scheduling.png`,
-        w: 1332,
-        h: 2896,
+        media: [
+          { img: `${IMG}/improvement-scheduling.png`, w: 1332, h: 2896 },
+          { img: `${IMG}/improvement-scheduling-2.png`, w: 1332, h: 2896 },
+        ],
       },
     ] as ImprovementItem[],
   },

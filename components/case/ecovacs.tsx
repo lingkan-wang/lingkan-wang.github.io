@@ -209,13 +209,23 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
                 <h3 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[1.7rem]">{it.title}</h3>
                 <p className="mt-4 max-w-prose text-[15px] leading-7 text-fg/90">{it.body}</p>
               </div>
-              <div className={`mx-auto w-full max-w-[280px] ${i % 2 === 1 ? "sm:order-1" : ""}`}>
-                <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
-                  {it.video ? (
-                    <ShotVideo src={it.video} poster={it.poster} alt={it.title} />
-                  ) : (
-                    <Image src={it.img!} alt={it.title} fill sizes="280px" className="rounded-[2.5rem] object-cover object-top" />
-                  )}
+              <div className={i % 2 === 1 ? "sm:order-1" : ""}>
+                <div className={`flex justify-center ${it.media.length > 1 ? "gap-3 sm:gap-4" : ""}`}>
+                  {it.media.map((m, j) => {
+                    const two = it.media.length > 1;
+                    const radius = two ? "rounded-[1.6rem]" : "rounded-[2.5rem]";
+                    return (
+                      <div key={j} className={`w-full ${two ? "max-w-[200px]" : "mx-auto max-w-[280px]"}`}>
+                        <div className={`relative aspect-[400/838] w-full overflow-hidden border border-border bg-white ${radius}`}>
+                          {m.video ? (
+                            <ShotVideo src={m.video} poster={m.poster} alt={it.title} />
+                          ) : (
+                            <Image src={m.img!} alt={it.title} fill sizes="200px" className={`${radius} object-cover object-top`} />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
