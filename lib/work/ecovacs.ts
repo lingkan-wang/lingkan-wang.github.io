@@ -25,6 +25,18 @@ export type Chapter = {
   note?: { title: string; body: string };
 };
 
+// A "more improvements" row: a feature with either a demo video or a screenshot.
+export type ImprovementItem = {
+  kicker: string;
+  title: string;
+  body: string;
+  video?: string;
+  poster?: string;
+  img?: string;
+  w?: number;
+  h?: number;
+};
+
 export const ecovacs = {
   hero: {
     kicker: "Product Builder · 2024 · Ecovacs Robotics",
@@ -183,17 +195,32 @@ export const ecovacs = {
 
   improvements: {
     intro:
-      "Beyond the three headline features, a handful of smaller refinements rounded out the X2 experience.",
-    yiko: {
-      kicker: "Yiko · Voice",
-      title: "Just say it out loud.",
-      body: "We refined Yiko, the on-device voice assistant — start a clean, send the robot to a specific room, or pause it, all hands-free without ever opening the app.",
-      // video placeholder until the Yiko demo clip is exported in
-    },
-    others: [
-      { title: "Improvement (to fill in)", body: "Short description of what changed and why it mattered — placeholder for now." },
-      { title: "Improvement (to fill in)", body: "Short description of what changed and why it mattered — placeholder for now." },
-    ] as Card[],
+      "Beyond the three headline features, a few more refinements rounded out the X2 experience.",
+    items: [
+      {
+        kicker: "Yiko · Voice",
+        title: "Just say it out loud.",
+        body: "We refined Yiko, the on-device voice assistant — start a clean, send the robot to a specific room, or pause it, all hands-free without ever opening the app.",
+        video: `${IMG}/demo-yiko.mp4`,
+        poster: `${IMG}/demo-yiko-poster.jpg`,
+      },
+      {
+        kicker: "Onboarding",
+        title: "Guided Custom Cleaning Experience",
+        body: "Guided onboarding was introduced to help users learn how to add custom cleaning areas, select zones on the map, and activate AI-assisted cleaning. With contextual instructions embedded directly in the interface, advanced cleaning features become easier to understand and more approachable for new users.",
+        img: `${IMG}/improvement-guided.png`,
+        w: 1332,
+        h: 2896,
+      },
+      {
+        kicker: "Scheduling",
+        title: "Smarter Scheduling Across Cleaning Modes",
+        body: "The scheduling flow was expanded to support full-home, custom, and zone-based cleaning with repeat options and reusable presets. This gives users greater flexibility to plan routines in advance and tailor cleaning tasks to different rooms, floors, and household scenarios.",
+        img: `${IMG}/improvement-scheduling.png`,
+        w: 1332,
+        h: 2896,
+      },
+    ] as ImprovementItem[],
   },
 
   takeaways: [

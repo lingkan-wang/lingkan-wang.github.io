@@ -4,7 +4,7 @@ import { ecovacs, type Media } from "@/lib/work/ecovacs";
 import { Reveal } from "@/components/reveal";
 import { Plate } from "./shots";
 import { ShotVideo } from "./shot-video";
-import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway, MediaPlaceholder, VideoSlot } from "./elements";
+import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway } from "./elements";
 
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
 const PROSE = "max-w-[680px]"; // readable text width, left-aligned to the WIDE edge
@@ -199,32 +199,29 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
         </div>
       </Reveal>
 
-      {/* Yiko — featured */}
-      <Reveal className={`${WIDE} mt-10`}>
-        <div className="grid items-center gap-8 sm:grid-cols-2 sm:gap-12">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{improvements.yiko.kicker}</p>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[1.7rem]">{improvements.yiko.title}</h3>
-            <p className="mt-4 max-w-prose text-[15px] leading-7 text-fg/90">{improvements.yiko.body}</p>
-          </div>
-          <div className="mx-auto w-full max-w-[300px]">
-            <VideoSlot label="Demo · Yiko voice" portrait />
-          </div>
-        </div>
-      </Reveal>
-
-      {/* other improvements — placeholders to fill in */}
-      <Reveal className={`${WIDE} mt-12`}>
-        <div className="grid gap-8 sm:grid-cols-2">
-          {improvements.others.map((o, i) => (
-            <div key={i}>
-              <MediaPlaceholder label={`Improvement ${String(i + 1).padStart(2, "0")}`} caption="image / video to come" />
-              <h3 className="mt-4 text-base font-semibold tracking-tight">{o.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">{o.body}</p>
+      {/* feature rows — alternating text / portrait media */}
+      <div className="mt-12 space-y-16 sm:mt-14 sm:space-y-24">
+        {improvements.items.map((it, i) => (
+          <Reveal key={it.title} className={WIDE}>
+            <div className="grid items-center gap-8 sm:grid-cols-2 sm:gap-12">
+              <div className={i % 2 === 1 ? "sm:order-2" : ""}>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{it.kicker}</p>
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[1.7rem]">{it.title}</h3>
+                <p className="mt-4 max-w-prose text-[15px] leading-7 text-fg/90">{it.body}</p>
+              </div>
+              <div className={`mx-auto w-full max-w-[280px] ${i % 2 === 1 ? "sm:order-1" : ""}`}>
+                <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
+                  {it.video ? (
+                    <ShotVideo src={it.video} poster={it.poster} alt={it.title} />
+                  ) : (
+                    <Image src={it.img!} alt={it.title} fill sizes="280px" className="rounded-[2.5rem] object-cover object-top" />
+                  )}
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-      </Reveal>
+          </Reveal>
+        ))}
+      </div>
 
       {/* ───────────── TAKEAWAYS ───────────── */}
       <Reveal className={`${WIDE} ${GAP}`}>
