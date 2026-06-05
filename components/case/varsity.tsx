@@ -49,7 +49,6 @@ function ExplorationSlide({ shot }: { shot: ShotT }) {
           />
         </div>
       )}
-      {shot.caption && <p className="mt-3 text-center text-xs text-muted">{shot.caption}</p>}
     </div>
   );
 }
