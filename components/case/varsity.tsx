@@ -62,6 +62,12 @@ function TradeOffCard({ t }: { t: TradeOff }) {
           <span className="font-medium">{t.chose}</span> {t.why}
         </p>
       </div>
+
+      {t.shot && (
+        <div className="mt-5 rounded-xl bg-fg/[0.025] p-4 sm:p-5">
+          <Shot shot={t.shot} />
+        </div>
+      )}
     </div>
   );
 }

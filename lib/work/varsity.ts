@@ -23,6 +23,7 @@ export type TradeOff = {
   considered: Option[];
   chose: string;
   why: string;
+  shot?: Shot;
 };
 export type Feature = { title: string; body: string };
 export type Shot = { src?: string; alt: string; w: number; h: number; placeholder?: boolean };
@@ -161,6 +162,7 @@ export const varsity = {
       ],
       chose: "Cut the feature.",
       why: "Trust and data quality over more information. Parents could still read engagement from other, more reliable signals — so the feature's cost outweighed its benefit.",
+      shot: { src: `${IMG}/tradeoff-emotion.png`, alt: "Engagement view with the Self-Reported Emotions card marked for removal", w: 1600, h: 1119 },
     },
     {
       n: "04",
