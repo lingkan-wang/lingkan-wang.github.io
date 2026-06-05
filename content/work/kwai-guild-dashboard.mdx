@@ -2,44 +2,119 @@
 title: "Kwai Guild Dashboard"
 slug: "kwai-guild-dashboard"
 year: 2024
-role: "Product Designer"
+role: "Product Builder"
 company: "KuaiShou (Kwai)"
+platform: "PC · Web"
+tools: "Figma"
 tags: ["B2B SaaS", "Live Streaming", "Data Analytics"]
 summary: "A performance monitoring dashboard for live-streaming guild managers to spot at-risk streamers early and replicate top-performer patterns."
 cover: "/work/covers/kwai.png"
 thumbnail: "/work/covers/kwai.png"
 order: 4
-featured: false
+featured: true
 confidential: false
 ---
 
 ## Overview
 
-[One paragraph: the context, the product, and the problem this project set out to solve. Replace with real copy.]
+KuaiShou's live-streaming business runs on guilds — agencies that recruit streamers, coach them, and take a cut of what they earn. But the managers who run those guilds were flying blind: the data they needed to catch a fading streamer or back a rising one was scattered, stale, and buried.
 
-<Figure alt="Project overview" breakout caption="Overview — replace with a real image" />
+I designed a **weekly reporting and churn-alert dashboard** for guild managers on PC. It reorganizes the metrics that matter, surfaces at-risk streamers from revenue trends *before* they churn, and turns a reactive, gut-feel routine into a proactive one.
 
-## Problem & Insight
+## Understanding the guild world
 
-[What you learned from research and the key insight that shaped the direction.]
+To make the tool scale across guilds — and hold up for overseas operations — I ran a multi-layered research process: interviews and surveys, analysis of behavioral and platform data, and a steady back-channel with the operations team who talk to guild managers every day.
 
-## Process
+A **guild** is a management group that recruits and supports streamers. Day to day, guilds:
 
-[Explorations, the decisions you made, and how the work evolved.]
+- Provide coaching, technical support, and content guidance
+- Help streamers grow their audiences and revenue
+- Earn a commission on the performance of the streamers they manage
 
-<Gallery>
-  <Figure alt="Exploration 1" />
-  <Figure alt="Exploration 2" />
-</Gallery>
+I interviewed **six guild managers** across top, mid, and emerging tiers. Three themes came through clearly:
+
+<Pillars items={[
+  { title: "Flying blind", body: "Managers leaned on intuition and self-reported updates, because timely data simply wasn't there." },
+  { title: "No way to compare", body: "There was no like-for-like way to compare streamers within a guild." },
+  { title: "A pull toward alerts", body: "Strong, repeated demand for structured alerts and one clear, centralized view." },
+]} />
+
+## From insight to opportunity
+
+<Quote>
+Guild managers need timely, structured, actionable insight — to monitor performance, catch churn early, scale their operations, and lift the quality of every stream.
+</Quote>
+
+Mapping the pain points against that need surfaced four opportunities to design against:
+
+- **Slow to spot churn** → surface key streamer metrics earlier, and make risk alerts something you can act on.
+- **Scattered tooling** → pull fragmented tools into one centralized, structured dashboard.
+- **Unclear tiers** → visualize guild-tier progression and make strategic growth legible.
+- **Information overload** → restructure the information architecture so the page leads with what matters.
+
+## Design strategies
+
+<Pillars items={[
+  { title: "Guild overview metrics", body: "Daily, weekly, and monthly trends, visualized clearly so managers spot growth or decline early and act on it." },
+  { title: "Tier classification", body: "Transparency and tier-progression cues, so managers can prioritize higher-value streamers and time promotions." },
+  { title: "Churn-risk alerts", body: "A predictive alert built on activity drops and income decline, so at-risk streamers get attention before they leave." },
+  { title: "Top-performer highlights", body: "Surface outperformers by income and growth, benchmark them against guild averages, and replicate what works." },
+]} />
 
 ## Solution
 
-[The final design. Walk through the core flows and screens.]
+Four moves carried the redesign — each one closing a specific gap from the research.
 
-<Figure alt="Final solution" breakout />
+### Guild data overview
+
+I synced the four headline metrics — Total Revenue, Total Live Hours, Active Streamers, and Total Streamers — and gave each one Day-over-Day, Week-over-Week, and Month-over-Month deltas, so a manager reads momentum at a glance instead of reconstructing it.
+
+<Figure src="/work/kwai-guild-dashboard/solution-01.png" alt="Guild data overview dashboard: four synced KPI cards — total revenue, live hours, active streamers, total streamers — each with DoD, WoW, and MoM comparisons" breakout zoom caption="The overview — four core metrics, each carrying day-, week-, and month-over-month deltas." />
+
+### Tier classification
+
+The platform rates each guild on its streamers' performance and sorts streamers into three income tiers, so managers always know where a guild stands and who to invest in.
+
+<Figure src="/work/kwai-guild-dashboard/solution-02.png" alt="Guild tier classification view: the current guild level, with streamers grouped into three monthly-income tiers" breakout zoom caption="Tier classification — guild level up top, streamers grouped into $50+, $600+, and $800+ tiers." />
+
+### Top this month
+
+A ranked Top 10 — the highest week-over-week growth among streamers clearing 10M diamonds — with gift contributions quantified, so wins are easy to spot and reward.
+
+<Figure src="/work/kwai-guild-dashboard/solution-03.png" alt="Top streamers this month, ranked by week-over-week growth with gift contributions quantified" breakout zoom caption="Top this month — ranked by WoW growth, with each streamer's gift contribution." />
+
+### Churn alert
+
+The piece that changes the workflow: the Top 10 at-risk streamers by income drop, with Effective Broadcast Days alongside, so managers can step in while it still matters.
+
+<Figure src="/work/kwai-guild-dashboard/solution-04.png" alt="Churn alert view: top at-risk streamers ranked by income drop, paired with their effective broadcast days" breakout zoom caption="Churn alert — at-risk streamers by income drop, paired with effective broadcast days." />
 
 ## Impact
 
-<MetricCallout value="—" label="Replace with a real result or remove" />
+<Stats items={[
+  { value: "65%", label: "Faster at-risk spotting" },
+  { value: "+20%", label: "Streamer retention" },
+  { value: "40%", label: "More decision confidence" },
+]} />
 
-[Outcomes and what you learned. For confidential projects, keep this qualitative.]
+The alert system cut the time to identify an at-risk streamer from roughly 20 minutes to 7 — a 65% drop — and retention in top-performing guilds rose about 20% the month after launch. In internal surveys, managers reported a 40% lift in confidence when making tier and promotion calls.
+
+<Quote cite="Mr. Li · Guild manager">
+The new dashboard saves me so much time. I can see instantly who's improving, who's slipping, and where to focus — and the churn alerts let me act early instead of after it's too late.
+</Quote>
+
+<Quote cite="Mrs. Xia · Guild manager">
+Tracking at-risk streamers and surfacing top performers has helped me retain talent and motivate the team. I finally have real data to guide the conversation.
+</Quote>
+
+<Quote cite="Mrs. Guo · Guild manager">
+Before this, we pieced everything together by hand. Now revenue, live hours, tiers, and trends sit in one place — and I feel far more confident planning promotions.
+</Quote>
+
+## Reflection
+
+This project reshaped how I think about designing for decisions. A dashboard for guild managers isn't a consumer screen — it has to give people both clarity and control over fast-moving data, and earn trust every time they open it.
+
+The hardest, most useful lesson was balancing density with usability. I stopped asking "how do I visualize this data?" and started asking "what decision should this view enable?" — and that question drove the information architecture and which metrics to lead with.
+
+The churn alert is the part I'm proudest of: it moved the product from passive reporting to proactive intervention. It pushed me past the UI into system thinking — how data flows, what should trigger action, and how to put the right signal in front of the right person at the right moment.

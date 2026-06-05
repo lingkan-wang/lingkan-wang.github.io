@@ -10,16 +10,29 @@ export type CodedWork = {
   year: number;
   live: string;
   offset: number;
+  /** Optional download link (e.g. a desktop build) shown in the description. */
+  download?: string;
 };
 
 export const codedWork: CodedWork[] = [
+  {
+    slug: "bubble-todo",
+    title: "Bubble To-do — a blow-a-bubble sticky note",
+    blurb:
+      "An illustrated girl blows watercolor bubbles you fill with to-dos. Type a task, double-click her to puff it off to the corner, then click a bubble to pop it done — with synthesized Web Audio sounds. Originally an Electron desktop widget.",
+    tags: ["Vanilla JS", "Web Audio", "Animation"],
+    year: 2026,
+    live: "https://lingkan-wang.github.io/bubble-todo/",
+    offset: 0,
+    download: "https://github.com/lingkan-wang/bubble-todo/releases/download/v1.0/Bubble-To-do-macOS-AppleSilicon.zip",
+  },
   {
     slug: "toast-sonner",
     title: "Toast — a Sonner recreation",
     blurb:
       "A faithful vanilla HTML/CSS/JS recreation of Sonner — stacking toasts, hover-to-expand, swipe-to-dismiss, plus promise & action toasts. Zero dependencies.",
     tags: ["Vanilla JS", "Animation", "Toast"],
-    year: 2025,
+    year: 2026,
     live: "https://lingkan-wang.github.io/toast_component/",
     offset: 150,
   },
@@ -29,7 +42,7 @@ export const codedWork: CodedWork[] = [
     blurb:
       "A feedback button that morphs into a popover and celebrates with a confetti burst on submit. Spring-based layout animation.",
     tags: ["Popover", "Morph", "Confetti"],
-    year: 2025,
+    year: 2026,
     live: "https://lingkan-wang.github.io/feedback-popover/",
     offset: 0,
   },

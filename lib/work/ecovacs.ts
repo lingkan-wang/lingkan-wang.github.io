@@ -1,220 +1,198 @@
-// Structured content for the Ecovacs case study. Tightened & curated from the
-// source Wix case study; images live in /public/work/ecovacs/.
-
+// Structured content for the Ecovacs DEEBOT X2 case study.
+// Feature-led narrative (marco.fyi-style): cinematic intro → 3 feature chapters
+// → careful rollout → qualitative impact → takeaways. Images in /public/work/ecovacs/.
+// VIDEO slots are placeholders until the Vimeo demos are exported in.
 const IMG = "/work/ecovacs";
 
-export type Stat = { value: number; suffix?: string; label: string };
+export type Meta = { label: string; items: string[] };
 export type Quote = { name: string; quote: string; avatar: string };
-export type Numbered = { n: string; title: string; body: string };
-export type Opportunity = { title: string; body: string };
-export type Feature = { title: string; body: string };
-export type Shot = { src: string; alt: string; kind: "phone" | "plate" };
-export type Pillar = {
-  icon: string;
+export type Card = { title: string; body: string };
+// A before/after media unit. `placeholder` = footage not yet supplied (shows a
+// labelled box); `video` = a real demo clip with a poster frame.
+export type Media =
+  | { kind: "placeholder"; label: string; caption: string }
+  | { kind: "image"; src: string; w: number; h: number; alt: string; caption: string }
+  | { kind: "video"; src: string; poster: string; alt: string; caption: string };
+
+export type Chapter = {
   kicker: string;
   title: string;
-  whatIsIt: string;
-  features: Feature[];
-  shots: Shot[];
+  problem: string;
+  solution: string;
+  before: Media;
+  after: Media;
+  extras?: Media[]; // additional "after" clips (e.g. the result screen)
+  note?: { title: string; body: string };
 };
 
 export const ecovacs = {
   hero: {
-    image: `${IMG}/hero.webp`,
-    imageAlt: "Four DEEBOT X2 app screens — mapping, AI Smart Hosting, logs, and Lab features",
+    kicker: "Product Builder · 2024 · Ecovacs Robotics",
+    headline: "Robot vacuums promised autonomy. They shipped a manual.",
+    sub: "Reworking the DEEBOT X2 from a robot you operate into one you trust — one-tap AI cleaning, a map that draws itself, and pet-safe navigation.",
     meta: [
-      { label: "Role", items: ["Product Designer"] },
-      {
-        label: "Team",
-        items: ["Product Design", "Software Eng", "Machine Learning", "Hardware R&D", "Product Mgmt"],
-      },
-      {
-        label: "Skills",
-        items: [
-          "Product Strategy",
-          "Research Synthesis",
-          "Interaction Design",
-          "System Logic",
-          "Cross-functional",
-          "Prototyping",
-        ],
-      },
+      { label: "Role", items: ["Product Builder"] },
+      { label: "Team", items: ["Product Design", "Software Eng", "Machine Learning", "Hardware R&D", "Product Mgmt"] },
+      { label: "Skills", items: ["Product Strategy", "Research Synthesis", "Interaction Design", "System Logic", "Prototyping"] },
       { label: "Timeline", items: ["May–Aug 2024", "12 weeks"] },
-    ],
+    ] as Meta[],
+    media: `${IMG}/hero.webp`,
+    mediaAlt: "DEEBOT X2 app — auto mapping, AI cleaning, and Lab features",
   },
 
-  brief:
-    "Under rising customer complaints and growing expectations for smart-home automation, I was tasked with optimizing the DEEBOT X2 autonomy experience at ECOVACS Robotics. The X2 already had advanced mapping and obstacle recognition, but users hit persistent friction: complex manual map editing, confusing parameters, and failures avoiding high-risk obstacles like pet waste. I focused on bridging the gap between technical capability and *perceived* intelligence — an AI hosting mode built on floor-material recognition, simpler mapping, and better high-risk detection — to cut cognitive load and build trust in autonomy.",
-
-  research: {
+  problem: {
     intro:
-      "To find where autonomy breaks down in real use, we combined customer-complaint analysis, App Store review mining, and interviews with pet owners and first-time users.",
-    stats: [
-      { value: 38, suffix: "%", label: "of negative feedback tied to mapping confusion & manual editing" },
-      { value: 72, suffix: "%", label: "of testers hesitated or changed cleaning settings before starting" },
-      { value: 33, suffix: "%", label: "of runs failed to avoid high-risk obstacles in pet-home tests" },
-    ] as Stat[],
-    ownership: [
-      "Defined success metrics + guardrails and aligned teams on one “product contract”",
-      "Turned usability findings into a prioritized roadmap, MVP scope, and acceptance criteria",
-      "Partnered with Robotics/ML/Eng to align UI with real robot constraints, model confidence, and failure modes",
-      "Shipped an Autopilot system that cut configuration without sacrificing safety or cleaning quality",
+      "The X2 was packed with capability — but TikTok and e-commerce reviews told another story. People found it complicated and, at worst, untrustworthy. Three pain points came up again and again.",
+    cards: [
+      {
+        title: "Setup was a chore",
+        body: "Before the first clean, users had to divide rooms by hand, draw virtual walls, and walk through a long setup. A rough first impression — and it hit almost everyone.",
+      },
+      {
+        title: "Too many knobs",
+        body: "Suction, water flow, cleaning passes… more than ten parameters, with no clear way to choose. The product felt complicated instead of smart.",
+      },
+      {
+        title: "Pet-waste accidents",
+        body: "Sometimes the robot failed to recognize pet waste and smeared it across the house. Rare — but catastrophic. It broke trust instantly.",
+      },
+    ] as Card[],
+    voices: [
+      { name: "Robert Rose", quote: "I thought it was automatic, but I still had to redraw the map myself. It feels more manual than smart.", avatar: `${IMG}/avatar-1.jpg` },
+      { name: "Alex Smith", quote: "There are too many cleaning settings. I don't know which one to choose.", avatar: `${IMG}/avatar-2.jpg` },
+      { name: "Jessica Davis", quote: "If it runs over pet waste, that's a disaster. I'd completely lose trust.", avatar: `${IMG}/avatar-3.jpg` },
+    ] as Quote[],
+  },
+
+  priorities: {
+    intro:
+      "We had more requests than we could build — voice control, scheduling, and more. So instead of guessing, we ranked every issue by two things:",
+    criteria: [
+      "How much it hurts the core experience",
+      "How broadly it hits users — or how severe it is when it does",
+    ],
+    bets: [
+      { title: "Mapping", body: "Shapes the very first experience and touches almost every user." },
+      { title: "AI auto-cleaning", body: "Simplifies the core daily job by removing manual configuration." },
+      { title: "Pet-waste detection", body: "Low-frequency, high-severity — when it fails, trust is gone." },
+    ] as Card[],
+  },
+
+  chapters: [
+    {
+      kicker: "Solution 01 · Mapping",
+      title: "A map that draws itself.",
+      problem: "Manual room-splitting and virtual walls turned setup into a chore.",
+      solution:
+        "Now the robot generates the map, divides rooms, and labels each room type on its own. Users only review and make small tweaks — setup goes from a task to a glance.",
+      before: {
+        kind: "image",
+        src: `${IMG}/before-mapping.png`,
+        w: 390,
+        h: 844,
+        alt: "Map editor — splitting rooms and drawing virtual walls by hand",
+        caption: "Editing the map by hand",
+      },
+      after: {
+        kind: "video",
+        src: `${IMG}/demo-mapping.mp4`,
+        poster: `${IMG}/demo-mapping-poster.jpg`,
+        alt: "Auto mapping — the robot draws and labels the map on its own",
+        caption: "The map draws and labels itself",
+      },
+    },
+    {
+      kicker: "Solution 02 · AI Auto-Cleaning",
+      title: "One tap. The robot decides the rest.",
+      problem: "A dozen cleaning settings users didn't know how to choose.",
+      solution:
+        "Tap Start, and the system reads each room's type and floor material to pick the strategy itself — suction, water, passes. The experience shifts from manual control to something that behaves like an agent working on your behalf.",
+      before: {
+        kind: "image",
+        src: `${IMG}/before-cleaning.png`,
+        w: 393,
+        h: 1323,
+        alt: "A dozen manual cleaning settings — mode, water level, passes, efficiency",
+        caption: "A dozen settings, set by hand",
+      },
+      after: {
+        kind: "video",
+        src: `${IMG}/demo-ai-cleaning.mp4`,
+        poster: `${IMG}/demo-ai-cleaning-poster.jpg`,
+        alt: "AI auto-cleaning — one tap and the robot picks the strategy",
+        caption: "One tap — AI picks the strategy",
+      },
+      extras: [
+        {
+          kind: "video",
+          src: `${IMG}/demo-ai-cleaning-result.mp4`,
+          poster: `${IMG}/demo-ai-cleaning-result-poster.jpg`,
+          alt: "Cleaning complete — the robot hands back a clear report",
+          caption: "…and hands back a clear cleaning report",
+        },
+      ],
+    },
+    {
+      kicker: "Solution 03 · Pet-Safe Navigation",
+      title: "Never smear it again.",
+      problem: "A single pet-waste accident was enough to lose a user for good.",
+      solution:
+        "We retrained the recognition system to reliably detect pet waste and steer around it mid-clean — turning the scariest failure mode into a non-event.",
+      before: {
+        kind: "image",
+        src: `${IMG}/before-zones.png`,
+        w: 393,
+        h: 852,
+        alt: "Manually drawing no-go zones to fence off the mess",
+        caption: "Fencing off the mess by hand",
+      },
+      after: {
+        kind: "video",
+        src: `${IMG}/demo-pet.mp4`,
+        poster: `${IMG}/demo-pet-poster.jpg`,
+        alt: "Pet-waste avoidance — the robot detects waste and steers around it",
+        caption: "Detects waste and steers around it",
+      },
+      note: {
+        title: "An honest trade-off",
+        body: "In build, a real constraint surfaced: pet-waste detection and fine-particle cleaning couldn't run at the same time. Rather than silently pick one, we designed a clear toggle with an explanation — so users make an informed choice for their own home.",
+      },
+    },
+  ] as Chapter[],
+
+  rollout: {
+    title: "Shipping it carefully.",
+    intro:
+      "The feature wasn't fully stable yet, so we didn't push it to everyone at once. We launched it as an experimental “Lab” feature first — which paid off in three ways:",
+    reasons: [
+      { title: "The right early users", body: "People who opt into experimental features tolerate rough edges and are eager to try new things." },
+      { title: "Real-world data", body: "We learned actual accuracy and usage patterns from real homes, not just internal tests." },
+      { title: "A safe exit", body: "If something broke, we could roll it back fast — without hurting the overall product." },
+    ] as Card[],
+    outro: "Once the data stabilized and we trusted the quality, we rolled it out more broadly.",
+  },
+
+  impact: {
+    headline: "The autonomy finally felt like autonomy.",
+    results: [
+      "Users got started much faster, with far less setup friction.",
+      "Adoption of the AI cleaning mode climbed.",
+      "Complaints about complexity fell — replaced by feedback that the product felt smarter and easier to use.",
     ],
   },
-
-  voices: [
-    {
-      name: "Robert Rose",
-      quote: "I thought it was automatic, but I still had to redraw the map myself. It feels more manual than smart.",
-      avatar: `${IMG}/avatar-1.jpg`,
-    },
-    {
-      name: "Alex Smith",
-      quote: "There are too many cleaning settings. I don’t know which one to choose.",
-      avatar: `${IMG}/avatar-2.jpg`,
-    },
-    {
-      name: "Jessica Davis",
-      quote: "If it runs over pet waste, that’s a disaster. I’d completely lose trust.",
-      avatar: `${IMG}/avatar-3.jpg`,
-    },
-  ] as Quote[],
-
-  problems: [
-    {
-      n: "01",
-      title: "Autonomy still feels manual",
-      body: "Users frequently edit maps after generation. Setup introduces hesitation and erodes confidence in the system’s intelligence from the very start.",
-    },
-    {
-      n: "02",
-      title: "Too many decisions for the user",
-      body: "Cleaning modes and suction levels require manual selection, but users lack clarity on how to choose — adding cognitive load and weakening the “one-click” promise.",
-    },
-    {
-      n: "03",
-      title: "High-risk failures break trust",
-      body: "In pet households, failing to avoid pet waste is catastrophic. Even occasional errors sharply damage trust in autonomous cleaning.",
-    },
-  ] as Numbered[],
-
-  mission:
-    "How might we make autonomy feel effortless and reliable — by reducing manual intervention, simplifying decisions, and strengthening trust in high-risk moments?",
-
-  opportunities: [
-    {
-      title: "Make mapping feel truly automatic",
-      body: "Auto-mapping existed, but users still split rooms, renamed spaces, and fixed boundaries. Reduce those corrections so mapping feels confident on its own — especially for first-timers who expect plug-and-play, not supervision.",
-    },
-    {
-      title: "Reduce decision fatigue in setup",
-      body: "Instead of asking users to configure the robot, shift the decision to the system — letting AI read floor types and usage patterns to recommend or auto-apply the right settings.",
-    },
-    {
-      title: "Design for trust in high-risk moments",
-      body: "Pet-waste failures damaged trust. Prioritize high-risk object recognition and clear system feedback so the robot feels safe and dependable, not unpredictable.",
-    },
-  ] as Opportunity[],
-
-  pillars: [
-    {
-      icon: `${IMG}/icon-settings.png`,
-      kicker: "Solution 01",
-      title: "AI Smart Hosting",
-      whatIsIt:
-        "A one-tap intelligent cleaning mode. Instead of configuring suction, water flow, or room selection, the system reads spatial data, floor types, obstacles, and past patterns in real time to decide the optimal strategy itself.",
-      features: [
-        {
-          title: "AI hosting as the default",
-          body: "The AI toggle sits at the whole-home cleaning entry — visible and accessible, not buried in settings. One tap applies intelligent defaults across every room.",
-        },
-        {
-          title: "Flexible control for advanced users",
-          body: "Advanced parameters move to a separate custom tab to keep the primary flow clean; users can still draw targeted zones on the map when they want to intervene.",
-        },
-        {
-          title: "Making AI visible and trustworthy",
-          body: "A first-time explainer sets expectations, a live status shows AI is driving the clean, and post-clean summaries — route, dirt map, metrics — make decisions traceable.",
-        },
-      ],
-      shots: [
-        { src: `${IMG}/hosting-intro.jpg`, alt: "AI Smart Hosting first-time explainer", kind: "phone" },
-        { src: `${IMG}/hosting-cleaning.png`, alt: "Whole-home cleaning with draw-zone controls", kind: "phone" },
-        { src: `${IMG}/hosting-progress.webp`, alt: "DEEBOT X2 detecting debris on a rug during an AI-hosted clean", kind: "plate" },
-      ],
-    },
-    {
-      icon: `${IMG}/icon-map.png`,
-      kicker: "Solution 02",
-      title: "AI Auto Mapping",
-      whatIsIt:
-        "An intelligent spatial-recognition system that scans, understands, and generates a structured floor plan on the first run — detecting walls, room boundaries, and layout in real time, with no manual setup.",
-      features: [
-        {
-          title: "Guided first-time mapping",
-          body: "A contextual pop-up gives simple prep tips (clear clutter, keep doors open); a clear entry point guides users into the flow when no map exists yet.",
-        },
-        {
-          title: "Transparent pause & stop",
-          body: "Mapping runs long, so interruptions are handled explicitly: early-exit warnings prevent accidental data loss, and pause states say whether progress will continue.",
-        },
-        {
-          title: "Post-mapping refinement",
-          body: "Users name the floor for clarity in multi-floor homes, and can adjust room labels and layout for minor corrections.",
-        },
-      ],
-      shots: [
-        { src: `${IMG}/mapping-rooms.png`, alt: "Automatic room recognition and labels", kind: "phone" },
-        { src: `${IMG}/mapping-split.png`, alt: "Room split and boundary editing", kind: "phone" },
-        { src: `${IMG}/mapping-screens.webp`, alt: "DEEBOT X2 scanning a room with laser navigation", kind: "plate" },
-      ],
-    },
-    {
-      icon: `${IMG}/icon-paw.png`,
-      kicker: "Solution 03",
-      title: "Pet Mode",
-      whatIsIt:
-        "An experimental Lab feature for homes with pets. It prioritizes risk avoidance — enhancing high-risk object detection and adjusting cleaning behavior to prevent contamination.",
-      features: [
-        {
-          title: "Clear conflict feedback",
-          body: "Pet Mode and Granular Dirt Mode optimize for opposite goals — safety vs. particle pickup — so a mutual-exclusion toggle and a clear dialog explain the trade-off instead of silently overriding the user.",
-        },
-      ],
-      shots: [{ src: `${IMG}/petmode.jpg`, alt: "Pet Mode onboarding for homes with pets", kind: "phone" }],
-    },
-  ] as Pillar[],
-
-  productOverview: {
-    body: "Designing the app meant designing to the hardware. I worked from the X2’s real form factor — its brushes, mopping pads, and sensor array — so on-screen behavior matched what the robot could actually sense and do.",
-    shots: [
-      { src: `${IMG}/hardware-diagram.webp`, alt: "DEEBOT X2 components and sensor layout", kind: "plate" },
-      { src: `${IMG}/product.webp`, alt: "DEEBOT X2 Omni", kind: "plate" },
-    ] as Shot[],
-  },
-
-  impact: [
-    { value: 93, suffix: "%", label: "reduction in setup time with one-tap AI cleaning" },
-    { value: 65, suffix: "%", label: "decrease in manual interactions" },
-    { value: 92, suffix: "%", label: "preferred AI Smart Hosting over manual mode" },
-    { value: 50, suffix: "%", label: "improvement in purchase intent" },
-  ] as Stat[],
-
-  nextSteps:
-    "After launch, we extended the YIKO settings architecture to support growing AI capabilities — voice control with a reviewable interaction history, intelligent error detection that replaces codes with visual fixes, and smart consumables reminders.",
 
   takeaways: [
     {
       title: "Start with real household behavior",
-      body: "People don’t think in cleaning modes — they think in outcomes: “make my home clean, and don’t bother me.” The value came from removing decisions, not adding options.",
+      body: "The sharpest insights came from messy real homes — pets, clutter, first-time setups — not the lab. Design for the room, not the spec sheet.",
     },
     {
       title: "Design for trust, not just automation",
-      body: "Even capable AI won’t be trusted unless it feels safe. Pet-waste avoidance was an emotional safety requirement; clear feedback turned “is it safe?” into “I can walk away.”",
+      body: "Autonomy only counts when people believe in it. One catastrophic failure outweighs a hundred smooth runs, so high-risk moments deserve the most care.",
     },
     {
       title: "AI should feel invisible but dependable",
-      body: "The best moments were when users didn’t notice the system thinking — only that the tasks disappeared. Great home automation is quiet confidence: “it just happens.”",
+      body: "The win wasn't more controls — it was fewer. The system makes the call, stays transparent about it, and earns the right to be trusted by default.",
     },
-  ] as Numbered[],
-} as const;
+  ] as Card[],
+};

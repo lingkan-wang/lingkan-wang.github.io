@@ -7,6 +7,7 @@ import { MusicCard } from "@/components/about/music-card";
 import { PhotoCard } from "@/components/about/photo-card";
 import { WechatCard } from "@/components/about/wechat-card";
 import { IMessage } from "@/components/about/imessage";
+import { HoverKeyword } from "@/components/hover-keyword";
 
 export const metadata: Metadata = { title: `About — ${site.name}` };
 
@@ -22,12 +23,35 @@ export default function About() {
         <Reveal>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">What I&apos;m about.</h1>
           <div className="mt-8 space-y-7">
-            {bio.map((b) => (
-              <section key={b.heading}>
-                <h2 className={label}>{b.heading}</h2>
-                <p className="mt-2 text-[15px] leading-7 text-fg/90">{b.body}</p>
-              </section>
-            ))}
+            {bio.map((b) => {
+              let body: React.ReactNode = b.body;
+              if (b.keywords?.length) {
+                const marks = b.keywords
+                  .map((k) => ({ k, i: b.body.indexOf(k.word) }))
+                  .filter((m) => m.i !== -1)
+                  .sort((a, z) => a.i - z.i);
+                const nodes: React.ReactNode[] = [];
+                let cur = 0;
+                marks.forEach((m, idx) => {
+                  if (m.i < cur) return; // skip overlaps
+                  if (m.i > cur) nodes.push(<span key={`t${idx}`}>{b.body.slice(cur, m.i)}</span>);
+                  nodes.push(
+                    <HoverKeyword key={`k${idx}`} emoji={m.k.emoji} logo={m.k.logo} logoEm={m.k.logoEm} href={m.k.href} external={m.k.external}>
+                      {m.k.word}
+                    </HoverKeyword>,
+                  );
+                  cur = m.i + m.k.word.length;
+                });
+                nodes.push(<span key="tail">{b.body.slice(cur)}</span>);
+                body = nodes;
+              }
+              return (
+                <section key={b.heading}>
+                  <h2 className={label}>{b.heading}</h2>
+                  <p className="mt-2 text-[15px] leading-7 text-fg/90">{body}</p>
+                </section>
+              );
+            })}
           </div>
 
           <div className="mt-9 flex items-center gap-5 text-muted">
