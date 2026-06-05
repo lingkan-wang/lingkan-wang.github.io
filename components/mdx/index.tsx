@@ -10,6 +10,9 @@ import { Stats } from "./stats";
 import { Pillars } from "./pillars";
 import { Personas } from "./personas";
 import { DataNote } from "./data-note";
+import { Statement } from "./statement";
+import { Triptych } from "./triptych";
+import { Opportunities } from "./opportunities";
 
 export function Prose({ children }: { children: ReactNode }) {
   return <div className="case-prose mx-auto max-w-[680px] px-6">{children}</div>;
@@ -49,4 +52,7 @@ export const mdxComponents = {
   Pillars,
   Personas,
   DataNote,
+  Statement,
+  Triptych,
+  Opportunities,
 };
