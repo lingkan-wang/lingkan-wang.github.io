@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 import type { Project } from "@/lib/projects";
 import { EcovacsCaseStudy } from "@/components/case/ecovacs";
 import { VarsityCaseStudy } from "@/components/case/varsity";
+import { BumbleCaseStudy } from "@/components/case/bumble";
 
 /**
  * Slugs that render a bespoke, richly-composed case study instead of the generic
@@ -10,4 +11,5 @@ import { VarsityCaseStudy } from "@/components/case/varsity";
 export const richCaseStudies: Record<string, ComponentType<{ meta: Project }>> = {
   "ecovacs-ai-cleaning": EcovacsCaseStudy,
   "varsity-tutors-parent-dashboard": VarsityCaseStudy,
+  "bumble-interest-cards": BumbleCaseStudy,
 };
