@@ -241,7 +241,6 @@ export const varsity = {
     body:
       "Before landing here, we explored five to six information structures — session-centered, skill-centered, and emotion-signal-first — and compared them on clarity, focus, and how well each guided action. The winner mirrored how parents actually make decisions.",
     shots: [
-      { alt: "Lo-fi IA exploration — a section per question vs. question-first (Progress / Engagement)", w: 1600, h: 900, placeholder: true, caption: "Lo-fi IA: section-per-question → question-first" },
       { src: `${IMG}/explore-before.png`, alt: "An earlier, heavier exploration", w: 1600, h: 735, caption: "An earlier, heavier layout" },
       { src: `${IMG}/explore-after.png`, alt: "The refined, clearer direction", w: 1600, h: 1137, caption: "A cleaner direction" },
       { src: `${IMG}/it-session-recap.png`, alt: "Session Recap — full refined view", w: 1480, h: 1600, caption: "Session Recap — refined view" },
