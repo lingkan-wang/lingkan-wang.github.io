@@ -211,7 +211,7 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
       {/* THE 3 JOBS */}
       <Reveal className={`${WIDE} ${GAP}`}>
         <SectionLabel>What parents hire the product to do</SectionLabel>
-        <p className="mt-4 max-w-2xl text-[15px] leading-7 text-fg/90">
+        <p className="mt-4 text-[15px] leading-7 text-fg/90">
           Synthesis pointed to three jobs behind the renewal decision — and the product was failing all three.
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -320,7 +320,7 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
           <Reveal>
             <SectionLabel>{p.kicker}</SectionLabel>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">{p.title}</h2>
-            <p className="mt-3 max-w-2xl text-[15px] leading-7 text-fg/90">{p.whatIsIt}</p>
+            <p className="mt-3 text-[15px] leading-7 text-fg/90">{p.whatIsIt}</p>
           </Reveal>
 
           <Reveal className="mt-8">
