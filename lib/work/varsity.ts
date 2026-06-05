@@ -165,6 +165,7 @@ export const varsity = {
       ],
       chose: "Two question-first entry points — Progress and Engagement.",
       why: "Parents start from the question already in their head, then drill down — instead of doing the system's synthesis work for it.",
+      shot: { src: `${IMG}/dashboard-annotated.png`, alt: "Annotated homepage — question-first structure with Progress / Engagement / Challenges / Next Steps entry points", w: 2400, h: 1201 },
     },
     {
       n: "03",
