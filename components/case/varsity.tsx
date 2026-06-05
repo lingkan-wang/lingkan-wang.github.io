@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Project } from "@/lib/projects";
-import { varsity, type Shot as ShotT, type TradeOff } from "@/lib/work/varsity";
+import { varsity, type Shot as ShotT, type TradeOff, type Matrix as MatrixT } from "@/lib/work/varsity";
 import { Reveal } from "@/components/reveal";
 import { Placeholder } from "@/components/placeholder";
 import { Carousel } from "./carousel";
@@ -53,6 +53,37 @@ function ExplorationSlide({ shot }: { shot: ShotT }) {
   );
 }
 
+/** Impact × effort plot showing why one option won. */
+function DecisionMatrix({ m }: { m: MatrixT }) {
+  return (
+    <div className="mt-5 rounded-xl border border-border bg-fg/[0.015] p-4 sm:p-5">
+      <p className="font-mono text-[9px] uppercase tracking-widest text-muted">{m.yLabel}</p>
+      <div className="relative mt-2 aspect-[16/10] rounded-lg border border-border bg-bg">
+        {/* sweet-spot quadrant (top-left: high impact, low effort) */}
+        <div className="pointer-events-none absolute left-0 top-0 h-1/2 w-1/2 rounded-tl-lg bg-accent/[0.06]" />
+        <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border" />
+        <div className="pointer-events-none absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-border" />
+        {m.points.map((p) => (
+          <div
+            key={p.label}
+            className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+            style={{ left: `${p.x * 100}%`, top: `${(1 - p.y) * 100}%` }}
+          >
+            <span className={`size-2.5 rounded-full ${p.chosen ? "bg-accent ring-4 ring-accent/15" : "bg-fg/35"}`} />
+            <span
+              className={`mt-1 whitespace-nowrap text-[10px] font-medium ${p.chosen ? "text-accent" : "text-muted"}`}
+            >
+              {p.label}
+            </span>
+          </div>
+        ))}
+      </div>
+      <p className="mt-2 text-right font-mono text-[9px] uppercase tracking-widest text-muted">{m.xLabel}</p>
+      {m.note && <p className="mt-3 text-[13px] leading-6 text-fg/80">{m.note}</p>}
+    </div>
+  );
+}
+
 function TradeOffCard({ t }: { t: TradeOff }) {
   return (
     <div className="rounded-2xl border border-border p-6 sm:p-7">
@@ -61,6 +92,12 @@ function TradeOffCard({ t }: { t: TradeOff }) {
         <h3 className="text-lg font-semibold tracking-tight">{t.title}</h3>
       </div>
       <p className="mt-3 text-[15px] leading-7 text-fg/90">{t.tension}</p>
+
+      {t.photo && (
+        <div className="mt-4">
+          <Shot shot={t.photo} />
+        </div>
+      )}
 
       <p className="mt-5 font-mono text-[10px] uppercase tracking-widest text-muted">Considered</p>
       <ul className="mt-3 space-y-2">
@@ -87,6 +124,8 @@ function TradeOffCard({ t }: { t: TradeOff }) {
           <span className="font-medium">{t.chose}</span> {t.why}
         </p>
       </div>
+
+      {t.matrix && <DecisionMatrix m={t.matrix} />}
 
       {t.shot && (
         <div className="mt-5 rounded-xl bg-fg/[0.025] p-4 sm:p-5">

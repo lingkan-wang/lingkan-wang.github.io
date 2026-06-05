@@ -16,6 +16,8 @@ export type Persona = {
   needs: string[];
 };
 export type Option = { label: string; note: string; chosen?: boolean };
+export type MatrixPoint = { label: string; x: number; y: number; chosen?: boolean }; // x,y in 0..1
+export type Matrix = { xLabel: string; yLabel: string; note?: string; points: MatrixPoint[] };
 export type TradeOff = {
   n: string;
   title: string;
@@ -23,7 +25,9 @@ export type TradeOff = {
   considered: Option[];
   chose: string;
   why: string;
-  shot?: Shot;
+  photo?: Shot; // contextual photo shown after the tension
+  shot?: Shot; // outcome image shown after the decision
+  matrix?: Matrix; // decision-rationale plot
 };
 export type Feature = { title: string; body: string };
 export type Shot = { src?: string; alt: string; w: number; h: number; placeholder?: boolean; caption?: string };
@@ -115,7 +119,7 @@ export const varsity = {
   problem: {
     statement:
       "We mapped the full journey from search to renewal and found four pain points — and the biggest gap lands exactly where it hurts most: during and after sessions, when parents most want to understand learning but the system gives the least clarity.",
-    blueprint: { src: `${IMG}/service-blueprint.png`, alt: "Service blueprint across the parent journey", w: 1600, h: 503 },
+    blueprint: { src: `${IMG}/journey-blueprint.png`, alt: "Full parent journey map — Before, During, After — with goals, actions, touchpoints, and an emotion curve", w: 2400, h: 1238 },
     items: [
       { n: "01", title: "Limited emotional touchpoints", body: "Parents can't feel how engaged or motivated their child is between sessions." },
       { n: "02", title: "Non-standardized process", body: "Tutoring quality and structure vary tutor to tutor, so 'good' is hard to define." },
@@ -138,6 +142,17 @@ export const varsity = {
       ],
       chose: "Emotional touchpoints + visibility into learning.",
       why: "It was the fastest path to the thing that actually drives renewal — how parents perceive value and trust — without re-architecting the platform.",
+      photo: { src: `${IMG}/cocreation-workshop.png`, alt: "The co-creation workshop with the Varsity Tutors team", w: 1600, h: 772 },
+      matrix: {
+        xLabel: "System change / effort →",
+        yLabel: "↑ Impact on trust & renewal",
+        note: "High impact on trust, low system change — the parent-experience layer wins.",
+        points: [
+          { label: "Standardize process", x: 0.82, y: 0.8 },
+          { label: "More comms", x: 0.28, y: 0.34 },
+          { label: "Emotional + visibility", x: 0.32, y: 0.85, chosen: true },
+        ],
+      },
     },
     {
       n: "02",
