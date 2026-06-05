@@ -1,19 +1,44 @@
 import Image from "next/image";
 import { bumble, type Img, type Clip as ClipT } from "@/lib/work/bumble";
 import { Reveal } from "@/components/reveal";
-import { Compare, CompareRow } from "@/components/mdx/compare";
-import { Stats } from "@/components/mdx/stats";
 import { Clip } from "./clip";
-import { SectionLabel, MetaGrid, NumberedCard, Takeaway } from "./elements";
 
+const COL = "mx-auto w-[min(880px,92vw)]";
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
-const PROSE = "max-w-[680px]";
-const GAP = "mt-24 sm:mt-36";
+const GAP = "mt-20 sm:mt-28";
 
-/** A still — bordered, rounded, with an optional caption. */
-function Shot({ img, className = "" }: { img: Img; className?: string }) {
+/** Render *text* between single asterisks in the accent color. */
+function Rich({ text }: { text: string }) {
+  const parts = text.split(/(\*[^*]+\*)/g);
   return (
-    <figure className={className}>
+    <>
+      {parts.map((p, i) =>
+        p.startsWith("*") && p.endsWith("*") ? (
+          <span key={i} className="text-accent">{p.slice(1, -1)}</span>
+        ) : (
+          <span key={i}>{p}</span>
+        ),
+      )}
+    </>
+  );
+}
+
+function H2({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-2xl font-semibold tracking-tight sm:text-[1.75rem]">{children}</h2>;
+}
+
+function Body({ text, className = "" }: { text: string; className?: string }) {
+  return (
+    <p className={`max-w-[680px] text-[15px] leading-7 text-fg/90 ${className}`}>
+      <Rich text={text} />
+    </p>
+  );
+}
+
+/** A still — centered, rounded, light border, optional caption. */
+function Shot({ img, maxW = "max-w-none" }: { img: Img; maxW?: string }) {
+  return (
+    <figure className={`mx-auto m-0 ${maxW}`}>
       <Image
         src={img.src}
         alt={img.alt}
@@ -22,112 +47,118 @@ function Shot({ img, className = "" }: { img: Img; className?: string }) {
         sizes="(max-width: 1080px) 92vw, 1080px"
         className="h-auto w-full rounded-2xl border border-border bg-fg/[0.02]"
       />
-      {img.caption && <figcaption className="mx-auto mt-3 max-w-[680px] text-center text-xs leading-5 text-muted">{img.caption}</figcaption>}
+      {img.caption && <figcaption className="mt-3 text-center text-xs text-muted">{img.caption}</figcaption>}
     </figure>
   );
 }
 
-/** A pre-framed flow recording (device baked in) on a white device tile. */
-function FlowTile({ clip, accent = false }: { clip: ClipT; accent?: boolean }) {
-  return (
-    <figure className="m-0">
-      <figcaption className="mb-3">
-        <span
-          className={`inline-block rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${
-            accent ? "border-accent/40 bg-accent/[0.06] text-accent" : "border-border text-muted"
-          }`}
-        >
-          {clip.label}
-        </span>
-        <span className="mt-2 block text-[13px] leading-6 text-muted">{clip.caption}</span>
-      </figcaption>
-      <div
-        className="relative w-full overflow-hidden rounded-[2rem] border border-border bg-white"
-        style={{ aspectRatio: `${clip.w} / ${clip.h}` }}
-      >
-        <Clip src={clip.src} poster={clip.poster} alt={clip.label} radius="2rem" fit="cover" />
-      </div>
-    </figure>
-  );
-}
-
-/** A screen-only microinteraction clip with a label + caption beneath. */
-function MiTile({ clip }: { clip: ClipT }) {
+/** A demo clip in a rounded frame, sized to its own aspect, optional label below. */
+function ClipTile({ clip, radius = "1.25rem", white = true }: { clip: ClipT; radius?: string; white?: boolean }) {
   return (
     <figure className="m-0">
       <div
-        className="relative w-full overflow-hidden rounded-xl border border-border bg-fg/[0.02]"
+        className={`relative w-full overflow-hidden rounded-[1.25rem] border border-border ${white ? "bg-white" : "bg-fg/[0.02]"}`}
         style={{ aspectRatio: `${clip.w} / ${clip.h}` }}
       >
-        <Clip src={clip.src} poster={clip.poster} alt={clip.label} radius="0.75rem" fit="cover" />
+        <Clip src={clip.src} poster={clip.poster} alt={clip.label ?? ""} radius={radius} fit="cover" />
       </div>
-      <figcaption className="mt-3">
-        <span className="block text-sm font-medium">{clip.label}</span>
-        <span className="mt-0.5 block text-[13px] leading-6 text-muted">{clip.caption}</span>
-      </figcaption>
+      {clip.label && <figcaption className="mt-2.5 text-center text-[12px] font-medium text-muted">{clip.label}</figcaption>}
     </figure>
   );
 }
 
 export function BumbleCaseStudy() {
-  const { hero, problem, insight, concept, flows, conversion, microinteractions, validation, takeaways } = bumble;
-
+  const b = bumble;
   return (
-    <div className="pt-20 sm:pt-28">
-      {/* ───────── HERO ───────── */}
-      <header className={WIDE}>
-        <Reveal>
-          <SectionLabel>{hero.kicker}</SectionLabel>
-          <h1 className="mt-5 max-w-4xl text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
-            {hero.headline}
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">{hero.sub}</p>
-        </Reveal>
-        <Reveal delay={0.05} className="mt-12 border-t border-border pt-8">
-          <MetaGrid meta={hero.meta} />
-        </Reveal>
-      </header>
+    <div className="pt-16 sm:pt-20">
+      <h1 className="sr-only">Bumble Interest Cards</h1>
 
+      {/* HERO */}
+      <Reveal className={WIDE}>
+        <Image
+          src={b.hero.media.src}
+          alt={b.hero.media.alt}
+          width={b.hero.media.w}
+          height={b.hero.media.h}
+          priority
+          sizes="(max-width: 1080px) 92vw, 1080px"
+          className="h-auto w-full rounded-2xl"
+        />
+      </Reveal>
+
+      {/* META */}
+      <Reveal className={`${COL} mt-10`}>
+        <dl className="grid grid-cols-2 gap-x-8 gap-y-6 border-y border-border py-7 sm:grid-cols-4">
+          {b.hero.meta.map((m) => (
+            <div key={m.label}>
+              <dt className="font-mono text-[10px] uppercase tracking-widest text-accent">{m.label}</dt>
+              <dd className="mt-2 text-sm leading-6 text-fg/90">{m.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </Reveal>
+
+      {/* BRIEF */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Brief</H2>
+        <Body text={b.brief} className="mt-5" />
+      </Reveal>
+
+      {/* PROBLEM */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Problem</H2>
+        <Body text={b.problem} className="mt-5" />
+      </Reveal>
+
+      {/* GOALS */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Goals</H2>
+        <div className="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-3">
+          {b.goals.map((g, i) => (
+            <div key={g.title}>
+              <span className="font-mono text-xs text-accent">{`0${i + 1}`}</span>
+              <h3 className="mt-2 text-[15px] font-semibold tracking-tight">{g.title}</h3>
+              <p className="mt-1.5 text-[13px] leading-6 text-muted">{g.body}</p>
+            </div>
+          ))}
+        </div>
+      </Reveal>
+
+      {/* GOAL STATEMENT + preview */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Goal statement</H2>
+        <Body text={b.goalStatement} className="mt-5" />
+      </Reveal>
       <Reveal className={`${WIDE} mt-12`}>
-        <Shot img={hero.media} />
-      </Reveal>
-
-      {/* ───────── PROBLEM ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>The problem</SectionLabel>
-          <p className="mt-5 text-[15px] leading-7 text-fg/90">{problem.intro}</p>
-        </div>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {problem.cards.map((c, i) => (
-            <NumberedCard key={c.title} n={`0${i + 1}`} title={c.title} body={c.body} />
+        <p className="text-center font-mono text-[11px] uppercase tracking-widest text-accent">{b.preview.label}</p>
+        <p className="mx-auto mt-2 max-w-[520px] text-center text-sm text-muted">{b.preview.sub}</p>
+        <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
+          {b.preview.clips.map((c) => (
+            <ClipTile key={c.src} clip={c} radius="1.25rem" />
           ))}
         </div>
       </Reveal>
 
-      {/* ───────── INSIGHT ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>The insight</SectionLabel>
-          <p className="mt-5 text-[15px] leading-7 text-fg/90">{insight.intro}</p>
-        </div>
+      {/* RESEARCH */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Research</H2>
+        <Body text={b.research} className="mt-5" />
       </Reveal>
-      <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {insight.cards.map((c, i) => (
-            <NumberedCard key={c.title} n={`0${i + 1}`} title={c.title} body={c.body} />
+
+      {/* COMPETITIVE ANALYSIS */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Competitive analysis</H2>
+        <Body text={b.competitive.intro} className="mt-5" />
+        <ol className="mt-5 max-w-[680px] space-y-3">
+          {b.competitive.patterns.map((p, i) => (
+            <li key={i} className="flex gap-3 text-[15px] leading-7 text-fg/90">
+              <span className="font-mono text-sm text-accent">{`0${i + 1}`}</span>
+              <span>{p}</span>
+            </li>
           ))}
-        </div>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-10`}>
-        <Shot img={insight.chart} />
-      </Reveal>
-      <Reveal className={`${WIDE} mt-10`}>
-        <p className="mb-4 font-mono text-[10px] uppercase tracking-widest text-muted">Competitive scan</p>
-        <div className="grid grid-cols-3 gap-4 sm:max-w-[520px]">
-          {insight.refs.map((r) => (
+        </ol>
+        <div className="mt-8 grid max-w-[520px] grid-cols-3 gap-4">
+          {b.competitive.refs.map((r) => (
             <Image
               key={r.src}
               src={r.src}
@@ -141,127 +172,142 @@ export function BumbleCaseStudy() {
         </div>
       </Reveal>
 
-      {/* ───────── CONCEPT ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>The concept</SectionLabel>
-          <p className="mt-5 text-[15px] leading-7 text-fg/90">{concept.intro}</p>
-        </div>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-10`}>
-        <Shot img={concept.states} />
-      </Reveal>
-      <Reveal className={`${WIDE} mt-12`}>
-        <Shot img={concept.sitemap} />
-      </Reveal>
-
-      {/* ───────── HOW IT WORKS ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>How it works</SectionLabel>
-          <p className="mt-5 text-[15px] leading-7 text-fg/90">{flows.intro}</p>
-        </div>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-9`}>
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {flows.items.map((c, i) => (
-            <FlowTile key={c.src} clip={c} accent={i === 2} />
-          ))}
-        </div>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-14`}>
-        <figure className="m-0">
-          <figcaption className="mb-3">
-            <span className="inline-block rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted">
-              {flows.desktop.label}
-            </span>
-            <span className="mt-2 block max-w-[680px] text-[13px] leading-6 text-muted">{flows.desktop.caption}</span>
-          </figcaption>
-          <div
-            className="relative w-full overflow-hidden rounded-2xl border border-border bg-white"
-            style={{ aspectRatio: `${flows.desktop.w} / ${flows.desktop.h}` }}
-          >
-            <Clip src={flows.desktop.src} poster={flows.desktop.poster} alt={flows.desktop.label} radius="1rem" fit="cover" />
-          </div>
-        </figure>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-14`}>
-        <p className={`${PROSE} text-[15px] leading-7 text-muted`}>{flows.crossPlatform.note}</p>
-        <div className="mt-6 grid items-start gap-8 sm:grid-cols-2">
-          <FlowTile clip={flows.crossPlatform.android} />
-          <Shot img={flows.crossPlatform.platforms} />
-        </div>
-      </Reveal>
-
-      {/* ───────── CONVERSION ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>Designing for conversion</SectionLabel>
-          <p className="mt-5 text-[15px] leading-7 text-fg/90">{conversion.intro}</p>
-        </div>
-      </Reveal>
-      <div className={`${WIDE} mt-2`}>
-        <Compare a="Free" b="Premium">
-          {conversion.rows.map((r) => (
-            <CompareRow key={r.feature} feature={r.feature} a={r.free} b={r.premium} />
-          ))}
-        </Compare>
-      </div>
-      <Reveal className={`${WIDE} mt-6`}>
-        <div className="grid items-start gap-8 sm:grid-cols-[280px_1fr]">
-          <div className="grid grid-cols-2 gap-4">
-            {conversion.gate.map((g) => (
-              <figure key={g.src} className="m-0">
-                <Image src={g.src} alt={g.alt} width={g.w} height={g.h} sizes="140px" className="h-auto w-full rounded-2xl border border-border" />
-                {g.caption && <figcaption className="mt-2 text-center text-[11px] text-muted">{g.caption}</figcaption>}
-              </figure>
-            ))}
-          </div>
-          <div className="self-center">
-            <Shot img={conversion.diagram} />
-          </div>
-        </div>
-      </Reveal>
-
-      {/* ───────── MICROINTERACTIONS ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>Microinteractions</SectionLabel>
-          <p className="mt-5 text-[15px] leading-7 text-fg/90">{microinteractions.intro}</p>
-        </div>
+      {/* DATA ANALYSIS */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Data analysis</H2>
+        <Body text={b.data.intro} className="mt-5" />
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3">
-          {microinteractions.items.map((c) => (
-            <MiTile key={c.src} clip={c} />
+        <Shot img={b.data.chart} />
+      </Reveal>
+
+      {/* IDEATION */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Ideation</H2>
+        <Body text={b.ideation.intro} className="mt-5" />
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8`}>
+        <Shot img={b.ideation.img} maxW="max-w-[860px]" />
+      </Reveal>
+
+      {/* SITE MAP */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Site map</H2>
+        <Body text={b.siteMap.intro} className="mt-5" />
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8`}>
+        <Shot img={b.siteMap.img} />
+      </Reveal>
+
+      {/* USER FLOW */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>User flow</H2>
+        <Body text={b.userFlow.intro} className="mt-5" />
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8 space-y-10`}>
+        <div>
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-accent">{b.userFlow.initiator.caption}</p>
+          <Shot img={{ ...b.userFlow.initiator, caption: undefined }} />
+        </div>
+        <div>
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-accent">{b.userFlow.receiver.caption}</p>
+          <Shot img={{ ...b.userFlow.receiver, caption: undefined }} />
+        </div>
+      </Reveal>
+
+      {/* CORE INTERACTIONS */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>{b.coreInteractions.title}</H2>
+        <Body text={b.coreInteractions.intro} className="mt-5" />
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8`}>
+        <Shot img={b.coreInteractions.img} />
+      </Reveal>
+      <Reveal className={`${COL} mt-10`}>
+        <div className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
+          {b.coreInteractions.points.map((p) => (
+            <div key={p.title} className="border-t border-border pt-4">
+              <h3 className="text-[15px] font-semibold tracking-tight">{p.title}</h3>
+              <p className="mt-1.5 text-[14px] leading-6 text-muted">{p.body}</p>
+            </div>
           ))}
         </div>
       </Reveal>
 
-      {/* ───────── VALIDATION ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>Validation</SectionLabel>
-          <p className="mt-5 text-[15px] leading-7 text-fg/90">{validation.intro}</p>
-        </div>
+      {/* CROSS-PLATFORM */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Cross-platform prototype</H2>
+        <Body text={b.crossPlatform.intro} className="mt-5" />
       </Reveal>
-      <div className={`${WIDE} mt-2`}>
-        <Stats items={validation.stats} />
-      </div>
-      <Reveal className={`${WIDE} mt-6`}>
-        <p className={`${PROSE} text-[15px] leading-7 text-muted`}>{validation.note}</p>
+      {/* Android & iPhone */}
+      <Reveal className={`${COL} mt-12`}>
+        <h3 className="text-lg font-semibold tracking-tight">{b.crossPlatform.androidIphone.title}</h3>
+        <Body text={b.crossPlatform.androidIphone.body} className="mt-3" />
       </Reveal>
-
-      {/* ───────── TAKEAWAYS ───────── */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <div className={PROSE}>
-          <SectionLabel>Takeaways</SectionLabel>
-          <div className="mt-6 space-y-8">
-            {takeaways.map((t, i) => (
-              <Takeaway key={t.title} n={`0${i + 1}`} title={t.title} body={t.body} />
-            ))}
+      <Reveal className={`${WIDE} mt-8`}>
+        <div className="mx-auto grid max-w-[820px] items-start gap-8 sm:grid-cols-2">
+          <Shot img={b.crossPlatform.androidIphone.img} />
+          <div className="mx-auto w-full max-w-[280px]">
+            <ClipTile clip={b.crossPlatform.androidIphone.clip} />
           </div>
         </div>
+      </Reveal>
+      {/* Desktop */}
+      <Reveal className={`${COL} mt-14`}>
+        <h3 className="text-lg font-semibold tracking-tight">{b.crossPlatform.desktop.title}</h3>
+        <Body text={b.crossPlatform.desktop.body} className="mt-3" />
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8`}>
+        <ClipTile clip={b.crossPlatform.desktop.clip} radius="1rem" />
+      </Reveal>
+
+      {/* MICROINTERACTIONS */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Microinteractions</H2>
+        <Body text={b.microinteractions.intro} className="mt-5" />
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8`}>
+        <div className="grid grid-cols-2 items-start gap-x-6 gap-y-10 sm:grid-cols-3">
+          {b.microinteractions.items.map((c) => (
+            <figure key={c.src} className="m-0">
+              <div
+                className="relative w-full overflow-hidden rounded-xl border border-border bg-fg/[0.02]"
+                style={{ aspectRatio: `${c.w} / ${c.h}` }}
+              >
+                <Clip src={c.src} poster={c.poster} alt={c.label ?? ""} radius="0.75rem" fit="cover" />
+              </div>
+              <figcaption className="mt-3">
+                <span className="block text-sm font-medium">{c.label}</span>
+                <span className="mt-0.5 block text-[13px] leading-6 text-muted">{c.caption}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </Reveal>
+
+      {/* USER TESTING */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>User testing</H2>
+        <Body text={b.userTesting} className="mt-5" />
+      </Reveal>
+
+      {/* NEXT STEPS */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Next steps</H2>
+        <ol className="mt-5 max-w-[680px] space-y-3">
+          {b.nextSteps.map((s, i) => (
+            <li key={i} className="flex gap-3 text-[15px] leading-7 text-fg/90">
+              <span className="font-mono text-sm text-accent">{`0${i + 1}`}</span>
+              <span>{s}</span>
+            </li>
+          ))}
+        </ol>
+      </Reveal>
+
+      {/* REFLECTION */}
+      <Reveal className={`${COL} ${GAP}`}>
+        <H2>Reflection</H2>
+        <Body text={b.reflection} className="mt-5" />
       </Reveal>
     </div>
   );
