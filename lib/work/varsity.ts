@@ -30,7 +30,7 @@ export const varsity = {
     image: `/work/covers/varsity.png`,
     imageAlt: "The Varsity Tutors parent dashboard — Skill Breakdown view on desktop",
     meta: [
-      { label: "Role", items: ["Product Designer"] },
+      { label: "Role", items: ["Product Builder"] },
       { label: "Team", items: ["CMU METALS Capstone", "× Varsity Tutors"] },
       { label: "Tools", items: ["Figma", "FigJam"] },
       { label: "Timeline", items: ["8 weeks", "2025"] },
