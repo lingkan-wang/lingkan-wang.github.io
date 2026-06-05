@@ -71,3 +71,82 @@ export function Takeaway({ n, title, body }: { n: string; title: string; body: s
     </div>
   );
 }
+
+/**
+ * A media placeholder for footage/screens not yet supplied. Defaults to 16:9;
+ * pass `portrait` to match a phone-shaped clip. Shows an image glyph + label.
+ */
+export function MediaPlaceholder({
+  label,
+  caption = "footage to come",
+  portrait = false,
+}: {
+  label: string;
+  caption?: string;
+  portrait?: boolean;
+}) {
+  return (
+    <div
+      className={`grid w-full place-items-center rounded-2xl border border-dashed border-border bg-fg/[0.025] ${
+        portrait ? "aspect-[57/95]" : "aspect-video"
+      }`}
+    >
+      <div className="flex flex-col items-center gap-3 px-6 text-center text-muted">
+        <span className="grid size-12 place-items-center rounded-full border border-border bg-bg/70 text-fg/55">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="m3 16 4-4 3 3 5-5 6 6" />
+            <circle cx="8.5" cy="9.5" r="1.4" />
+          </svg>
+        </span>
+        <span className="font-mono text-[11px] uppercase tracking-widest text-fg/70">{label}</span>
+        <span className="text-[11px] text-muted/70">{caption}</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A 16:9 media slot for a feature demo. With `src` it renders a looping, muted
+ * autoplay <video>; without one it shows a labelled placeholder (play glyph +
+ * caption) so the layout reads correctly before the real clip is exported in.
+ */
+export function VideoSlot({
+  label,
+  src,
+  poster,
+  portrait = false,
+}: {
+  label: string;
+  src?: string;
+  poster?: string;
+  portrait?: boolean;
+}) {
+  const aspect = portrait ? "aspect-[404/838]" : "aspect-video";
+  if (src) {
+    return (
+      <video
+        src={src}
+        poster={poster}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className={`${aspect} w-full rounded-2xl border border-border object-cover`}
+      />
+    );
+  }
+  return (
+    <div className={`grid ${aspect} w-full place-items-center rounded-2xl border border-dashed border-border bg-fg/[0.025]`}>
+      <div className="flex flex-col items-center gap-3 text-muted">
+        <span className="grid size-14 place-items-center rounded-full border border-border bg-bg/70 text-fg/70">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+        <span className="font-mono text-[11px] uppercase tracking-widest text-fg/70">{label}</span>
+        <span className="text-[11px] text-muted/70">video placeholder</span>
+      </div>
+    </div>
+  );
+}

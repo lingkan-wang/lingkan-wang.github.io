@@ -19,7 +19,9 @@ export function Logo({ size = 36 }: { size?: number }) {
       {ok ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src="/logo.png"
+          // ?v= cache-buster: bump when the avatar art changes so browsers fetch
+          // the new file immediately (the plain /logo.png URL is cached ~10 min).
+          src="/logo.png?v=2"
           alt=""
           width={size}
           height={size}

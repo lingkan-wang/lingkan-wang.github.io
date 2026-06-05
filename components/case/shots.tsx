@@ -36,6 +36,22 @@ export function Phone({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+/** A pre-framed mockup (device already composited on its own background) —
+ *  rendered as-is with just a rounded border, sized for a portrait shot. */
+export function Mockup({ src, alt }: { src: string; alt: string }) {
+  const [w, h] = dims(src);
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={w}
+      height={h}
+      sizes="(max-width: 640px) 70vw, 320px"
+      className="h-auto w-full rounded-2xl border border-border"
+    />
+  );
+}
+
 /** A wider composition (multi-phone shot, diagram, product render). */
 export function Plate({ src, alt }: { src: string; alt: string }) {
   const [w, h] = dims(src);

@@ -2,44 +2,122 @@
 title: "Taimer.ai"
 slug: "taimer-ai"
 year: 2023
-role: "Product Designer"
+role: "Product Builder"
 company: "Taimer.ai"
+timeline: "7 months"
+platform: "Web"
+tools: "Figma"
 tags: ["AIGC", "B2B2C", "Interior Design"]
-summary: "AI image-to-image platform combining generative models with designer input to deliver personalized renovation plans for Chinese consumers."
+summary: "An AIGC platform that pairs generative models with designer fine-tuning to turn a renovation brief into client-ready interior renders — in minutes, not weeks."
 cover: "/work/covers/taimer.png"
 thumbnail: "/work/covers/taimer.png"
 order: 5
-featured: false
+featured: true
 confidential: false
 ---
 
 ## Overview
 
-[One paragraph: the context, the product, and the problem this project set out to solve. Replace with real copy.]
+China's home-interior industry runs on slow, manual work: long back-and-forth with homeowners, renders drawn by hand, and lead-to-deal conversion that rarely pays back the cost of acquiring the lead. Taimer.ai set out to collapse that loop.
 
-<Figure alt="Project overview" breakout caption="Overview — replace with a real image" />
+Over seven months, working with a team of five (a PM, me, a marketer, and two engineers), I designed a multi-modal AIGC platform — text-to-image, image-to-image, recognition, and 3D — that lets a designer fine-tune a model to their own house style, then generate client-ready interior renders in minutes. The work won the Outstanding Project award at the Tsinghua University AIGC Application Innovation Challenge and drew investment from Beijing institutions and angel backers.
 
-## Problem & Insight
+<Figure src="/work/taimer-ai/cover-app.png" alt="The Taimer.ai workspace — a sidebar of creation and training tools, a grid of generated interior renders, and a right-hand panel of style and generation controls" breakout zoom caption="The workspace — custom style models, an image library, and generation controls in one place." />
 
-[What you learned from research and the key insight that shaped the direction.]
+## The problem
 
-## Process
+I started by mapping where designers and homeowners actually lose time. The friction wasn't one big thing; it was a stack of small ones.
 
-[Explorations, the decisions you made, and how the work evolved.]
+<Pillars items={[
+  { title: "High communication cost", body: "Endless back-and-forth with homeowners drains time and energy." },
+  { title: "Slow manual production", body: "Producing renders by hand is painstaking and hard to scale." },
+  { title: "Low conversion", body: "Leads rarely turn into signed projects." },
+  { title: "Blurry references", body: "Stock imagery is unclear and low quality." },
+  { title: "No acquisition channels", body: "Designers lack reliable ways to reach new clients." },
+  { title: "Lack of inspiration", body: "Fresh creative starting points are hard to find." },
+]} />
 
-<Gallery>
-  <Figure alt="Exploration 1" />
-  <Figure alt="Exploration 2" />
-</Gallery>
+On top of the day-to-day friction sit four structural barriers: the expertise the work demands, the difficulty of guaranteeing detail quality, cross-disciplinary tech that's gated abroad, and a delivery experience that keeps cost and timelines high.
 
-## Solution
+## Market opportunity
 
-[The final design. Walk through the core flows and screens.]
+The upside of removing that friction is large — both for the people doing the work and for the market around it.
 
-<Figure alt="Final solution" breakout />
+<Stats items={[
+  { value: "1wk → 1h", label: "Revision turnaround" },
+  { value: "+45%", label: "Design-to-deal conversion" },
+  { value: "1 min", label: "Brief → first proposal" },
+  { value: "$500B", label: "N. American market" },
+  { value: "9.5M+", label: "Designers in China" },
+  { value: "20,000+", label: "Beta renovation users" },
+]} />
+
+## The product
+
+Taimer is a community-plus-creation platform. The core is a generation surface designers actually control, wrapped in tools that make a personal model worth building.
+
+<Pillars items={[
+  { title: "Interior generation", body: "Upload a room, choose a type, then generate material styles, sketches, and floor plans — and expand, redraw, or annotate any region." },
+  { title: "Creator tools", body: "Custom style models, a style plaza, a personal image library, and asset management." },
+  { title: "Fine-tuning controls", body: "Image count, clarity, steps, learning rate, text intensity, sampler, seed, and copyright protection." },
+]} />
+
+<Figure src="/work/taimer-ai/renders.png" alt="A horizontal strip of six AI-generated interiors — bedrooms in varied styles and a set of bar stools" breakout zoom caption="Sample interiors generated through the platform." />
+
+## How it works
+
+Under the surface, Taimer runs a proprietary deep-learning fine-tuning solution built on ControlNet and diffusion models, with multi-modal support and compute backed by AWS and NVIDIA. The point of the fine-tuning layer is control: a designer's model should reproduce *their* style, not a generic one.
+
+<Figure src="/work/taimer-ai/architecture.png" alt="Diagram of the Stable Diffusion and ControlNet-LITE pipeline, from input conditioning through the model to a generated interior render" breakout zoom caption="The Stable Diffusion + ControlNet-LITE pipeline, from input conditioning to output." />
+
+Training a style model moves through five stages:
+
+1. **Preprocess & label** the designer's reference images.
+2. **Prepare** the datasets and configure the run.
+3. **Train** on the fine-tuning stack.
+4. **Compare & select** from candidate results.
+5. **Tune weights** until the output matches the target style.
+
+<Figure src="/work/taimer-ai/training.png" alt="Screenshots of the model-training process — data preprocessing and labeling, a training run in progress, and a grid for comparing and selecting results" breakout zoom caption="Data preprocessing, training, and result selection." />
+
+## Who it's for
+
+The design centered on independent designers and small studios — people who need volume and consistency without a render farm.
+
+<Personas people={[
+  {
+    name: "Alex",
+    meta: "33 · Changsha · Interior Designer",
+    motivation: [
+      "Serve more clients and finish projects faster",
+      "Generate large volumes of low-cost drafts with AI",
+      "Offer varied styles for different clients and markets",
+    ],
+    needs: [
+      "Models that match the firm's house style",
+      "Convenient fine-tuning tools",
+      "Less manual back-and-forth with homeowners",
+    ],
+  },
+]} />
+
+## Business model
+
+Designers subscribe; product brands pay per usage. The tiers map to how many drafts a studio actually ships in a month.
+
+- **Basic — ¥59/mo** · 10 orders / month
+- **Standard — ¥399/mo** · 100 orders / month
+- **Pro — ¥1999/mo** · 400 orders / month
+- **Inventory listing — ¥699** · upload 10 SKUs (pay-per-usage)
+
+Behind the subscription, a designer requests a customized model, a training expert builds and tracks it, candidate outputs are reviewed together, and the result is delivered — with evaluation and after-sales support if it isn't right the first time.
 
 ## Impact
 
-<MetricCallout value="—" label="Replace with a real result or remove" />
+<Metrics>
+  <Metric value="1wk → 1h" label="Revision turnaround, down from a week to an hour" />
+  <Metric value="+45%" label="Lift in design-to-deal conversion" />
+  <Metric value="20,000+" label="Renovation users reached in beta" />
+</Metrics>
 
-[Outcomes and what you learned. For confidential projects, keep this qualitative.]
+Beyond the numbers, Taimer opened a new income stream for independent designers and gave consumers a one-minute path from brief to first proposal. The lesson that stuck with me: in an AIGC tool, *control* is the feature — the fine-tuning that makes a model feel like the designer's own is exactly what makes the output worth paying for.

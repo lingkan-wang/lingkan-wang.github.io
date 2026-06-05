@@ -24,4 +24,6 @@ export const sfx = {
   flip: clip("/about/sfx-photo.mp3"),
   /** category select */
   tab: clip("/about/sfx-category.mp3"),
+  /** subtle hover cue (marco.fyi's twitter sound) — softer, for the Follow button */
+  hover: clip("/about/sfx-hover.mp3", 0.4),
 };
