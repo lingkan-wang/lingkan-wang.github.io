@@ -1,16 +1,21 @@
 import Image from "next/image";
 import type { Project } from "@/lib/projects";
-import { varsity, type Shot as ShotT } from "@/lib/work/varsity";
+import { varsity, type Shot as ShotT, type TradeOff } from "@/lib/work/varsity";
 import { Reveal } from "@/components/reveal";
+import { Placeholder } from "@/components/placeholder";
 import { StatCounter } from "./stat-counter";
 import { SectionLabel, Emph, MetaGrid, NumberedCard, Takeaway } from "./elements";
 
 const NARROW = "mx-auto max-w-[680px] px-6";
+const MID = "mx-auto max-w-[820px] px-6";
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
 const GAP = "mt-20 sm:mt-28";
 
-/** A bordered, rounded screenshot on the page surface. */
+/** A bordered, rounded screenshot — or a labelled placeholder when no asset yet. */
 function Shot({ shot, className = "" }: { shot: ShotT; className?: string }) {
+  if (shot.placeholder || !shot.src) {
+    return <Placeholder label={shot.alt} aspect="aspect-[16/9]" className={className} />;
+  }
   return (
     <Image
       src={shot.src}
@@ -23,23 +28,47 @@ function Shot({ shot, className = "" }: { shot: ShotT; className?: string }) {
   );
 }
 
+function TradeOffCard({ t }: { t: TradeOff }) {
+  return (
+    <div className="rounded-2xl border border-border p-6 sm:p-7">
+      <div className="flex items-baseline gap-3">
+        <span className="font-mono text-xs text-accent">{t.n}</span>
+        <h3 className="text-lg font-semibold tracking-tight">{t.title}</h3>
+      </div>
+      <p className="mt-3 text-[15px] leading-7 text-fg/90">{t.tension}</p>
+
+      <p className="mt-5 font-mono text-[10px] uppercase tracking-widest text-muted">Considered</p>
+      <ul className="mt-3 space-y-2">
+        {t.considered.map((o) => (
+          <li
+            key={o.label}
+            className={`rounded-xl border p-3.5 ${o.chosen ? "border-accent/40 bg-accent/[0.04]" : "border-border"}`}
+          >
+            <div className="flex items-center gap-2">
+              <span className={`size-1.5 shrink-0 rounded-full ${o.chosen ? "bg-accent" : "bg-fg/25"}`} />
+              <span className={`text-[13px] font-medium ${o.chosen ? "text-accent" : "text-fg/90"}`}>
+                {o.label}
+                {o.chosen && " · chosen"}
+              </span>
+            </div>
+            <p className="mt-1.5 pl-3.5 text-[13px] leading-6 text-muted">{o.note}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-5 border-t border-border pt-4">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-accent">Decision</p>
+        <p className="mt-2 text-[15px] leading-7 text-fg/90">
+          <span className="font-medium">{t.chose}</span> {t.why}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function VarsityCaseStudy({ meta }: { meta: Project }) {
-  const {
-    hero,
-    brief,
-    context,
-    research,
-    personas,
-    voices,
-    problem,
-    mission,
-    opportunities,
-    springMvp,
-    pillars,
-    explorations,
-    outcome,
-    takeaways,
-  } = varsity;
+  const { hero, brief, context, research, jobs, personas, problem, tradeoffs, reframe, pillars, explorations, outcome, takeaways } =
+    varsity;
 
   return (
     <div className="pt-20 sm:pt-28">
@@ -80,7 +109,7 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         <p className="mt-5 text-[15px] leading-7 text-muted">{context}</p>
       </Reveal>
 
-      {/* RESEARCH + STATS + OWNERSHIP */}
+      {/* RESEARCH */}
       <Reveal className={`${NARROW} ${GAP}`}>
         <SectionLabel>Research</SectionLabel>
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{research.intro}</p>
@@ -109,9 +138,26 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         </ul>
       </Reveal>
 
+      {/* THE 3 JOBS */}
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <SectionLabel>What parents hire the product to do</SectionLabel>
+        <p className="mt-4 max-w-2xl text-[15px] leading-7 text-fg/90">
+          Synthesis pointed to three jobs behind the renewal decision — and the product was failing all three.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {jobs.map((j) => (
+            <div key={j.title} className="rounded-2xl border border-border p-5">
+              <h3 className="text-[15px] font-semibold tracking-tight">{j.title}</h3>
+              <p className="mt-3 border-l-2 border-accent pl-3 text-sm leading-6 text-fg/90">“{j.want}”</p>
+              <p className="mt-3 text-[13px] leading-6 text-muted">{j.body}</p>
+            </div>
+          ))}
+        </div>
+      </Reveal>
+
       {/* PERSONAS */}
       <Reveal className={`${WIDE} ${GAP}`}>
-        <SectionLabel>Who we designed for</SectionLabel>
+        <SectionLabel>Two parents, two horizons</SectionLabel>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           {personas.map((p) => (
             <div key={p.name} className="rounded-2xl border border-border p-5">
@@ -151,24 +197,6 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         </div>
       </Reveal>
 
-      {/* VOICES */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <SectionLabel>What we heard</SectionLabel>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {voices.map((v) => (
-            <figure
-              key={v.quote}
-              className="rounded-2xl border border-border bg-fg/[0.02] p-5 transition-colors hover:border-fg/20"
-            >
-              <blockquote className="text-[15px] leading-7 text-fg/90">“{v.quote}”</blockquote>
-              <figcaption className="mt-3 font-mono text-[11px] uppercase tracking-wider text-muted">
-                {v.source}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </Reveal>
-
       {/* PROBLEM */}
       <Reveal className={`${NARROW} ${GAP}`}>
         <SectionLabel>Problem</SectionLabel>
@@ -176,56 +204,47 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
         <div className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
-          <Shot shot={problem.blueprint} className="border-border" />
+          <Shot shot={problem.blueprint} />
         </div>
       </Reveal>
       <Reveal className={`${WIDE} mt-6`}>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {problem.items.map((p) => (
             <NumberedCard key={p.n} {...p} />
           ))}
         </div>
       </Reveal>
 
-      {/* MISSION */}
-      <Reveal className={`mx-auto max-w-[860px] px-6 ${GAP}`}>
-        <p className="text-center font-mono text-xs uppercase tracking-widest text-muted">The mission</p>
-        <p className="mt-5 text-balance text-center text-2xl font-medium leading-snug tracking-tight sm:text-[2rem]">
-          {mission}
+      {/* KEY TRADE-OFFS */}
+      <Reveal className={`${MID} ${GAP}`}>
+        <SectionLabel>Key trade-offs</SectionLabel>
+        <p className="mt-4 text-[15px] leading-7 text-fg/90">
+          Getting from problem to product meant four decisions where the obvious answer wasn’t the right one — spanning the
+          co-creation workshop through the final design.
         </p>
       </Reveal>
+      <div className={`${MID} mt-8 space-y-5`}>
+        {tradeoffs.map((t) => (
+          <Reveal key={t.n}>
+            <TradeOffCard t={t} />
+          </Reveal>
+        ))}
+      </div>
 
-      {/* OPPORTUNITIES */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <SectionLabel>Design opportunities</SectionLabel>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {opportunities.map((o, i) => (
-            <NumberedCard key={o.title} n={`0${i + 1}`} title={o.title} body={o.body} />
-          ))}
-        </div>
-      </Reveal>
-
-      {/* FROM LO-FI TO A TESTED MVP */}
+      {/* REFRAME → FIND / UNDERSTAND / ACT */}
       <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>From lo-fi to a tested MVP</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">{springMvp.body}</p>
+        <SectionLabel>What testing changed</SectionLabel>
+        <p className="mt-5 text-[15px] leading-7 text-fg/90">{reframe.body}</p>
       </Reveal>
-      <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {springMvp.shots.map((s) => (
-            <div key={s.src} className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
-              <Shot shot={s} />
-            </div>
+      <Reveal className={`${WIDE} mt-6`}>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {reframe.goals.map((g) => (
+            <NumberedCard key={g.n} {...g} />
           ))}
         </div>
       </Reveal>
-      <Reveal className={`${NARROW} mt-10`}>
-        <div className="rounded-2xl border-l-2 border-accent bg-fg/[0.02] py-4 pl-5 pr-4">
-          <p className="text-[15px] leading-7 text-fg/90">{springMvp.learned}</p>
-        </div>
-      </Reveal>
 
-      {/* SOLUTION PILLARS */}
+      {/* FINAL MVP PILLARS */}
       {pillars.map((p) => (
         <section key={p.title} className={`${WIDE} ${GAP}`}>
           <Reveal>
@@ -237,7 +256,7 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
           <Reveal className="mt-8">
             <div className={`grid gap-4 rounded-3xl ${p.tint} p-5 sm:p-8 ${p.shots.length > 1 ? "sm:grid-cols-2" : ""}`}>
               {p.shots.map((s) => (
-                <Shot key={s.src} shot={s} />
+                <Shot key={s.src ?? s.alt} shot={s} />
               ))}
             </div>
           </Reveal>
@@ -261,21 +280,18 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{explorations.body}</p>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <figure className="rounded-2xl bg-fg/[0.025] p-5">
-            <Shot shot={explorations.before} />
-            <figcaption className="mt-3 text-center text-xs text-muted">Earlier direction</figcaption>
-          </figure>
-          <figure className="rounded-2xl bg-fg/[0.025] p-5">
-            <Shot shot={explorations.after} />
-            <figcaption className="mt-3 text-center text-xs text-muted">Refined direction</figcaption>
-          </figure>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {explorations.shots.map((s) => (
+            <div key={s.src ?? s.alt} className="rounded-2xl bg-fg/[0.025] p-5">
+              <Shot shot={s} />
+            </div>
+          ))}
         </div>
       </Reveal>
 
       {/* OUTCOME */}
       <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Outcome</SectionLabel>
+        <SectionLabel>Outcome &amp; next steps</SectionLabel>
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{outcome}</p>
       </Reveal>
 

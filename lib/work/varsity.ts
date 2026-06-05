@@ -1,12 +1,13 @@
 // Structured content for the Varsity Tutors parent-dashboard case study.
-// Narrative carried over from the original portfolio; presentation follows the
-// repo's rich case-study format. Images live in /public/work/varsity/.
+// Narrative follows the project deck (retention through learning visibility);
+// presentation follows the repo's rich case-study format. Images live in
+// /public/work/varsity/. Some process visuals are placeholders (see `placeholder`).
 
 const IMG = "/work/varsity";
 
 export type Stat = { value: number; suffix?: string; label: string };
-export type Voice = { quote: string; source: string };
 export type Numbered = { n: string; title: string; body: string };
+export type Job = { title: string; want: string; body: string };
 export type Persona = {
   name: string;
   meta: string;
@@ -14,15 +15,24 @@ export type Persona = {
   motivation: string[];
   needs: string[];
 };
+export type Option = { label: string; note: string; chosen?: boolean };
+export type TradeOff = {
+  n: string;
+  title: string;
+  tension: string;
+  considered: Option[];
+  chose: string;
+  why: string;
+};
 export type Feature = { title: string; body: string };
-export type Shot = { src: string; alt: string; w: number; h: number };
+export type Shot = { src?: string; alt: string; w: number; h: number; placeholder?: boolean };
 export type Pillar = {
   kicker: string;
   title: string;
   whatIsIt: string;
   features: Feature[];
   shots: Shot[];
-  tint: string; // soft container background
+  tint: string;
 };
 
 export const varsity = {
@@ -38,160 +48,218 @@ export const varsity = {
   },
 
   brief:
-    "As part of CMU's METALS Capstone, I worked with Varsity Tutors to rethink how parents stay informed about their child's progress. Today's reports are thin, so families disengage. Our goal was a transparent, engaging parent experience that turns raw tutoring-session data into *meaningful, actionable* updates. I contributed to research synthesis, data strategy, and the MVP design of a parent-facing dashboard — now in Varsity's development pipeline.",
+    "Varsity Tutors is a subscription tutoring marketplace for grades 10–12, where *renewal is the core business metric*. But parents never really see the product. All they get is a raw session transcript — long, unstructured, mapped to no learning framework — which gives them almost nothing to judge whether it's working. The result is *silent churn*: parents who quietly stop renewing because they can't tell if learning is happening. Over an 8-week CMU METALS Capstone, I worked with Varsity Tutors to turn each session transcript into signals parents can act on — so the renewal decision shifts from a guess to a confident yes.",
 
   context:
-    "Varsity Tutors is expanding personalized tutoring for high-schoolers prepping for the SAT/ACT/AP. But after the shift to remote and hybrid learning, parents needed more than grades: clearer evidence of progress, personalized next steps, and real visibility into what their child is actually learning.",
+    "This built on a takeaway from my previous project at Ecovacs: as systems get more intelligent, the thing that needs designing isn't just functionality — it's trust and visibility. When people can't see what an intelligent system is doing, or why, they won't hand it their trust. That lens shaped everything here.",
 
   research: {
     intro:
-      "To learn where trust breaks down, we ran a mixed-methods study — a literature review of learning-science frameworks, an expert interview with a Varsity Tutors UX researcher, a parent survey, and in-depth interviews with parents who are also educators.",
+      "To find where trust breaks down, we triangulated across theory, business, and real users — a literature review of learning-science frameworks, internal expert interviews at Varsity Tutors, a survey of 104 parents, and 1:1 in-depth interviews — to understand what parents care about, what confuses them, and where they feel uncertain.",
     stats: [
       { value: 104, suffix: "", label: "parents surveyed on how they judge tutoring effectiveness" },
-      { value: 4, suffix: "", label: "in-depth interviews with parent–educators" },
-      { value: 8, suffix: " wks", label: "from research synthesis to a tested MVP" },
+      { value: 4, suffix: "", label: "in-depth 1:1 parent interviews" },
+      { value: 8, suffix: " wks", label: "from research to a tested MVP" },
     ] as Stat[],
     ownership: [
-      "Synthesized survey + interview data into four core insights with the team via affinity diagramming",
-      "Shaped the data strategy — how raw session transcripts map to skills, mastery, and learning-science principles",
-      "Designed the MVP parent dashboard: homepage, session reports, and a skill-mastery breakdown",
-      "Ran 1:1 think-aloud testing and turned the findings into a clearer, more actionable second version",
+      "Synthesized survey + interview data into the framework below, with the team, via affinity diagramming",
+      "Owned the data strategy — how a raw session transcript maps to skills, mastery, and learning-science principles",
+      "Designed the MVP: homepage, session reports, and an AI-driven skill-mastery breakdown",
+      "Ran 1:1 think-aloud testing and made the hard calls that turned a confusing v1 into an actionable v2",
     ],
   },
+
+  // What parents actually hire the product to do
+  jobs: [
+    {
+      title: "The Learning Job",
+      want: "Tell me whether learning actually happened — not just how many sessions.",
+      body: "Today parents get a transcript and grades that lag by weeks. They want mastery; the system reports attendance.",
+    },
+    {
+      title: "The Engagement Job",
+      want: "Let me see whether my kid is actually engaged — not just present.",
+      body: "Engagement is the leading indicator parents most want, yet it's completely invisible. That blind spot is the source of silent churn.",
+    },
+    {
+      title: "The Trust Job",
+      want: "Give me a stable, honest read. I don't want surprises.",
+      body: "Trust comes from consistent, transparent feedback. Inconsistent signals quietly erode it between billing cycles.",
+    },
+  ] as Job[],
 
   personas: [
     {
       name: "Proactive Daisy",
-      meta: "45 · Parent of a 10th-grader",
+      meta: "Parent of a 10th-grader",
       avatar: `${IMG}/persona-daisy.png`,
       motivation: [
-        "Wants her daughter to excel — a perfect SAT and 5s across AP courses",
-        "Get ahead of peers and into a top university",
+        "Wants her daughter to excel — a top SAT and 5s across AP courses",
+        "Planning years ahead toward a competitive university",
       ],
-      needs: ["Highly qualified, hand-selected tutors", "An easy way to check progress at a glance"],
+      needs: ["Highly qualified tutors", "An at-a-glance read on whether things are on track"],
     },
     {
       name: "Reactive David",
-      meta: "48 · Parent of an 11th-grader",
+      meta: "Parent of an 11th-grader",
       avatar: `${IMG}/persona-david.png`,
       motivation: [
-        "His son is struggling in math and needs help fast",
-        "Wants to rebuild his son's confidence at school",
+        "His son is already struggling; he needs fast results before an upcoming exam",
+        "Looking 6–8 weeks out, not years — and will cancel if he doesn't see progress",
       ],
-      needs: ["Noticeable improvement before the next exam", "A way to monitor progress without daily involvement"],
+      needs: ["Visible improvement within a short window", "A way to monitor progress without daily involvement"],
     },
   ] as Persona[],
 
-  voices: [
-    { quote: "The content my child produces is more important than letter grades.", source: "Parent interview" },
-    { quote: "I want to know whether they're independently taking responsibility for their tasks.", source: "Parent interview" },
-    { quote: "Being able to see past work, like a portfolio of progress, would be helpful.", source: "Parent interview" },
-    { quote: "After understanding progress, I want clear next steps and how I can help at home.", source: "Parent interview" },
-  ] as Voice[],
-
   problem: {
     statement:
-      "We mapped the full parent journey — Search → Matching → Tutoring → Renew — and found that the experience functions, but it rarely feels transparent or trustworthy. Four pain points stood out.",
-    blueprint: { src: `${IMG}/service-blueprint.png`, alt: "Service blueprint across the four parent-journey stages", w: 1600, h: 503 },
+      "We mapped the full journey from search to renewal and found four pain points — and the biggest gap lands exactly where it hurts most: during and after sessions, when parents most want to understand learning but the system gives the least clarity.",
+    blueprint: { src: `${IMG}/service-blueprint.png`, alt: "Service blueprint across the parent journey", w: 1600, h: 503 },
     items: [
-      { n: "01", title: "Disconnected from the child", body: "Parents can't see their child's mindset or motivation, so engagement stays invisible." },
-      { n: "02", title: "A non-standardized process", body: "Tutoring quality and structure vary, making it hard to know what 'good' looks like." },
-      { n: "03", title: "Updates are hard to read", body: "Reports are inconsistent or too technical, so confidence erodes instead of building." },
-      { n: "04", title: "No visibility into learning", body: "Grades don't show what was actually practiced, mastered, or still shaky." },
+      { n: "01", title: "Limited emotional touchpoints", body: "Parents can't feel how engaged or motivated their child is between sessions." },
+      { n: "02", title: "Non-standardized process", body: "Tutoring quality and structure vary tutor to tutor, so 'good' is hard to define." },
+      { n: "03", title: "Communication gaps", body: "Updates are sparse, late, or hard to interpret — confidence erodes instead of building." },
+      { n: "04", title: "No visibility beyond grades", body: "Grades don't show what was actually practiced, mastered, or still shaky." },
     ] as Numbered[],
   },
 
-  mission:
-    "How might we turn raw session data into progress parents can actually see, trust, and act on — without drowning them in numbers?",
+  // The decisions that shaped the product — research through final design.
+  tradeoffs: [
+    {
+      n: "01",
+      title: "Where to focus",
+      tension:
+        "A co-creation workshop with the Varsity team surfaced three candidate bets. Which one moves renewal fastest at this product stage?",
+      considered: [
+        { label: "Standardize the tutoring process", note: "The business's first instinct — better quality at scale. But it needs deep changes to tutor workflows and internal systems; too slow to ship now." },
+        { label: "Add communication touchpoints", note: "More notifications and summaries add information, not understanding — they don't touch the core problem." },
+        { label: "Emotional touchpoints + visibility into learning", note: "Lives in the parent-experience layer — no system rebuild, but the most direct impact on perceived value and trust.", chosen: true },
+      ],
+      chose: "Emotional touchpoints + visibility into learning.",
+      why: "It was the fastest path to the thing that actually drives renewal — how parents perceive value and trust — without re-architecting the platform.",
+    },
+    {
+      n: "02",
+      title: "How to structure the dashboard",
+      tension:
+        "My first lo-fi mapped each How-Might-We question to its own section. Tidy on paper — but parents don't come to read content, they come with a question.",
+      considered: [
+        { label: "A section per HMW question", note: "Clean taxonomy, but it forced parents to assemble the answer to 'how is my child doing?' themselves." },
+        { label: "Question-first: Progress + Engagement", note: "Two entry points mirroring the two questions parents already ask. Mastery + next-steps under Progress; emotional signals + updates under Engagement.", chosen: true },
+      ],
+      chose: "Two question-first entry points — Progress and Engagement.",
+      why: "Parents start from the question already in their head, then drill down — instead of doing the system's synthesis work for it.",
+    },
+    {
+      n: "03",
+      title: "The emotion self-report feature",
+      tension:
+        "Early research said parents wanted to know how their child felt after each session, so we built a student emotion self-report. In testing, the feedback split — some parents doubted kids would report honestly.",
+      considered: [
+        { label: "Keep it — parents asked for emotional signal", note: "Satisfies a stated desire, but rests on data of questionable reliability." },
+        { label: "Remove it", note: "Unreliable self-reports could mislead parents and damage the exact trust we were building.", chosen: true },
+      ],
+      chose: "Cut the feature.",
+      why: "Trust and data quality over more information. Parents could still read engagement from other, more reliable signals — so the feature's cost outweighed its benefit.",
+    },
+    {
+      n: "04",
+      title: "How to express mastery",
+      tension:
+        "How do we answer 'how much has my child mastered?' in a way parents actually trust?",
+      considered: [
+        { label: "Continuous scores / a more complex model", note: "Precise, but internal testing showed it wasn't transparent — parents couldn't tell what a number meant." },
+        { label: "Clear, interpretable levels", note: "Mastered / Familiar / Need Support, with plain hover explanations and the accuracy + practice-count logic behind each.", chosen: true },
+      ],
+      chose: "Interpretable mastery levels over raw scores.",
+      why: "An interpretable signal parents trust beats a precise one they can't read.",
+    },
+  ] as TradeOff[],
 
-  opportunities: [
-    { title: "Show mastery with evidence", body: "Pair the data with real student examples, so progress is something parents can see, not just a score." },
-    { title: "Make engagement visible", body: "Surface behavioral signals — persistence, retries, focus — that turn 'are they trying?' into something tangible." },
-    { title: "Consistent, personalized updates", body: "Replace generic reports with transparent, tailored communication that's easy to access and act on." },
-    { title: "Guide the next step", body: "Whether catching up or getting ahead, every parent wants to know what's next and how to help at home." },
-  ] as Numbered[],
-
-  // From lo-fi to a tested MVP
-  springMvp: {
-    body: "We started low-fidelity to validate structure, then built a Spring MVP with two key views — a Progress & Engagement tab and a progress detail page — and tested it with parents.",
-    shots: [
-      { src: `${IMG}/spring-progress.png`, alt: "Spring MVP — Progress & Engagement tab", w: 1600, h: 1119 },
-      { src: `${IMG}/spring-detail.png`, alt: "Spring MVP — progress detail page", w: 1600, h: 1119 },
-    ] as Shot[],
-    learned:
-      "1:1 think-aloud sessions were blunt: “I don't know where to look,” “the charts are too technical,” “I don't know what to do with this.” Parents didn't need more data — they needed the right data, with better structure and plainer language. That reframed the second version around three jobs: Find, Understand, Act.",
+  // Reframe from testing
+  reframe: {
+    body:
+      "We tested the first MVP with four parents of students in grades 5–8, think-aloud. Three issues came up every time: parents didn't know where to start; the information felt scattered, abstract, or too technical; and the biggest one — “I understand it, but I still don't know what to do next.” The problem wasn't the data. It was how the data was structured and how action was guided. That reframed the MVP around three jobs:",
+    goals: [
+      { n: "01", title: "Find", body: "Help parents quickly locate the key information." },
+      { n: "02", title: "Understand", body: "Make the data easy to grasp — plain language over jargon." },
+      { n: "03", title: "Act", body: "Always make the next step to support their child obvious." },
+    ] as Numbered[],
   },
 
   pillars: [
     {
       kicker: "Final MVP · 01",
-      title: "A homepage you can scan",
+      title: "A homepage that guides, not dumps",
       whatIsIt:
-        "The homepage gives parents a quick, calm snapshot of their child's progress and makes it easy to act or follow up — an opening message, per-session and overall subject progress, learning history, support, and schedule reminders.",
+        "The homepage's job is to guide, not to show everything at once. A personalized opening message, clear entry points to the session view and overall progress, and quick access to history and schedule. Earlier versions packed in more data — and just raised cognitive load.",
       tint: "bg-[#eef0fb]",
       features: [
-        { title: "Lead with a clear summary", body: "Progress shows up in plain terms first, so parents know how things are going before any chart." },
-        { title: "Point to what matters", body: "Personalized entry points guide parents to the most relevant session or subject, not an undifferentiated wall of options." },
-        { title: "Always offer a next step", body: "Every view ends with something to do — review a session, message a tutor, or support a skill at home." },
+        { title: "Personalized opening", body: "A one-line message orients the parent in seconds." },
+        { title: "Clear entry points", body: "Direct routes into Session view and overall Progress, not a flat wall of data." },
+        { title: "Guide over overwhelm", body: "We cut anything that didn't drive a decision, so the page points instead of floods." },
       ],
       shots: [{ src: `${IMG}/homepage-final.png`, alt: "Final parent-dashboard homepage", w: 1600, h: 1137 }],
     },
     {
       kicker: "Final MVP · 02",
-      title: "Session reports parents understand",
+      title: "Understand a session in 30 seconds",
       whatIsIt:
-        "Each session report explains what a child actually accomplished. Every number is grounded in a learning-science principle and traced back to the session transcript — so the data feels earned, not arbitrary.",
+        "The goal: let a parent understand how a session went in about 30 seconds. Three high-level metrics summarize performance, with hover explanations that clarify the data logic without interrupting the read. Below, skill highlights — and a cross-session view and at-home cards that came straight from testing.",
       tint: "bg-[#eef0fb]",
       features: [
-        { title: "Accuracy & effective time", body: "Detected from transcript keywords and focused exchanges — formative feedback after every session." },
-        { title: "Skills, shown two ways", body: "Practiced skills map to Knowledge Components and pair text with visual examples for dual-channel comprehension." },
-        { title: "Progress over time", body: "Mastery is aggregated across sessions and compared to platform averages to support realistic goal-setting." },
+        { title: "Three metrics at a glance", body: "Accuracy Rate, Effective Learning Time, and Skills Covered — all grounded in the session transcript." },
+        { title: "Hover, don't interrupt", body: "Data logic is explained on hover, so curious parents can dig in without breaking the scan." },
+        { title: "Trends, and what to do at home", body: "A cross-session view answers 'is my child improving over time?'; positive, actionable cards answer 'what can I do at home?'" },
       ],
       shots: [
-        { src: `${IMG}/session-report.png`, alt: "Session overview report — accuracy, effective time, skills covered", w: 1600, h: 1135 },
-        { src: `${IMG}/progress-over-sessions.png`, alt: "Skill mastery progression across sessions", w: 1600, h: 1136 },
+        { src: `${IMG}/session-report.png`, alt: "Session overview — accuracy, effective time, skills covered", w: 1600, h: 1135 },
+        { src: `${IMG}/progress-over-sessions.png`, alt: "Cross-session progress view", w: 1600, h: 1136 },
       ],
     },
     {
       kicker: "Final MVP · 03",
-      title: "Mastery, made legible",
+      title: "Where they stand across the subject",
       whatIsIt:
-        "An AI agent breaks each practice segment down — extracting the question, analyzing the student's thinking, and classifying the attempt. Skills land as Mastered, Familiar, or Need Support, with thresholds parents can actually see.",
+        "If Session Overview answers 'what happened this session,' Skill Breakdown answers 'where does my child stand across the subject?' An AI agent breaks down each practice, scores it on accuracy and repetition, and sorts skills into levels parents can read.",
       tint: "bg-[#eef0fb]",
       features: [
-        { title: "Transparent thresholds", body: "Mastered (3+ practices, ≥90%), Familiar (70–89%), Need Support (<70%) — surfaced via microcopy so labels aren't a black box." },
-        { title: "Filter to what matters", body: "Parents filter by mastery level to zoom in on where their child excels or needs help." },
-        { title: "Per-skill detail", body: "Each row shows the skill, correctness rate, and practice count — evidence behind every label." },
+        { title: "Interpretable levels", body: "Mastered / Familiar / Need Support, with plain hover explanations — chosen over opaque continuous scores." },
+        { title: "A filter that earned its keep", body: "A simple mastery filter looked minor but was used constantly in testing — it jumps parents straight to what needs support." },
+        { title: "Evidence per skill", body: "Each row shows the skill, correctness rate, and practice count — the proof behind the label." },
       ],
       shots: [
         { src: `${IMG}/skill-overview.png`, alt: "Skill breakdown overview with mastery badges", w: 1600, h: 907 },
-        { src: `${IMG}/skill-detail.png`, alt: "Detailed skill list with filtering", w: 1600, h: 1229 },
+        { src: `${IMG}/skill-detail.png`, alt: "Detailed skill list with mastery filter", w: 1600, h: 1229 },
       ],
     },
   ] as Pillar[],
 
   explorations: {
-    body: "Not everything worked. Early directions overloaded the page or left parents guessing what a label meant — useful failures that pushed the design toward clarity and quick scanning.",
-    before: { src: `${IMG}/explore-before.png`, alt: "An earlier, heavier exploration", w: 1600, h: 735 },
-    after: { src: `${IMG}/explore-after.png`, alt: "The refined, clearer direction", w: 1600, h: 1137 },
+    body:
+      "Before landing here, we explored five to six information structures — session-centered, skill-centered, and emotion-signal-first — and compared them on clarity, focus, and how well each guided action. The winner mirrored how parents actually make decisions.",
+    shots: [
+      { alt: "Lo-fi IA exploration — a section per question vs. question-first (Progress / Engagement)", w: 1600, h: 900, placeholder: true },
+      { src: `${IMG}/explore-before.png`, alt: "An earlier, heavier exploration", w: 1600, h: 735 },
+      { src: `${IMG}/explore-after.png`, alt: "The refined, clearer direction", w: 1600, h: 1137 },
+    ] as Shot[],
   },
 
-  // Capstone outcome is qualitative. Add quantitative results here if/when available.
   outcome:
-    "Usability testing validated the shift from 'more data' to the right data — surfaced with structure and plain language. The final MVP — homepage, session reports, and a skill-mastery breakdown — is now in Varsity Tutors' development pipeline.",
+    "Testing validated the shift from more data to the right data — structured around the questions parents ask, and guided toward action. The MVP (homepage, session reports, and skill breakdown) is now in Varsity Tutors' development pipeline. Given more time, the next steps are: a human-in-the-loop to validate and improve AI accuracy; expanding beyond Algebra to more subjects; and larger-scale testing with real Varsity users to measure long-term value.",
 
   takeaways: [
     {
-      title: "Useful ≠ feel-good",
-      body: "Some parents liked the idea of kids self-reporting emotions after a session — but a happy emoji doesn't mean they understood the material. We cut it and prioritized clearer indicators of real learning.",
+      title: "Design trust and visibility, not just features",
+      body: "As systems get smarter, the job shifts: people won't hand control to something they can't see or understand. Most of this project was making an AI's reasoning legible enough to trust.",
     },
     {
-      title: "Designing with (limited) data",
-      body: "A small dataset forced us to clean, organize, and make the most of what we had — and to help parents understand what the numbers mean, not just display them.",
+      title: "Structure beats more data",
+      body: "Parents didn't need more numbers — they needed the right ones, organized around the questions they already ask. The same data, restructured, went from confusing to actionable.",
     },
     {
-      title: "AI as a design partner",
-      body: "We used AI for data cleaning, interview synthesis, and parts of the UI process — a collaborator that sped up the work so we could focus on the decisions that mattered.",
+      title: "Sometimes the best feature is the one you cut",
+      body: "Removing the unreliable emotion self-report protected the trust the whole product depended on. Useful isn't the same as feel-good.",
     },
   ] as Numbered[],
 } as const;
