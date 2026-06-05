@@ -36,7 +36,7 @@ export function ShotVideo({ src, poster, alt }: { src: string; poster?: string; 
       playsInline
       preload="metadata"
       aria-label={alt}
-      className="h-auto w-full rounded-2xl border border-border bg-fg/[0.02]"
+      className="absolute inset-0 h-full w-full object-cover"
     />
   );
 }

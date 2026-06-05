@@ -11,6 +11,7 @@ export type Card = { title: string; body: string };
 // labelled box); `video` = a real demo clip with a poster frame.
 export type Media =
   | { kind: "placeholder"; label: string; caption: string }
+  | { kind: "image"; src: string; w: number; h: number; alt: string; caption: string }
   | { kind: "video"; src: string; poster: string; alt: string; caption: string };
 
 export type Chapter = {
@@ -27,7 +28,7 @@ export type Chapter = {
 export const ecovacs = {
   hero: {
     kicker: "Product Builder · 2024 · Ecovacs Robotics",
-    headline: "Robot vacuums promised to clean on their own. They still shipped with a manual.",
+    headline: "Robot vacuums promised autonomy. They shipped a manual.",
     sub: "Reworking the DEEBOT X2 from a robot you operate into one you trust — one-tap AI cleaning, a map that draws itself, and pet-safe navigation.",
     meta: [
       { label: "Role", items: ["Product Builder"] },
@@ -84,7 +85,14 @@ export const ecovacs = {
       problem: "Manual room-splitting and virtual walls turned setup into a chore.",
       solution:
         "Now the robot generates the map, divides rooms, and labels each room type on its own. Users only review and make small tweaks — setup goes from a task to a glance.",
-      before: { kind: "placeholder", label: "Manual room-splitting & virtual walls", caption: "How mapping setup used to feel" },
+      before: {
+        kind: "image",
+        src: `${IMG}/before-mapping.png`,
+        w: 390,
+        h: 844,
+        alt: "Map editor — splitting rooms and drawing virtual walls by hand",
+        caption: "Editing the map by hand",
+      },
       after: {
         kind: "video",
         src: `${IMG}/demo-mapping.mp4`,
@@ -99,7 +107,14 @@ export const ecovacs = {
       problem: "A dozen cleaning settings users didn't know how to choose.",
       solution:
         "Tap Start, and the system reads each room's type and floor material to pick the strategy itself — suction, water, passes. The experience shifts from manual control to something that behaves like an agent working on your behalf.",
-      before: { kind: "placeholder", label: "A dozen settings to choose", caption: "Configuring every clean by hand" },
+      before: {
+        kind: "image",
+        src: `${IMG}/before-cleaning.png`,
+        w: 393,
+        h: 1323,
+        alt: "A dozen manual cleaning settings — mode, water level, passes, efficiency",
+        caption: "A dozen settings, set by hand",
+      },
       after: {
         kind: "video",
         src: `${IMG}/demo-ai-cleaning.mp4`,
@@ -123,7 +138,14 @@ export const ecovacs = {
       problem: "A single pet-waste accident was enough to lose a user for good.",
       solution:
         "We retrained the recognition system to reliably detect pet waste and steer around it mid-clean — turning the scariest failure mode into a non-event.",
-      before: { kind: "placeholder", label: "Robot runs over pet waste", caption: "The failure that broke trust" },
+      before: {
+        kind: "image",
+        src: `${IMG}/before-zones.png`,
+        w: 393,
+        h: 852,
+        alt: "Manually drawing no-go zones to fence off the mess",
+        caption: "Fencing off the mess by hand",
+      },
       after: {
         kind: "video",
         src: `${IMG}/demo-pet.mp4`,

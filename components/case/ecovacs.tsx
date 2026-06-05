@@ -1,15 +1,16 @@
+import Image from "next/image";
 import type { Project } from "@/lib/projects";
 import { ecovacs, type Media } from "@/lib/work/ecovacs";
 import { Reveal } from "@/components/reveal";
 import { Plate } from "./shots";
 import { ShotVideo } from "./shot-video";
-import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway, MediaPlaceholder } from "./elements";
+import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway } from "./elements";
 
-const NARROW = "mx-auto max-w-[680px] px-6";
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
+const PROSE = "max-w-[680px]"; // readable text width, left-aligned to the WIDE edge
 const GAP = "mt-24 sm:mt-36";
 
-/** One labelled before/after tile: a chip + caption over a portrait media. */
+/** One labelled before/after tile: a chip + caption over a uniform phone-screen frame. */
 function MediaTile({ media, chip, accent = false }: { media: Media; chip: string; accent?: boolean }) {
   return (
     <figure className="mx-auto w-full max-w-[300px]">
@@ -23,11 +24,17 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
         </span>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
       </figcaption>
-      {media.kind === "video" ? (
-        <ShotVideo src={media.src} poster={media.poster} alt={media.alt} />
-      ) : (
-        <MediaPlaceholder portrait label={media.label} caption="footage to come" />
-      )}
+      <div className="relative aspect-[378/740] w-full overflow-hidden rounded-2xl border border-border bg-fg/[0.02]">
+        {media.kind === "video" ? (
+          <ShotVideo src={media.src} poster={media.poster} alt={media.alt} />
+        ) : media.kind === "image" ? (
+          <Image src={media.src} alt={media.alt} fill sizes="300px" className="object-cover object-top" />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center px-6 text-center">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-muted">{media.label}</span>
+          </div>
+        )}
+      </div>
     </figure>
   );
 }
@@ -56,9 +63,11 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
       </Reveal>
 
       {/* ───────────── PROBLEM ───────────── */}
-      <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>The problem</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">{problem.intro}</p>
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <div className={PROSE}>
+          <SectionLabel>The problem</SectionLabel>
+          <p className="mt-5 text-[15px] leading-7 text-fg/90">{problem.intro}</p>
+        </div>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -77,18 +86,20 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
       </Reveal>
 
       {/* ───────────── PRIORITIES ───────────── */}
-      <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>How we chose what to build</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">{priorities.intro}</p>
-        <ul className="mt-5 space-y-3">
-          {priorities.criteria.map((c) => (
-            <li key={c} className="flex gap-3 text-[15px] leading-7 text-fg/90">
-              <span className="mt-[11px] size-1.5 shrink-0 rounded-full bg-accent" />
-              <span>{c}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-6 text-[15px] leading-7 text-fg/90">Three bets rose to the top:</p>
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <div className={PROSE}>
+          <SectionLabel>How we chose what to build</SectionLabel>
+          <p className="mt-5 text-[15px] leading-7 text-fg/90">{priorities.intro}</p>
+          <ul className="mt-5 space-y-3">
+            {priorities.criteria.map((c) => (
+              <li key={c} className="flex gap-3 text-[15px] leading-7 text-fg/90">
+                <span className="mt-[11px] size-1.5 shrink-0 rounded-full bg-accent" />
+                <span>{c}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-[15px] leading-7 text-fg/90">Three bets rose to the top:</p>
+        </div>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -146,10 +157,12 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
       ))}
 
       {/* ───────────── ROLLOUT ───────────── */}
-      <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Rollout</SectionLabel>
-        <h2 className="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">{rollout.title}</h2>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">{rollout.intro}</p>
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <div className={PROSE}>
+          <SectionLabel>Rollout</SectionLabel>
+          <h2 className="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">{rollout.title}</h2>
+          <p className="mt-5 text-[15px] leading-7 text-fg/90">{rollout.intro}</p>
+        </div>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
         <div className="grid gap-4 sm:grid-cols-3">
@@ -158,17 +171,17 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
           ))}
         </div>
       </Reveal>
-      <Reveal className={`${NARROW} mt-8`}>
-        <p className="text-[15px] leading-7 text-muted">{rollout.outro}</p>
+      <Reveal className={`${WIDE} mt-8`}>
+        <p className={`${PROSE} text-[15px] leading-7 text-muted`}>{rollout.outro}</p>
       </Reveal>
 
       {/* ───────────── IMPACT (qualitative) ───────────── */}
-      <Reveal className={`mx-auto max-w-[860px] px-6 ${GAP}`}>
-        <p className="text-center font-mono text-xs uppercase tracking-widest text-muted">Impact</p>
-        <p className="mt-5 text-balance text-center text-2xl font-medium leading-snug tracking-tight sm:text-[2rem]">
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <SectionLabel>Impact</SectionLabel>
+        <p className="mt-5 max-w-3xl text-balance text-2xl font-medium leading-snug tracking-tight sm:text-[2rem]">
           {impact.headline}
         </p>
-        <ul className="mx-auto mt-10 max-w-2xl space-y-4">
+        <ul className="mt-8 max-w-2xl space-y-4">
           {impact.results.map((r) => (
             <li key={r} className="flex gap-3 text-[15px] leading-7 text-fg/90">
               <span className="mt-[10px] size-1.5 shrink-0 rounded-full bg-accent" />
@@ -179,12 +192,14 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
       </Reveal>
 
       {/* ───────────── TAKEAWAYS ───────────── */}
-      <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Takeaways</SectionLabel>
-        <div className="mt-6 space-y-8">
-          {takeaways.map((t, i) => (
-            <Takeaway key={t.title} n={`0${i + 1}`} title={t.title} body={t.body} />
-          ))}
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <div className={PROSE}>
+          <SectionLabel>Takeaways</SectionLabel>
+          <div className="mt-6 space-y-8">
+            {takeaways.map((t, i) => (
+              <Takeaway key={t.title} n={`0${i + 1}`} title={t.title} body={t.body} />
+            ))}
+          </div>
         </div>
       </Reveal>
     </div>
