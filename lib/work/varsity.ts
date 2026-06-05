@@ -146,7 +146,6 @@ export const varsity = {
       matrix: {
         xLabel: "System change / effort →",
         yLabel: "↑ Impact on trust & renewal",
-        note: "High impact on trust, low system change — the parent-experience layer wins.",
         points: [
           { label: "Standardize process", x: 0.82, y: 0.8 },
           { label: "More comms", x: 0.28, y: 0.34 },
