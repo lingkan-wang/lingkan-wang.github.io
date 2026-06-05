@@ -24,11 +24,11 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
         </span>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
       </figcaption>
-      <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.75rem] border border-border bg-fg/[0.02]">
+      <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
         {media.kind === "video" ? (
           <ShotVideo src={media.src} poster={media.poster} alt={media.alt} />
         ) : media.kind === "image" ? (
-          <Image src={media.src} alt={media.alt} fill sizes="300px" className="object-cover object-top" />
+          <Image src={media.src} alt={media.alt} fill sizes="300px" className="rounded-[2.5rem] object-cover object-top" />
         ) : (
           <div className="absolute inset-0 grid place-items-center px-6 text-center">
             <span className="font-mono text-[11px] uppercase tracking-widest text-muted">{media.label}</span>

@@ -36,6 +36,9 @@ export function ShotVideo({ src, poster, alt }: { src: string; poster?: string; 
       playsInline
       preload="metadata"
       aria-label={alt}
+      // clip-path reliably clips the composited video layer (border-radius alone
+      // is ignored on a playing <video> in some browsers, leaking the corners)
+      style={{ clipPath: "inset(0 round 2.5rem)" }}
       className="absolute inset-0 h-full w-full object-cover"
     />
   );
