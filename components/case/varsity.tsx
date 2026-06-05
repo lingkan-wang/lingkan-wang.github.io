@@ -286,11 +286,12 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{explorations.body}</p>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid items-start gap-4 sm:grid-cols-2">
           {explorations.shots.map((s) => (
-            <div key={s.src ?? s.alt} className="rounded-2xl bg-fg/[0.025] p-5">
+            <figure key={s.src ?? s.alt} className="rounded-2xl bg-fg/[0.025] p-5">
               <Shot shot={s} />
-            </div>
+              {s.caption && <figcaption className="mt-3 text-center text-xs text-muted">{s.caption}</figcaption>}
+            </figure>
           ))}
         </div>
       </Reveal>
