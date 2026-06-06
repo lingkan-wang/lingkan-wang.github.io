@@ -283,9 +283,40 @@ export const varsity = {
       whatIsIt:
         "If Session Overview answers 'what happened this session,' Skill Breakdown answers 'where does my child stand across the subject?' An AI agent breaks down each practice, scores it on accuracy and repetition, and sorts skills into levels parents can read.",
       tint: "bg-[#eef0fb]",
+      splitLayout: true,
       shots: [
-        { src: `${IMG}/skill-breakdown-hover.png`, alt: "Skill Breakdown — mastery levels explained on hover", w: 2200, h: 1551 },
-        { src: `${IMG}/skill-breakdown-final.png`, alt: "Skill Breakdown — full skill table with correctness and practice count", w: 2200, h: 1564 },
+        { src: `${IMG}/skill-breakdown-final.png`, alt: "Full Skill Breakdown — mastery summary and the per-skill table", w: 2200, h: 1564 },
+        {
+          src: `${IMG}/sb-summary.png`,
+          alt: "Mastery summary — share of skills covered, and Mastered / Familiar / Need Support levels",
+          w: 1714,
+          h: 314,
+          note: {
+            title: "Reveal how mastery levels are calculated",
+            logic: [
+              "An AI agent breaks down each practice segment — extracting the question, reading the student's thinking, weighing the tutor's feedback, and marking the attempt correct or incorrect.",
+              "Mastered — practiced 3+ times at ≥90% accuracy.",
+              "Familiar — accuracy between 70–89%.",
+              "Need Support — accuracy below 70%.",
+            ],
+            principle: { name: "Interpretable Levels", body: "Plain, named levels beat an opaque continuous score parents can't act on." },
+          },
+        },
+        {
+          src: `${IMG}/sb-table.png`,
+          alt: "Skill table with filters — each row shows the skill, correctness rate, and practice count",
+          w: 1714,
+          h: 836,
+          note: {
+            title: "Help parents focus on the skills that matter",
+            logic: [
+              "Filter the list by mastery level or domain to zoom straight to the relevant subset.",
+              "Each row carries the evidence — skill, correctness rate, and practice count.",
+              "A simple mastery filter looked minor but was used constantly in testing.",
+            ],
+            principle: { name: "Evidence per Skill", body: "Every label is backed by the numbers behind it, so parents can trust the read." },
+          },
+        },
       ],
     },
   ] as Pillar[],
