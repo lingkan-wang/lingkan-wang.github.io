@@ -10,25 +10,49 @@ const WIDE = "mx-auto w-[min(1080px,92vw)]";
 const PROSE = "max-w-[680px]"; // readable text width, left-aligned to the WIDE edge
 const GAP = "mt-24 sm:mt-36";
 
-/** One labelled before/after tile: a chip + caption over a uniform phone-screen frame. */
+function Chip({ children, accent }: { children: string; accent?: boolean }) {
+  return (
+    <span
+      className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${
+        accent ? "border-accent/40 bg-accent/[0.06] text-accent" : "border-border text-muted"
+      }`}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** One labelled before/after tile: a chip + caption over the media. Phone screens
+ *  and clips sit in a uniform phone frame; real photos render as stacked cards. */
 function MediaTile({ media, chip, accent = false }: { media: Media; chip: string; accent?: boolean }) {
+  if (media.kind === "photos") {
+    return (
+      <figure className="mx-auto w-full max-w-[270px]">
+        <figcaption className="mb-3 flex items-center gap-2.5">
+          <Chip accent={accent}>{chip}</Chip>
+          <span className="text-xs leading-tight text-muted">{media.caption}</span>
+        </figcaption>
+        <div className="space-y-3">
+          {media.items.map((it) => (
+            <div key={it.src} className="overflow-hidden rounded-2xl border border-border bg-fg/[0.02]">
+              <Image src={it.src} alt={it.alt} width={it.w} height={it.h} sizes="270px" className="h-auto w-full" />
+            </div>
+          ))}
+        </div>
+      </figure>
+    );
+  }
   return (
     <figure className="mx-auto w-full max-w-[300px]">
       <figcaption className="mb-3 flex items-center gap-2.5">
-        <span
-          className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${
-            accent ? "border-accent/40 bg-accent/[0.06] text-accent" : "border-border text-muted"
-          }`}
-        >
-          {chip}
-        </span>
+        <Chip accent={accent}>{chip}</Chip>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
       </figcaption>
-      <div className="relative aspect-[378/740] w-full overflow-hidden rounded-2xl border border-border bg-fg/[0.02]">
+      <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
         {media.kind === "video" ? (
           <ShotVideo src={media.src} poster={media.poster} alt={media.alt} />
         ) : media.kind === "image" ? (
-          <Image src={media.src} alt={media.alt} fill sizes="300px" className="object-cover object-top" />
+          <Image src={media.src} alt={media.alt} fill sizes="300px" className="rounded-[2.5rem] object-cover object-top" />
         ) : (
           <div className="absolute inset-0 grid place-items-center px-6 text-center">
             <span className="font-mono text-[11px] uppercase tracking-widest text-muted">{media.label}</span>
@@ -40,7 +64,7 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
 }
 
 export function EcovacsCaseStudy(_props: { meta: Project }) {
-  const { hero, problem, priorities, chapters, rollout, impact, takeaways } = ecovacs;
+  const { hero, problem, priorities, chapters, rollout, impact, improvements, takeaways } = ecovacs;
 
   return (
     <div className="pt-20 sm:pt-28">
@@ -190,6 +214,48 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
           ))}
         </ul>
       </Reveal>
+
+      {/* ───────────── MORE IMPROVEMENTS ───────────── */}
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <div className={PROSE}>
+          <SectionLabel>More improvements</SectionLabel>
+          <p className="mt-5 text-[15px] leading-7 text-fg/90">{improvements.intro}</p>
+        </div>
+      </Reveal>
+
+      {/* feature rows — alternating text / portrait media */}
+      <div className="mt-12 space-y-16 sm:mt-14 sm:space-y-24">
+        {improvements.items.map((it, i) => (
+          <Reveal key={it.title} className={WIDE}>
+            <div className="grid items-center gap-8 sm:grid-cols-2 sm:gap-12">
+              <div className={i % 2 === 1 ? "sm:order-2" : ""}>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{it.kicker}</p>
+                <h3 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[1.7rem]">{it.title}</h3>
+                <p className="mt-4 max-w-prose text-[15px] leading-7 text-fg/90">{it.body}</p>
+              </div>
+              <div className={i % 2 === 1 ? "sm:order-1" : ""}>
+                <div className={`flex justify-center ${it.media.length > 1 ? "gap-3 sm:gap-4" : ""}`}>
+                  {it.media.map((m, j) => {
+                    const two = it.media.length > 1;
+                    const radius = two ? "rounded-[1.6rem]" : "rounded-[2.5rem]";
+                    return (
+                      <div key={j} className={`w-full ${two ? "max-w-[200px]" : "mx-auto max-w-[280px]"}`}>
+                        <div className={`relative aspect-[400/838] w-full overflow-hidden border border-border bg-white ${radius}`}>
+                          {m.video ? (
+                            <ShotVideo src={m.video} poster={m.poster} alt={it.title} />
+                          ) : (
+                            <Image src={m.img!} alt={it.title} fill sizes="200px" className={`${radius} object-cover object-top`} />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
 
       {/* ───────────── TAKEAWAYS ───────────── */}
       <Reveal className={`${WIDE} ${GAP}`}>

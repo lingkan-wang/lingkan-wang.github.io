@@ -12,7 +12,8 @@ export type Card = { title: string; body: string };
 export type Media =
   | { kind: "placeholder"; label: string; caption: string }
   | { kind: "image"; src: string; w: number; h: number; alt: string; caption: string }
-  | { kind: "video"; src: string; poster: string; alt: string; caption: string };
+  | { kind: "video"; src: string; poster: string; alt: string; caption: string }
+  | { kind: "photos"; items: { src: string; w: number; h: number; alt: string }[]; caption: string };
 
 export type Chapter = {
   kicker: string;
@@ -23,6 +24,15 @@ export type Chapter = {
   after: Media;
   extras?: Media[]; // additional "after" clips (e.g. the result screen)
   note?: { title: string; body: string };
+};
+
+// A "more improvements" row: a feature with one or more media (demo video or screenshots).
+export type ImprovementMedia = { video?: string; poster?: string; img?: string; w?: number; h?: number };
+export type ImprovementItem = {
+  kicker: string;
+  title: string;
+  body: string;
+  media: ImprovementMedia[];
 };
 
 export const ecovacs = {
@@ -139,12 +149,12 @@ export const ecovacs = {
       solution:
         "We retrained the recognition system to reliably detect pet waste and steer around it mid-clean — turning the scariest failure mode into a non-event.",
       before: {
-        kind: "image",
-        src: `${IMG}/before-zones.png`,
-        w: 393,
-        h: 852,
-        alt: "Manually drawing no-go zones to fence off the mess",
-        caption: "Fencing off the mess by hand",
+        kind: "photos",
+        caption: "Ran over pet waste — smeared across the house",
+        items: [
+          { src: `${IMG}/before-pet-rug.png`, w: 899, h: 1352, alt: "Pet waste smeared in long streaks across the living-room rug" },
+          { src: `${IMG}/before-pet-robot.png`, w: 983, h: 1356, alt: "The robot's underside and roller brush caked with pet waste" },
+        ],
       },
       after: {
         kind: "video",
@@ -179,6 +189,37 @@ export const ecovacs = {
       "Adoption of the AI cleaning mode climbed.",
       "Complaints about complexity fell — replaced by feedback that the product felt smarter and easier to use.",
     ],
+  },
+
+  improvements: {
+    intro:
+      "Beyond the three headline features, a few more refinements rounded out the X2 experience.",
+    items: [
+      {
+        kicker: "Yiko · Voice",
+        title: "Just say it out loud.",
+        body: "We refined Yiko, the on-device voice assistant — start a clean, send the robot to a specific room, or pause it, all hands-free without ever opening the app.",
+        media: [{ video: `${IMG}/demo-yiko.mp4`, poster: `${IMG}/demo-yiko-poster.jpg` }],
+      },
+      {
+        kicker: "Onboarding",
+        title: "Guided Custom Cleaning Experience",
+        body: "Guided onboarding was introduced to help users learn how to add custom cleaning areas, select zones on the map, and activate AI-assisted cleaning. With contextual instructions embedded directly in the interface, advanced cleaning features become easier to understand and more approachable for new users.",
+        media: [
+          { img: `${IMG}/improvement-guided.png`, w: 1332, h: 2896 },
+          { img: `${IMG}/improvement-guided-2.png`, w: 1332, h: 2896 },
+        ],
+      },
+      {
+        kicker: "Scheduling",
+        title: "Smarter Scheduling Across Cleaning Modes",
+        body: "The scheduling flow was expanded to support full-home, custom, and zone-based cleaning with repeat options and reusable presets. This gives users greater flexibility to plan routines in advance and tailor cleaning tasks to different rooms, floors, and household scenarios.",
+        media: [
+          { img: `${IMG}/improvement-scheduling.png`, w: 1332, h: 2896 },
+          { img: `${IMG}/improvement-scheduling-2.png`, w: 1332, h: 2896 },
+        ],
+      },
+    ] as ImprovementItem[],
   },
 
   takeaways: [
