@@ -43,9 +43,12 @@ export type Pillar = {
   whatIsIt: string;
   shots: Shot[];
   splitLayout?: boolean; // shots[0] big on the left, shots[1..] stacked on the right
-  highlights?: { title: string; body: string }[]; // labelled callouts shown in a grid under the shot
+  highlights?: Highlight[]; // labelled callouts that flank the shot, aligned to regions
   tint: string;
 };
+// A callout that sits beside the homepage shot. `side` picks the column, `at` is the
+// y-fraction of the image it lines up with.
+export type Highlight = { title: string; body: string; side: "left" | "right"; at: number };
 
 export const varsity = {
   hero: {
@@ -207,12 +210,12 @@ export const varsity = {
       tint: "bg-[#eef0fb]",
       shots: [{ src: `${IMG}/homepage-final.png`, alt: "Final parent-dashboard homepage", w: 1600, h: 1137 }],
       highlights: [
-        { title: "Opening message", body: "A personalized greeting orients the parent in seconds." },
-        { title: "Individual session progress", body: "A direct route to the latest session's recap and suggested next steps." },
-        { title: "Overall subject progress", body: "Subject-level mastery at a glance, so parents can spot where help is needed." },
-        { title: "Service support entry", body: "Easy access to follow-up services, like renewing a plan." },
-        { title: "Schedule reminder", body: "Keeps parents aware of the next upcoming session." },
-        { title: "Learning history", body: "Quickly locate and revisit past sessions." },
+        { side: "left", at: 0.1, title: "Opening message", body: "A personalized greeting for quick understanding." },
+        { side: "left", at: 0.31, title: "Individual session progress", body: "The latest session's recap and suggested plans." },
+        { side: "left", at: 0.54, title: "Overall subject progress", body: "Subject-level mastery, and where help is needed." },
+        { side: "left", at: 0.77, title: "Service support entry", body: "Easy access to follow-up services." },
+        { side: "right", at: 0.22, title: "Schedule reminder", body: "Keeps parents aware of upcoming sessions." },
+        { side: "right", at: 0.55, title: "Learning history", body: "Quickly locate past learning sessions." },
       ],
     },
     {

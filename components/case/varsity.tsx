@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Project } from "@/lib/projects";
-import { varsity, type Shot as ShotT, type ShotNote as ShotNoteT, type TradeOff, type Matrix as MatrixT } from "@/lib/work/varsity";
+import { varsity, type Shot as ShotT, type ShotNote as ShotNoteT, type Highlight as HighlightT, type TradeOff, type Matrix as MatrixT } from "@/lib/work/varsity";
 import { Reveal } from "@/components/reveal";
 import { Placeholder } from "@/components/placeholder";
 import { Carousel } from "./carousel";
@@ -55,6 +55,69 @@ function ShotNote({ note }: { note: ShotNoteT }) {
           {note.principle.body}
         </p>
       )}
+    </div>
+  );
+}
+
+/** A single flanking callout with a vertical accent bar pointing at the image. */
+function CalloutItem({ h }: { h: HighlightT }) {
+  const text = (
+    <div className={h.side === "left" ? "text-right" : "text-left"}>
+      <h4 className="text-[13px] font-semibold leading-snug tracking-tight text-fg">{h.title}</h4>
+      <p className="mt-1 text-[12px] leading-5 text-muted">{h.body}</p>
+    </div>
+  );
+  const bar = <span className="w-[3px] shrink-0 rounded-full bg-accent/55" aria-hidden />;
+  return (
+    <div
+      className={`absolute flex w-full gap-3 ${h.side === "left" ? "right-0 justify-end pr-1" : "left-0 pl-1"}`}
+      style={{ top: `${h.at * 100}%`, transform: "translateY(-50%)" }}
+    >
+      {h.side === "left" ? (
+        <>
+          {text}
+          {bar}
+        </>
+      ) : (
+        <>
+          {bar}
+          {text}
+        </>
+      )}
+    </div>
+  );
+}
+
+/** Homepage shot with callouts flanking it (xl+); stacks the callouts in a grid below on smaller screens. */
+function HomeCallouts({ shot, highlights, tint }: { shot: ShotT; highlights: HighlightT[]; tint: string }) {
+  return (
+    <div className={`rounded-3xl ${tint} p-5 sm:p-8`}>
+      {/* xl+: callouts flank the image, each aligned to its region */}
+      <div className="hidden xl:grid xl:grid-cols-[1fr_minmax(0,600px)_1fr] xl:gap-5">
+        <div className="relative">
+          {highlights.filter((h) => h.side === "left").map((h) => (
+            <CalloutItem key={h.title} h={h} />
+          ))}
+        </div>
+        <Shot shot={shot} className="self-start" />
+        <div className="relative">
+          {highlights.filter((h) => h.side === "right").map((h) => (
+            <CalloutItem key={h.title} h={h} />
+          ))}
+        </div>
+      </div>
+      {/* < xl: image, then callouts in a 2-up grid */}
+      <div className="xl:hidden">
+        <Shot shot={shot} />
+        <div className="mt-7 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+          {highlights.map((h) => (
+            <div key={h.title} className="border-t border-border pt-4">
+              <h4 className="text-sm font-semibold tracking-tight">{h.title}</h4>
+              <p className="mt-2 text-sm leading-6 text-muted">{h.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -350,7 +413,9 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
           </Reveal>
 
           <Reveal className="mt-8">
-            {p.splitLayout ? (
+            {p.highlights ? (
+              <HomeCallouts shot={p.shots[0]} highlights={p.highlights} tint={p.tint} />
+            ) : p.splitLayout ? (
               <div className={`grid items-start gap-4 rounded-3xl ${p.tint} p-5 sm:grid-cols-2 sm:gap-6 sm:p-8`}>
                 <Shot shot={p.shots[0]} className="sm:sticky sm:top-24" />
                 <div className="grid content-start gap-7">
@@ -370,19 +435,6 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
               </div>
             )}
           </Reveal>
-
-          {p.highlights && (
-            <Reveal className="mt-10">
-              <div className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
-                {p.highlights.map((h) => (
-                  <div key={h.title} className="border-t border-border pt-4">
-                    <h3 className="text-sm font-semibold tracking-tight">{h.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted">{h.body}</p>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-          )}
         </section>
       ))}
 
