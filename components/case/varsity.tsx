@@ -370,17 +370,6 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
               </div>
             )}
           </Reveal>
-
-          <Reveal className="mt-10">
-            <div className="grid gap-x-8 gap-y-7 sm:grid-cols-3">
-              {p.features.map((f) => (
-                <div key={f.title} className="border-t border-border pt-4">
-                  <h3 className="text-sm font-semibold tracking-tight">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{f.body}</p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
         </section>
       ))}
 

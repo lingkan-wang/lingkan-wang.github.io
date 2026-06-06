@@ -29,7 +29,6 @@ export type TradeOff = {
   shot?: Shot; // outcome image shown after the decision
   matrix?: Matrix; // decision-rationale plot
 };
-export type Feature = { title: string; body: string };
 // Annotation shown under a split-layout component image: its goal, how the data is
 // derived, and the learning-science principle behind it.
 export type ShotNote = {
@@ -42,7 +41,6 @@ export type Pillar = {
   kicker: string;
   title: string;
   whatIsIt: string;
-  features: Feature[];
   shots: Shot[];
   splitLayout?: boolean; // shots[0] big on the left, shots[1..] stacked on the right
   tint: string;
@@ -206,11 +204,6 @@ export const varsity = {
       whatIsIt:
         "The homepage's job is to guide, not to show everything at once. A personalized opening message, clear entry points to the session view and overall progress, and quick access to history and schedule. Earlier versions packed in more data — and just raised cognitive load.",
       tint: "bg-[#eef0fb]",
-      features: [
-        { title: "Personalized opening", body: "A one-line message orients the parent in seconds." },
-        { title: "Clear entry points", body: "Direct routes into Session view and overall Progress, not a flat wall of data." },
-        { title: "Guide over overwhelm", body: "We cut anything that didn't drive a decision, so the page points instead of floods." },
-      ],
       shots: [{ src: `${IMG}/homepage-final.png`, alt: "Final parent-dashboard homepage", w: 1600, h: 1137 }],
     },
     {
@@ -219,11 +212,6 @@ export const varsity = {
       whatIsIt:
         "The goal: let a parent understand how a session went in about 30 seconds. Three high-level metrics summarize performance, with hover explanations that clarify the data logic without interrupting the read. Below, skill highlights — and a cross-session view and at-home cards that came straight from testing.",
       tint: "bg-[#eef0fb]",
-      features: [
-        { title: "Three metrics at a glance", body: "Accuracy Rate, Effective Learning Time, and Skills Covered — all grounded in the session transcript." },
-        { title: "Hover, don't interrupt", body: "Data logic is explained on hover, so curious parents can dig in without breaking the scan." },
-        { title: "Trends, and what to do at home", body: "A cross-session view answers 'is my child improving over time?'; positive, actionable cards answer 'what can I do at home?'" },
-      ],
       splitLayout: true,
       shots: [
         { src: `${IMG}/so-full.png`, alt: "Full session overview — report, skill highlights, growth, and home support", w: 1304, h: 2000 },
@@ -295,11 +283,6 @@ export const varsity = {
       whatIsIt:
         "If Session Overview answers 'what happened this session,' Skill Breakdown answers 'where does my child stand across the subject?' An AI agent breaks down each practice, scores it on accuracy and repetition, and sorts skills into levels parents can read.",
       tint: "bg-[#eef0fb]",
-      features: [
-        { title: "Interpretable levels", body: "Mastered / Familiar / Need Support, with plain hover explanations — chosen over opaque continuous scores." },
-        { title: "A filter that earned its keep", body: "A simple mastery filter looked minor but was used constantly in testing — it jumps parents straight to what needs support." },
-        { title: "Evidence per skill", body: "Each row shows the skill, correctness rate, and practice count — the proof behind the label." },
-      ],
       shots: [
         { src: `${IMG}/skill-breakdown-hover.png`, alt: "Skill Breakdown — mastery levels explained on hover", w: 2200, h: 1551 },
         { src: `${IMG}/skill-breakdown-final.png`, alt: "Skill Breakdown — full skill table with correctness and practice count", w: 2200, h: 1564 },
