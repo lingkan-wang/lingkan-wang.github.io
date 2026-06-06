@@ -27,7 +27,7 @@ function Chip({ children, accent }: { children: string; accent?: boolean }) {
 function MediaTile({ media, chip, accent = false }: { media: Media; chip: string; accent?: boolean }) {
   if (media.kind === "photos") {
     return (
-      <figure className="mx-auto w-full max-w-[420px]">
+      <figure className="w-full max-w-[420px]">
         <figcaption className="mb-3 flex items-center gap-2.5">
           <Chip accent={accent}>{chip}</Chip>
           <span className="text-xs leading-tight text-muted">{media.caption}</span>
@@ -46,7 +46,7 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
     );
   }
   return (
-    <figure className="mx-auto w-full max-w-[300px]">
+    <figure className="w-full max-w-[300px]">
       <figcaption className="mb-3 flex items-center gap-2.5">
         <Chip accent={accent}>{chip}</Chip>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
@@ -137,42 +137,46 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
       </Reveal>
 
       {/* ───────────── FEATURE CHAPTERS ───────────── */}
-      {chapters.map((ch) => {
-        // before, after, and any "then" extras render as columns in one row,
-        // top-aligned. Chapters with an extra (AI cleaning) become a 3-up.
-        const tiles = [
-          { media: ch.before, chip: "Before", accent: false },
-          { media: ch.after, chip: "After", accent: true },
-          ...(ch.extras ?? []).map((m) => ({ media: m, chip: "Then", accent: false })),
-        ];
-        const cols = tiles.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2";
-        return (
-          <section key={ch.kicker} className={`${WIDE} ${GAP}`}>
-            <Reveal>
-              <SectionLabel>{ch.kicker}</SectionLabel>
-              <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-                {ch.title}
-              </h2>
-              <div className="mt-7 grid gap-x-10 gap-y-6 sm:grid-cols-2">
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The problem</p>
-                  <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.problem}</p>
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The solution</p>
-                  <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.solution}</p>
-                </div>
+      {chapters.map((ch) => (
+        <section key={ch.kicker} className={`${WIDE} ${GAP}`}>
+          <Reveal>
+            <SectionLabel>{ch.kicker}</SectionLabel>
+            <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+              {ch.title}
+            </h2>
+            {/* same 2-col grid + gap as the media below, so the text aligns with it */}
+            <div className="mt-7 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The problem</p>
+                <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.problem}</p>
               </div>
-            </Reveal>
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The solution</p>
+                <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.solution}</p>
+              </div>
+            </div>
+          </Reveal>
 
-            {/* before / after (+ then) — top-aligned columns */}
-            <Reveal className="mt-9">
-              <div className={`grid items-start gap-8 ${cols}`}>
-                {tiles.map((t, i) => (
-                  <MediaTile key={i} media={t.media} chip={t.chip} accent={t.accent} />
-                ))}
-              </div>
-            </Reveal>
+          {/* before (col 1) / after [+ then] (col 2) — left-aligned to match the text columns */}
+          <Reveal className="mt-9">
+            <div className="grid items-start gap-x-8 gap-y-10 sm:grid-cols-2">
+              <MediaTile media={ch.before} chip="Before" />
+              {ch.extras && ch.extras.length > 0 ? (
+                <div className="flex gap-4">
+                  <div className="min-w-0 flex-1">
+                    <MediaTile media={ch.after} chip="After" accent />
+                  </div>
+                  {ch.extras.map((m, i) => (
+                    <div key={i} className="min-w-0 flex-1">
+                      <MediaTile media={m} chip="Then" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <MediaTile media={ch.after} chip="After" accent />
+              )}
+            </div>
+          </Reveal>
 
           {/* optional trade-off callout */}
           {ch.note && (
@@ -183,9 +187,8 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
               </div>
             </Reveal>
           )}
-          </section>
-        );
-      })}
+        </section>
+      ))}
 
       {/* ───────────── ROLLOUT ───────────── */}
       <Reveal className={`${WIDE} ${GAP}`}>
