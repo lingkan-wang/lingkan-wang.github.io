@@ -56,7 +56,7 @@ export const varsity = {
 
   brief:
     "Varsity Tutors is a subscription tutoring marketplace for grades 10–12, where *renewal is the core business metric*. But parents never really see the product. All they get is a raw session transcript — long, unstructured, mapped to no learning framework — which gives them almost nothing to judge whether it's working. The result is *silent churn*: parents who quietly stop renewing because they can't tell if learning is happening. Over an 8-week CMU METALS Capstone, I worked with Varsity Tutors to turn each session transcript into signals parents can act on — so the renewal decision shifts from a guess to a confident yes.",
-  briefShot: { src: `${IMG}/brief-workshop.png`, alt: "Co-creation workshop with the Varsity Tutors team", w: 4192, h: 2024 },
+  briefShot: { src: `${IMG}/brief-workshop.png`, alt: "Co-creation workshop with the Varsity Tutors team", w: 1319, h: 748 },
 
   research: {
     intro:
