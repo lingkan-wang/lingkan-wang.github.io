@@ -3,8 +3,10 @@ import { bumble, type Img, type Clip as ClipT } from "@/lib/work/bumble";
 import { Reveal } from "@/components/reveal";
 import { Clip } from "./clip";
 
-const COL = "mx-auto w-[min(880px,92vw)]";
+// Text and media share one column so every heading, paragraph and box aligns to
+// the same left edge as the images. Text runs the full width — no early wrap.
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
+const COL = WIDE;
 const GAP = "mt-20 sm:mt-28";
 
 /** Render *text* between single asterisks in the accent color. */
@@ -29,7 +31,7 @@ function H2({ children }: { children: React.ReactNode }) {
 
 function Body({ text, className = "" }: { text: string; className?: string }) {
   return (
-    <p className={`max-w-[680px] text-[15px] leading-7 text-fg/90 ${className}`}>
+    <p className={`text-[15px] leading-7 text-fg/90 ${className}`}>
       <Rich text={text} />
     </p>
   );
@@ -131,7 +133,7 @@ export function BumbleCaseStudy() {
       </Reveal>
       <Reveal className={`${WIDE} mt-12`}>
         <p className="font-mono text-[11px] uppercase tracking-widest text-accent">{b.preview.label}</p>
-        <p className="mt-2 max-w-[520px] text-sm text-muted">{b.preview.sub}</p>
+        <p className="mt-2 text-sm text-muted">{b.preview.sub}</p>
         <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
           {b.preview.clips.map((c) => (
             <ClipTile key={c.src} clip={c} radius="1.25rem" />
@@ -149,7 +151,7 @@ export function BumbleCaseStudy() {
       <Reveal className={`${COL} ${GAP}`}>
         <H2>Competitive analysis</H2>
         <Body text={b.competitive.intro} className="mt-5" />
-        <ol className="mt-5 max-w-[680px] space-y-3">
+        <ol className="mt-5 space-y-3">
           {b.competitive.patterns.map((p, i) => (
             <li key={i} className="flex gap-3 text-[15px] leading-7 text-fg/90">
               <span className="font-mono text-sm text-accent">{`0${i + 1}`}</span>
@@ -262,7 +264,7 @@ export function BumbleCaseStudy() {
       {/* NEXT STEPS */}
       <Reveal className={`${COL} ${GAP}`}>
         <H2>Next steps</H2>
-        <ol className="mt-5 max-w-[680px] space-y-3">
+        <ol className="mt-5 space-y-3">
           {b.nextSteps.map((s, i) => (
             <li key={i} className="flex gap-3 text-[15px] leading-7 text-fg/90">
               <span className="font-mono text-sm text-accent">{`0${i + 1}`}</span>
