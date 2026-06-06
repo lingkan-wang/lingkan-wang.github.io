@@ -56,9 +56,7 @@ export const varsity = {
 
   brief:
     "Varsity Tutors is a subscription tutoring marketplace for grades 10–12, where *renewal is the core business metric*. But parents never really see the product. All they get is a raw session transcript — long, unstructured, mapped to no learning framework — which gives them almost nothing to judge whether it's working. The result is *silent churn*: parents who quietly stop renewing because they can't tell if learning is happening. Over an 8-week CMU METALS Capstone, I worked with Varsity Tutors to turn each session transcript into signals parents can act on — so the renewal decision shifts from a guess to a confident yes.",
-
-  context:
-    "This built on a takeaway from my previous project at Ecovacs: as systems get more intelligent, the thing that needs designing isn't just functionality — it's trust and visibility. When people can't see what an intelligent system is doing, or why, they won't hand it their trust. That lens shaped everything here.",
+  briefShot: { src: `${IMG}/brief-workshop.png`, alt: "Co-creation workshop with the Varsity Tutors team", w: 4192, h: 2024 },
 
   research: {
     intro:
@@ -122,6 +120,7 @@ export const varsity = {
     statement:
       "We mapped the full journey from search to renewal and found four pain points — and the biggest gap lands exactly where it hurts most: during and after sessions, when parents most want to understand learning but the system gives the least clarity.",
     blueprint: { src: `${IMG}/journey-blueprint.png`, alt: "Full parent journey map — Before, During, After — with goals, actions, touchpoints, and an emotion curve", w: 2400, h: 1238 },
+    transcripts: { src: `${IMG}/old-transcripts.png`, alt: "What parents got before the dashboard — long, unstructured session-recap pages", w: 3680, h: 2759 },
     items: [
       { n: "01", title: "Limited emotional touchpoints", body: "Parents can't feel how engaged or motivated their child is between sessions." },
       { n: "02", title: "Non-standardized process", body: "Tutoring quality and structure vary tutor to tutor, so 'good' is hard to define." },

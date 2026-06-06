@@ -140,7 +140,7 @@ function TradeOffCard({ t }: { t: TradeOff }) {
 }
 
 export function VarsityCaseStudy({ meta }: { meta: Project }) {
-  const { hero, brief, context, research, jobs, personas, problem, tradeoffs, reframe, pillars, explorations, outcome, takeaways } =
+  const { hero, brief, briefShot, research, jobs, personas, problem, tradeoffs, reframe, pillars, explorations, outcome, takeaways } =
     varsity;
 
   return (
@@ -173,13 +173,20 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         />
       </Reveal>
 
-      {/* BRIEF + CONTEXT */}
+      {/* BRIEF */}
       <Reveal className={`${NARROW} ${GAP}`}>
         <SectionLabel>Brief</SectionLabel>
         <p className="mt-5 text-[15px] leading-7 text-fg/90">
           <Emph text={brief} />
         </p>
-        <p className="mt-5 text-[15px] leading-7 text-muted">{context}</p>
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8`}>
+        <figure>
+          <Shot shot={briefShot} />
+          <figcaption className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
+            Co-creation workshop with the Varsity Tutors team
+          </figcaption>
+        </figure>
       </Reveal>
 
       {/* RESEARCH */}
@@ -276,6 +283,14 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{problem.statement}</p>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
+        <figure className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
+          <Shot shot={problem.transcripts} />
+          <figcaption className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
+            Before the dashboard — the raw session recaps parents had to judge progress from
+          </figcaption>
+        </figure>
+      </Reveal>
+      <Reveal className={`${WIDE} mt-6`}>
         <div className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
           <Shot shot={problem.blueprint} />
         </div>
