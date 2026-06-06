@@ -27,15 +27,18 @@ function Chip({ children, accent }: { children: string; accent?: boolean }) {
 function MediaTile({ media, chip, accent = false }: { media: Media; chip: string; accent?: boolean }) {
   if (media.kind === "photos") {
     return (
-      <figure className="mx-auto w-full max-w-[270px]">
+      <figure className="mx-auto w-full max-w-[420px]">
         <figcaption className="mb-3 flex items-center gap-2.5">
           <Chip accent={accent}>{chip}</Chip>
           <span className="text-xs leading-tight text-muted">{media.caption}</span>
         </figcaption>
-        <div className="space-y-3">
+        <div className="flex gap-3">
           {media.items.map((it) => (
-            <div key={it.src} className="overflow-hidden rounded-2xl border border-border bg-fg/[0.02]">
-              <Image src={it.src} alt={it.alt} width={it.w} height={it.h} sizes="270px" className="h-auto w-full" />
+            <div
+              key={it.src}
+              className="relative aspect-[3/4] flex-1 overflow-hidden rounded-2xl border border-border bg-fg/[0.02]"
+            >
+              <Image src={it.src} alt={it.alt} fill sizes="210px" className="object-cover" />
             </div>
           ))}
         </div>
@@ -155,7 +158,7 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
 
           {/* before / after comparison */}
           <Reveal className="mt-9">
-            <div className="grid items-start gap-8 sm:grid-cols-2">
+            <div className="grid items-center gap-8 sm:grid-cols-2">
               <MediaTile media={ch.before} chip="Before" />
               <MediaTile media={ch.after} chip="After" accent />
             </div>
