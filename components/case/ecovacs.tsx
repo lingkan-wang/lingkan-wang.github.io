@@ -137,39 +137,42 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
       </Reveal>
 
       {/* ───────────── FEATURE CHAPTERS ───────────── */}
-      {chapters.map((ch) => (
-        <section key={ch.kicker} className={`${WIDE} ${GAP}`}>
-          <Reveal>
-            <SectionLabel>{ch.kicker}</SectionLabel>
-            <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-              {ch.title}
-            </h2>
-            <div className="mt-7 grid gap-x-10 gap-y-6 sm:grid-cols-2">
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The problem</p>
-                <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.problem}</p>
+      {chapters.map((ch) => {
+        // before, after, and any "then" extras render as columns in one row,
+        // top-aligned. Chapters with an extra (AI cleaning) become a 3-up.
+        const tiles = [
+          { media: ch.before, chip: "Before", accent: false },
+          { media: ch.after, chip: "After", accent: true },
+          ...(ch.extras ?? []).map((m) => ({ media: m, chip: "Then", accent: false })),
+        ];
+        const cols = tiles.length >= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2";
+        return (
+          <section key={ch.kicker} className={`${WIDE} ${GAP}`}>
+            <Reveal>
+              <SectionLabel>{ch.kicker}</SectionLabel>
+              <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                {ch.title}
+              </h2>
+              <div className="mt-7 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The problem</p>
+                  <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.problem}</p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The solution</p>
+                  <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.solution}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The solution</p>
-                <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.solution}</p>
-              </div>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          {/* before / after comparison */}
-          <Reveal className="mt-9">
-            <div className="grid items-center gap-8 sm:grid-cols-2">
-              <MediaTile media={ch.before} chip="Before" />
-              <MediaTile media={ch.after} chip="After" accent />
-            </div>
-            {ch.extras && ch.extras.length > 0 && (
-              <div className="mt-8 flex flex-wrap justify-center gap-8">
-                {ch.extras.map((m, i) => (
-                  <MediaTile key={i} media={m} chip="Then" />
+            {/* before / after (+ then) — top-aligned columns */}
+            <Reveal className="mt-9">
+              <div className={`grid items-start gap-8 ${cols}`}>
+                {tiles.map((t, i) => (
+                  <MediaTile key={i} media={t.media} chip={t.chip} accent={t.accent} />
                 ))}
               </div>
-            )}
-          </Reveal>
+            </Reveal>
 
           {/* optional trade-off callout */}
           {ch.note && (
@@ -180,8 +183,9 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
               </div>
             </Reveal>
           )}
-        </section>
-      ))}
+          </section>
+        );
+      })}
 
       {/* ───────────── ROLLOUT ───────────── */}
       <Reveal className={`${WIDE} ${GAP}`}>
