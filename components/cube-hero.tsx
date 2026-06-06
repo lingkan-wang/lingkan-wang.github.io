@@ -32,17 +32,40 @@ export function CubeHero() {
   const hovering = useRef(false);
   const dragRef = useRef<{ x: number; y: number; rx: number; ry: number; moved: boolean } | null>(null);
   const wasDrag = useRef(false);
+  // angular velocity (deg/ms) for the flick-and-let-go inertia, plus the last
+  // sampled rotation so we can derive it from successive pointer moves.
+  const vel = useRef({ x: 0, y: 0 });
+  const lastMove = useRef<{ t: number; rx: number; ry: number } | null>(null);
   const [open, setOpen] = useState<string | null>(null);
   const [bubble, setBubble] = useState<Bubble | null>(null);
 
-  // calm auto-spin while idle (not hovering, not dragging, not reduced-motion)
+  // Per-frame motion. Priority: pointer is driving → do nothing; otherwise
+  // spend any leftover flick velocity (decaying frame-rate-independently) and,
+  // once it settles, resume the calm idle drift (unless the pointer is resting
+  // on the cube).
   useAnimationFrame((_, delta) => {
-    if (reduce || hovering.current || dragRef.current) return;
+    if (reduce || dragRef.current) return;
+
+    const v = vel.current;
+    if (Math.abs(v.x) + Math.abs(v.y) > 0.0008) {
+      ry.set(ry.get() + v.y * delta);
+      const nextX = clamp(rx.get() + v.x * delta, -85, 85);
+      if (nextX === 85 || nextX === -85) v.x = 0; // don't grind against the clamp
+      rx.set(nextX);
+      const decay = Math.pow(0.935, delta / 16.6667); // ~0.935 per 60fps frame
+      v.x *= decay;
+      v.y *= decay;
+      return;
+    }
+
+    if (hovering.current) return; // settled and being looked at → rest
     ry.set(ry.get() + delta * 0.015);
   });
 
   function onDown(e: React.PointerEvent) {
     dragRef.current = { x: e.clientX, y: e.clientY, rx: rx.get(), ry: ry.get(), moved: false };
+    vel.current = { x: 0, y: 0 }; // grabbing kills any leftover spin
+    lastMove.current = null;
   }
   function onMove(e: React.PointerEvent) {
     const d = dragRef.current;
@@ -53,12 +76,33 @@ export function CubeHero() {
       d.moved = true;
       setBubble(null); // dragging dismisses the bubble
     }
-    ry.set(d.ry + dx * 0.5);
-    rx.set(clamp(d.rx - dy * 0.5, -85, 85));
+    const nextRy = d.ry + dx * 0.5;
+    const nextRx = clamp(d.rx - dy * 0.5, -85, 85);
+
+    // derive angular velocity from this move so a flick keeps spinning on release
+    const now = performance.now();
+    const lm = lastMove.current;
+    if (lm) {
+      const dt = now - lm.t;
+      if (dt > 0) {
+        const cap = (val: number) => Math.max(-2, Math.min(2, val)); // sane spin ceiling
+        vel.current.y = cap((nextRy - lm.ry) / dt);
+        vel.current.x = cap((nextRx - lm.rx) / dt);
+      }
+    }
+    lastMove.current = { t: now, rx: nextRx, ry: nextRy };
+
+    ry.set(nextRy);
+    rx.set(nextRx);
   }
   function onUp() {
     if (dragRef.current) wasDrag.current = dragRef.current.moved;
     dragRef.current = null;
+    // releasing after a pause shouldn't fling — drop stale velocity if the last
+    // move is old (the pointer was held still before letting go).
+    if (lastMove.current && performance.now() - lastMove.current.t > 80) {
+      vel.current = { x: 0, y: 0 };
+    }
   }
 
   function reveal(id: string, label: string, el: HTMLElement) {
