@@ -27,7 +27,7 @@ function Chip({ children, accent }: { children: string; accent?: boolean }) {
 function MediaTile({ media, chip, accent = false }: { media: Media; chip: string; accent?: boolean }) {
   if (media.kind === "photos") {
     return (
-      <figure className="mx-auto w-full max-w-[420px]">
+      <figure className="w-full max-w-[420px]">
         <figcaption className="mb-3 flex items-center gap-2.5">
           <Chip accent={accent}>{chip}</Chip>
           <span className="text-xs leading-tight text-muted">{media.caption}</span>
@@ -46,7 +46,7 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
     );
   }
   return (
-    <figure className="mx-auto w-full max-w-[300px]">
+    <figure className="w-full max-w-[250px]">
       <figcaption className="mb-3 flex items-center gap-2.5">
         <Chip accent={accent}>{chip}</Chip>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
@@ -144,7 +144,8 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
             <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
               {ch.title}
             </h2>
-            <div className="mt-7 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+            {/* same 2-col grid + gap as the media below, so the text aligns with it */}
+            <div className="mt-7 grid gap-x-8 gap-y-6 sm:grid-cols-2">
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-widest text-muted">The problem</p>
                 <p className="mt-2 text-[15px] leading-7 text-fg/90">{ch.problem}</p>
@@ -156,19 +157,25 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
             </div>
           </Reveal>
 
-          {/* before / after comparison */}
+          {/* before (col 1) / after [+ then] (col 2) — left-aligned to match the text columns */}
           <Reveal className="mt-9">
-            <div className="grid items-center gap-8 sm:grid-cols-2">
+            <div className="grid items-start gap-x-8 gap-y-10 sm:grid-cols-2">
               <MediaTile media={ch.before} chip="Before" />
-              <MediaTile media={ch.after} chip="After" accent />
+              {ch.extras && ch.extras.length > 0 ? (
+                <div className="flex gap-4">
+                  <div className="min-w-0 flex-1">
+                    <MediaTile media={ch.after} chip="After" accent />
+                  </div>
+                  {ch.extras.map((m, i) => (
+                    <div key={i} className="min-w-0 flex-1">
+                      <MediaTile media={m} chip="Then" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <MediaTile media={ch.after} chip="After" accent />
+              )}
             </div>
-            {ch.extras && ch.extras.length > 0 && (
-              <div className="mt-8 flex flex-wrap justify-center gap-8">
-                {ch.extras.map((m, i) => (
-                  <MediaTile key={i} media={m} chip="Then" />
-                ))}
-              </div>
-            )}
           </Reveal>
 
           {/* optional trade-off callout */}
