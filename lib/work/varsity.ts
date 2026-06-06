@@ -31,12 +31,14 @@ export type TradeOff = {
 };
 export type Feature = { title: string; body: string };
 export type Shot = { src?: string; alt: string; w: number; h: number; placeholder?: boolean; caption?: string };
+export type Callout = { src: string; w: number; h: number; alt: string; caption: string; at: number }; // at = y-fraction on the full screen
 export type Pillar = {
   kicker: string;
   title: string;
   whatIsIt: string;
   features: Feature[];
   shots: Shot[];
+  annotated?: { full: { src: string; w: number; h: number; alt: string }; callouts: Callout[] };
   tint: string;
 };
 
@@ -229,12 +231,16 @@ export const varsity = {
         { title: "Hover, don't interrupt", body: "Data logic is explained on hover, so curious parents can dig in without breaking the scan." },
         { title: "Trends, and what to do at home", body: "A cross-session view answers 'is my child improving over time?'; positive, actionable cards answer 'what can I do at home?'" },
       ],
-      shots: [
-        { src: `${IMG}/session-report.png`, alt: "Session overview — accuracy, effective time, skills covered", w: 1600, h: 1135 },
-        { src: `${IMG}/session-skills.png`, alt: "Session Skills Highlight — skills to improve vs. mastered, with a worked example", w: 2400, h: 1350 },
-        { src: `${IMG}/progress-over-sessions.png`, alt: "Cross-session learning growth over time", w: 1600, h: 1136 },
-        { src: `${IMG}/session-support.png`, alt: "Support at Home — positive, actionable cards for parents", w: 1600, h: 1136 },
-      ],
+      shots: [],
+      annotated: {
+        full: { src: `${IMG}/session-overview-full.png`, w: 5760, h: 6420, alt: "The full Session Overview screen — progress banner, session skills, learning growth, and at-home support" },
+        callouts: [
+          { src: `${IMG}/so-hero.png`, w: 5537, h: 883, alt: "Three at-a-glance metrics: accuracy, effective time, skills covered", caption: "Three metrics at a glance, grounded in the session transcript.", at: 0.155 },
+          { src: `${IMG}/so-skills.png`, w: 5537, h: 1905, alt: "Session Skills Highlight — skills to improve vs. mastered, with a worked example", caption: "Skills to improve vs. mastered, with a worked example.", at: 0.384 },
+          { src: `${IMG}/so-growth.png`, w: 5537, h: 1543, alt: "Learning growth over time across sessions", caption: "A cross-session view: is my child improving over time?", at: 0.666 },
+          { src: `${IMG}/so-support.png`, w: 5537, h: 1254, alt: "Support at Home — positive, actionable cards for parents", caption: "Positive, actionable cards: what can I do at home?", at: 0.898 },
+        ],
+      },
     },
     {
       kicker: "Final MVP · 03",

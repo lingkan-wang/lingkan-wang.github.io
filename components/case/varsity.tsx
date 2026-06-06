@@ -4,6 +4,7 @@ import { varsity, type Shot as ShotT, type TradeOff, type Matrix as MatrixT } fr
 import { Reveal } from "@/components/reveal";
 import { Placeholder } from "@/components/placeholder";
 import { ScrollGallery } from "./scroll-gallery";
+import { InterfaceCallouts } from "./interface-callouts";
 import { StatCounter } from "./stat-counter";
 import { SectionLabel, Emph, MetaGrid, NumberedCard, Takeaway } from "./elements";
 
@@ -326,11 +327,17 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
           </Reveal>
 
           <Reveal className="mt-8">
-            <div className={`grid gap-4 rounded-3xl ${p.tint} p-5 sm:p-8 ${p.shots.length > 1 ? "sm:grid-cols-2" : ""}`}>
-              {p.shots.map((s) => (
-                <Shot key={s.src ?? s.alt} shot={s} />
-              ))}
-            </div>
+            {p.annotated ? (
+              <div className={`rounded-3xl ${p.tint} p-5 sm:p-8`}>
+                <InterfaceCallouts full={p.annotated.full} callouts={p.annotated.callouts} />
+              </div>
+            ) : (
+              <div className={`grid gap-4 rounded-3xl ${p.tint} p-5 sm:p-8 ${p.shots.length > 1 ? "sm:grid-cols-2" : ""}`}>
+                {p.shots.map((s) => (
+                  <Shot key={s.src ?? s.alt} shot={s} />
+                ))}
+              </div>
+            )}
           </Reveal>
 
           <Reveal className="mt-10">
