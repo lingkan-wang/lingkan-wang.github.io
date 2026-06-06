@@ -231,6 +231,7 @@ export const varsity = {
       ],
       shots: [
         { src: `${IMG}/session-report.png`, alt: "Session overview — accuracy, effective time, skills covered", w: 1600, h: 1135 },
+        { src: `${IMG}/session-skills.png`, alt: "Session Skills Highlight — skills to improve vs. mastered, with a worked example", w: 2400, h: 1350 },
         { src: `${IMG}/progress-over-sessions.png`, alt: "Cross-session learning growth over time", w: 1600, h: 1136 },
         { src: `${IMG}/session-support.png`, alt: "Support at Home — positive, actionable cards for parents", w: 1600, h: 1136 },
       ],
