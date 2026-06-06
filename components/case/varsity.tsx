@@ -326,11 +326,22 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
           </Reveal>
 
           <Reveal className="mt-8">
-            <div className={`grid gap-4 rounded-3xl ${p.tint} p-5 sm:p-8 ${p.shots.length > 1 ? "sm:grid-cols-2" : ""}`}>
-              {p.shots.map((s) => (
-                <Shot key={s.src ?? s.alt} shot={s} />
-              ))}
-            </div>
+            {p.splitLayout ? (
+              <div className={`grid items-start gap-4 rounded-3xl ${p.tint} p-5 sm:grid-cols-2 sm:p-8`}>
+                <Shot shot={p.shots[0]} />
+                <div className="grid content-start gap-4">
+                  {p.shots.slice(1).map((s) => (
+                    <Shot key={s.src ?? s.alt} shot={s} />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className={`grid gap-4 rounded-3xl ${p.tint} p-5 sm:p-8 ${p.shots.length > 1 ? "sm:grid-cols-2" : ""}`}>
+                {p.shots.map((s) => (
+                  <Shot key={s.src ?? s.alt} shot={s} />
+                ))}
+              </div>
+            )}
           </Reveal>
 
           <Reveal className="mt-10">

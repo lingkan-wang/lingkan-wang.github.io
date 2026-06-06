@@ -38,6 +38,7 @@ export type Pillar = {
   features: Feature[];
   shots: Shot[];
   tint: string;
+  splitLayout?: boolean; // shots[0] big on the left, shots[1..] stacked on the right
 };
 
 export const varsity = {
@@ -229,11 +230,13 @@ export const varsity = {
         { title: "Hover, don't interrupt", body: "Data logic is explained on hover, so curious parents can dig in without breaking the scan." },
         { title: "Trends, and what to do at home", body: "A cross-session view answers 'is my child improving over time?'; positive, actionable cards answer 'what can I do at home?'" },
       ],
+      splitLayout: true,
       shots: [
-        { src: `${IMG}/session-report.png`, alt: "Session overview — accuracy, effective time, skills covered", w: 1600, h: 1135 },
-        { src: `${IMG}/session-skills.png`, alt: "Session Skills Highlight — skills to improve vs. mastered, with a worked example", w: 2400, h: 1350 },
-        { src: `${IMG}/progress-over-sessions.png`, alt: "Cross-session learning growth over time", w: 1600, h: 1136 },
-        { src: `${IMG}/session-support.png`, alt: "Support at Home — positive, actionable cards for parents", w: 1600, h: 1136 },
+        { src: `${IMG}/so-full.png`, alt: "Full session overview — report, skill highlights, growth, and home support", w: 1304, h: 2000 },
+        { src: `${IMG}/so-metrics.png`, alt: "Today's progress — accuracy, effective learning time, and skills covered", w: 2000, h: 718 },
+        { src: `${IMG}/so-skills.png`, alt: "Session Skills Highlight — skills to improve vs. mastered, with a worked example", w: 2000, h: 858 },
+        { src: `${IMG}/so-growth.png`, alt: "Learning growth over time vs. the platform average", w: 2000, h: 718 },
+        { src: `${IMG}/so-support.png`, alt: "Support at Home — positive, actionable cards for parents", w: 2000, h: 581 },
       ],
     },
     {
