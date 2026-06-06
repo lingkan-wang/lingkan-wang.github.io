@@ -3,7 +3,7 @@ import type { Project } from "@/lib/projects";
 import { varsity, type Shot as ShotT, type TradeOff, type Matrix as MatrixT } from "@/lib/work/varsity";
 import { Reveal } from "@/components/reveal";
 import { Placeholder } from "@/components/placeholder";
-import { Carousel } from "./carousel";
+import { ScrollGallery } from "./scroll-gallery";
 import { StatCounter } from "./stat-counter";
 import { SectionLabel, Emph, MetaGrid, NumberedCard, Takeaway } from "./elements";
 
@@ -351,17 +351,17 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         <SectionLabel>Explorations &amp; iterations</SectionLabel>
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{explorations.body}</p>
       </Reveal>
-      <Reveal className={`${WIDE} mt-8`}>
-        <Carousel
+      <div className={`${WIDE} mt-8`}>
+        <p className="mb-2 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
+          Scroll to browse →
+        </p>
+        <ScrollGallery
           slides={explorations.shots.map((s) => ({
             key: s.src ?? s.alt,
             node: <ExplorationSlide shot={s} />,
           }))}
         />
-        <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
-          ← Swipe to browse →
-        </p>
-      </Reveal>
+      </div>
 
       {/* OUTCOME */}
       <Reveal className={`${NARROW} ${GAP}`}>
