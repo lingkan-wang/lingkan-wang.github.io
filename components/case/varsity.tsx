@@ -59,19 +59,20 @@ function ShotNote({ note }: { note: ShotNoteT }) {
   );
 }
 
-/** A single flanking callout with a vertical accent bar pointing at the image. */
+/** A single flanking callout: a connector bar that spans the region [top, bottom],
+ *  with the text top-aligned beside it. */
 function CalloutItem({ h }: { h: HighlightT }) {
   const text = (
-    <div className={h.side === "left" ? "text-right" : "text-left"}>
+    <div className={`min-w-0 flex-1 ${h.side === "left" ? "text-right" : "text-left"}`}>
       <h4 className="text-[13px] font-semibold leading-snug tracking-tight text-fg">{h.title}</h4>
       <p className="mt-1 text-[12px] leading-5 text-muted">{h.body}</p>
     </div>
   );
-  const bar = <span className="w-[3px] shrink-0 rounded-full bg-accent/55" aria-hidden />;
+  const bar = <span className="w-[3px] shrink-0 rounded-full bg-accent/60" aria-hidden />;
   return (
     <div
-      className={`absolute flex w-full gap-3 ${h.side === "left" ? "right-0 justify-end pr-1" : "left-0 pl-1"}`}
-      style={{ top: `${h.at * 100}%`, transform: "translateY(-50%)" }}
+      className={`absolute flex w-full items-stretch gap-3 ${h.side === "left" ? "right-0 justify-end pr-1" : "left-0 pl-1"}`}
+      style={{ top: `${h.top * 100}%`, height: `${(h.bottom - h.top) * 100}%` }}
     >
       {h.side === "left" ? (
         <>

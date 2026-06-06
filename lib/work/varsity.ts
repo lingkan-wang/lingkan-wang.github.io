@@ -46,9 +46,9 @@ export type Pillar = {
   highlights?: Highlight[]; // labelled callouts that flank the shot, aligned to regions
   tint: string;
 };
-// A callout that sits beside the homepage shot. `side` picks the column, `at` is the
-// y-fraction of the image it lines up with.
-export type Highlight = { title: string; body: string; side: "left" | "right"; at: number };
+// A callout that sits beside the homepage shot. `side` picks the column; `top`/`bottom`
+// are y-fractions of the image marking the region its connector bar spans.
+export type Highlight = { title: string; body: string; side: "left" | "right"; top: number; bottom: number };
 
 export const varsity = {
   hero: {
@@ -210,12 +210,12 @@ export const varsity = {
       tint: "bg-[#eef0fb]",
       shots: [{ src: `${IMG}/homepage-final.png`, alt: "Final parent-dashboard homepage", w: 1600, h: 1137 }],
       highlights: [
-        { side: "left", at: 0.1, title: "Opening message", body: "A personalized greeting for quick understanding." },
-        { side: "left", at: 0.31, title: "Individual session progress", body: "The latest session's recap and suggested plans." },
-        { side: "left", at: 0.54, title: "Overall subject progress", body: "Subject-level mastery, and where help is needed." },
-        { side: "left", at: 0.77, title: "Service support entry", body: "Easy access to follow-up services." },
-        { side: "right", at: 0.22, title: "Schedule reminder", body: "Keeps parents aware of upcoming sessions." },
-        { side: "right", at: 0.55, title: "Learning history", body: "Quickly locate past learning sessions." },
+        { side: "left", top: 0.085, bottom: 0.235, title: "Opening message", body: "A personalized greeting for quick understanding." },
+        { side: "left", top: 0.275, bottom: 0.45, title: "Individual session progress", body: "The latest session's recap and suggested plans." },
+        { side: "left", top: 0.5, bottom: 0.68, title: "Overall subject progress", body: "Subject-level mastery, and where help is needed." },
+        { side: "left", top: 0.74, bottom: 0.95, title: "Service support entry", body: "Easy access to follow-up services." },
+        { side: "right", top: 0.15, bottom: 0.33, title: "Schedule reminder", body: "Keeps parents aware of upcoming sessions." },
+        { side: "right", top: 0.51, bottom: 0.97, title: "Learning history", body: "Quickly locate past learning sessions." },
       ],
     },
     {
