@@ -223,16 +223,6 @@ export function BumbleCaseStudy() {
       <Reveal className={`${WIDE} mt-8`}>
         <Shot img={b.coreInteractions.img} />
       </Reveal>
-      <Reveal className={`${COL} mt-10`}>
-        <div className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
-          {b.coreInteractions.points.map((p) => (
-            <div key={p.title} className="border-t border-border pt-4">
-              <h3 className="text-[15px] font-semibold tracking-tight">{p.title}</h3>
-              <p className="mt-1.5 text-[14px] leading-6 text-muted">{p.body}</p>
-            </div>
-          ))}
-        </div>
-      </Reveal>
 
       {/* CROSS-PLATFORM */}
       <Reveal className={`${COL} ${GAP}`}>
