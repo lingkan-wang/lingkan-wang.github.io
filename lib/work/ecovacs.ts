@@ -138,7 +138,7 @@ export const ecovacs = {
           src: `${IMG}/demo-ai-cleaning-result.mp4`,
           poster: `${IMG}/demo-ai-cleaning-result-poster.jpg`,
           alt: "Cleaning complete — the robot hands back a clear report",
-          caption: "…and hands back a clear cleaning report",
+          caption: "…and hands back a cleaning report",
         },
       ],
     },
@@ -161,7 +161,7 @@ export const ecovacs = {
         src: `${IMG}/demo-pet.mp4`,
         poster: `${IMG}/demo-pet-poster.jpg`,
         alt: "Pet-waste avoidance — the robot detects waste and steers around it",
-        caption: "Detects waste and steers around it",
+        caption: "Detects waste and avoids it",
       },
       note: {
         title: "An honest trade-off",

@@ -28,9 +28,9 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
   if (media.kind === "photos") {
     return (
       <figure className="w-full max-w-[420px]">
-        <figcaption className="mb-3 flex items-center gap-2.5">
+        <figcaption className="mb-3">
           <Chip accent={accent}>{chip}</Chip>
-          <span className="text-xs leading-tight text-muted">{media.caption}</span>
+          <span className="mt-2 block text-xs leading-snug text-muted">{media.caption}</span>
         </figcaption>
         <div className="flex gap-3">
           {media.items.map((it) => (
