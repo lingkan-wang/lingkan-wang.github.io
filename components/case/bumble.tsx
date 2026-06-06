@@ -47,7 +47,7 @@ function Shot({ img, maxW = "max-w-none" }: { img: Img; maxW?: string }) {
         sizes="(max-width: 1080px) 92vw, 1080px"
         className="h-auto w-full rounded-2xl border border-border bg-fg/[0.02]"
       />
-      {img.caption && <figcaption className="mt-3 text-center text-xs text-muted">{img.caption}</figcaption>}
+      {img.caption && <figcaption className="mt-3 text-xs text-muted">{img.caption}</figcaption>}
     </figure>
   );
 }
@@ -62,7 +62,7 @@ function ClipTile({ clip, radius = "1.25rem", white = true }: { clip: ClipT; rad
       >
         <Clip src={clip.src} poster={clip.poster} alt={clip.label ?? ""} radius={radius} fit="cover" />
       </div>
-      {clip.label && <figcaption className="mt-2.5 text-center text-[12px] font-medium text-muted">{clip.label}</figcaption>}
+      {clip.label && <figcaption className="mt-2.5 text-[12px] font-medium text-muted">{clip.label}</figcaption>}
     </figure>
   );
 }
@@ -130,8 +130,8 @@ export function BumbleCaseStudy() {
         <Body text={b.goalStatement} className="mt-5" />
       </Reveal>
       <Reveal className={`${WIDE} mt-12`}>
-        <p className="text-center font-mono text-[11px] uppercase tracking-widest text-accent">{b.preview.label}</p>
-        <p className="mx-auto mt-2 max-w-[520px] text-center text-sm text-muted">{b.preview.sub}</p>
+        <p className="font-mono text-[11px] uppercase tracking-widest text-accent">{b.preview.label}</p>
+        <p className="mt-2 max-w-[520px] text-sm text-muted">{b.preview.sub}</p>
         <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
           {b.preview.clips.map((c) => (
             <ClipTile key={c.src} clip={c} radius="1.25rem" />
