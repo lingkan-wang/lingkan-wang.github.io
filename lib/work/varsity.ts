@@ -64,7 +64,7 @@ export const varsity = {
     stats: [
       { value: 104, suffix: "", label: "parents surveyed on how they judge tutoring effectiveness" },
       { value: 4, suffix: "", label: "in-depth 1:1 parent interviews" },
-      { value: 8, suffix: " wks", label: "from research to a tested MVP" },
+      { value: 3, suffix: "", label: "research lenses — theory, business & real users" },
     ] as Stat[],
     ownership: [
       "Synthesized survey + interview data into the framework below, with the team, via affinity diagramming",

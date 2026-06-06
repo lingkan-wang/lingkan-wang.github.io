@@ -7,7 +7,9 @@ import { Carousel } from "./carousel";
 import { StatCounter } from "./stat-counter";
 import { SectionLabel, Emph, MetaGrid, NumberedCard, Takeaway } from "./elements";
 
-const NARROW = "mx-auto max-w-[680px] px-6";
+// Prose shares the content width so it left-aligns with the visual blocks below
+// and runs to the same right edge before wrapping.
+const NARROW = "mx-auto w-[min(1080px,92vw)]";
 const MID = "mx-auto max-w-[820px] px-6";
 const WIDE = "mx-auto w-[min(1080px,92vw)]";
 const GAP = "mt-20 sm:mt-28";
@@ -357,7 +359,7 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
           }))}
         />
         <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
-          Drag, swipe, or use ← → to browse
+          ← Swipe to browse →
         </p>
       </Reveal>
 
