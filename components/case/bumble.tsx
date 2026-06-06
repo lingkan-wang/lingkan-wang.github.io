@@ -47,7 +47,7 @@ function Shot({ img, maxW = "max-w-none" }: { img: Img; maxW?: string }) {
         sizes="(max-width: 1080px) 92vw, 1080px"
         className="h-auto w-full rounded-2xl border border-border bg-fg/[0.02]"
       />
-      {img.caption && <figcaption className="mt-3 text-center text-xs text-muted">{img.caption}</figcaption>}
+      {img.caption && <figcaption className="mt-3 text-xs text-muted">{img.caption}</figcaption>}
     </figure>
   );
 }
@@ -62,7 +62,7 @@ function ClipTile({ clip, radius = "1.25rem", white = true }: { clip: ClipT; rad
       >
         <Clip src={clip.src} poster={clip.poster} alt={clip.label ?? ""} radius={radius} fit="cover" />
       </div>
-      {clip.label && <figcaption className="mt-2.5 text-center text-[12px] font-medium text-muted">{clip.label}</figcaption>}
+      {clip.label && <figcaption className="mt-2.5 text-[12px] font-medium text-muted">{clip.label}</figcaption>}
     </figure>
   );
 }
@@ -130,8 +130,8 @@ export function BumbleCaseStudy() {
         <Body text={b.goalStatement} className="mt-5" />
       </Reveal>
       <Reveal className={`${WIDE} mt-12`}>
-        <p className="text-center font-mono text-[11px] uppercase tracking-widest text-accent">{b.preview.label}</p>
-        <p className="mx-auto mt-2 max-w-[520px] text-center text-sm text-muted">{b.preview.sub}</p>
+        <p className="font-mono text-[11px] uppercase tracking-widest text-accent">{b.preview.label}</p>
+        <p className="mt-2 max-w-[520px] text-sm text-muted">{b.preview.sub}</p>
         <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-4">
           {b.preview.clips.map((c) => (
             <ClipTile key={c.src} clip={c} radius="1.25rem" />
@@ -157,7 +157,7 @@ export function BumbleCaseStudy() {
             </li>
           ))}
         </ol>
-        <div className="mt-8 grid max-w-[520px] grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-5">
           {b.competitive.refs.map((r) => (
             <Image
               key={r.src}
@@ -165,7 +165,7 @@ export function BumbleCaseStudy() {
               alt={r.alt}
               width={r.w}
               height={r.h}
-              sizes="(max-width: 640px) 30vw, 170px"
+              sizes="(max-width: 640px) 45vw, 160px"
               className="h-auto w-full rounded-xl border border-border"
             />
           ))}
@@ -223,16 +223,6 @@ export function BumbleCaseStudy() {
       <Reveal className={`${WIDE} mt-8`}>
         <Shot img={b.coreInteractions.img} />
       </Reveal>
-      <Reveal className={`${COL} mt-10`}>
-        <div className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
-          {b.coreInteractions.points.map((p) => (
-            <div key={p.title} className="border-t border-border pt-4">
-              <h3 className="text-[15px] font-semibold tracking-tight">{p.title}</h3>
-              <p className="mt-1.5 text-[14px] leading-6 text-muted">{p.body}</p>
-            </div>
-          ))}
-        </div>
-      </Reveal>
 
       {/* CROSS-PLATFORM */}
       <Reveal className={`${COL} ${GAP}`}>
@@ -245,9 +235,11 @@ export function BumbleCaseStudy() {
         <Body text={b.crossPlatform.androidIphone.body} className="mt-3" />
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <div className="mx-auto grid max-w-[820px] items-start gap-8 sm:grid-cols-2">
+        {/* Columns sized 1.565:1 so the wide annotated still (0.756) and the tall
+            phone clip (0.483) render at the same height — tops and bottoms align. */}
+        <div className="mx-auto grid max-w-[760px] items-start gap-8 sm:grid-cols-[1.565fr_1fr]">
           <Shot img={b.crossPlatform.androidIphone.img} />
-          <div className="mx-auto w-full max-w-[280px]">
+          <div className="mx-auto w-full max-w-[280px] sm:max-w-none">
             <ClipTile clip={b.crossPlatform.androidIphone.clip} />
           </div>
         </div>

@@ -58,9 +58,11 @@ export const bumble = {
       "Short, visually striking text posts lower the self-expression barrier.",
     ],
     refs: [
-      { src: `${IMG}/ref-standouts.png`, w: 434, h: 940, alt: "Bumble Standouts, reviewed in the competitive scan" },
-      { src: `${IMG}/ref-events.png`, w: 434, h: 940, alt: "A location-based events app, reviewed in the competitive scan" },
-      { src: `${IMG}/ref-hinge.png`, w: 434, h: 940, alt: "A dating profile, reviewed in the competitive scan" },
+      { src: `${IMG}/ref-events.png`, w: 434, h: 940, alt: "A location-based events app — browsing nearby classes and meetups" },
+      { src: `${IMG}/ref-hinge.png`, w: 434, h: 940, alt: "A dating profile with photos and prompts" },
+      { src: `${IMG}/ref-sammy.png`, w: 434, h: 940, alt: "A dating profile with detailed about-me attributes" },
+      { src: `${IMG}/ref-standouts.png`, w: 434, h: 940, alt: "Bumble Standouts — a curated daily discovery surface" },
+      { src: `${IMG}/ref-red.png`, w: 434, h: 940, alt: "A social discovery feed of short, visual posts" },
     ] as Img[],
   },
 

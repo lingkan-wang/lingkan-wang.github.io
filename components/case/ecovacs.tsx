@@ -28,9 +28,9 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
   if (media.kind === "photos") {
     return (
       <figure className="w-full max-w-[420px]">
-        <figcaption className="mb-3 flex items-center gap-2.5">
+        <figcaption className="mb-3">
           <Chip accent={accent}>{chip}</Chip>
-          <span className="text-xs leading-tight text-muted">{media.caption}</span>
+          <span className="mt-2 block text-xs leading-snug text-muted">{media.caption}</span>
         </figcaption>
         <div className="flex gap-3">
           {media.items.map((it) => (
@@ -247,14 +247,13 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
                 <div className={`flex justify-center ${it.media.length > 1 ? "gap-3 sm:gap-4" : ""}`}>
                   {it.media.map((m, j) => {
                     const two = it.media.length > 1;
-                    const radius = two ? "rounded-[1.6rem]" : "rounded-[2.5rem]";
                     return (
-                      <div key={j} className={`w-full ${two ? "max-w-[200px]" : "mx-auto max-w-[280px]"}`}>
-                        <div className={`relative aspect-[400/838] w-full overflow-hidden border border-border bg-white ${radius}`}>
+                      <div key={j} className={`w-full max-w-[250px] ${two ? "min-w-0 flex-1" : "mx-auto"}`}>
+                        <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
                           {m.video ? (
                             <ShotVideo src={m.video} poster={m.poster} alt={it.title} />
                           ) : (
-                            <Image src={m.img!} alt={it.title} fill sizes="200px" className={`${radius} object-cover object-top`} />
+                            <Image src={m.img!} alt={it.title} fill sizes="250px" className="rounded-[2.5rem] object-cover object-top" />
                           )}
                         </div>
                       </div>
