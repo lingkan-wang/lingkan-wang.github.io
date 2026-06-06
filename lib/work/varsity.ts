@@ -43,6 +43,7 @@ export type Pillar = {
   whatIsIt: string;
   shots: Shot[];
   splitLayout?: boolean; // shots[0] big on the left, shots[1..] stacked on the right
+  highlights?: { title: string; body: string }[]; // labelled callouts shown in a grid under the shot
   tint: string;
 };
 
@@ -205,6 +206,14 @@ export const varsity = {
         "The homepage's job is to guide, not to show everything at once. A personalized opening message, clear entry points to the session view and overall progress, and quick access to history and schedule. Earlier versions packed in more data — and just raised cognitive load.",
       tint: "bg-[#eef0fb]",
       shots: [{ src: `${IMG}/homepage-final.png`, alt: "Final parent-dashboard homepage", w: 1600, h: 1137 }],
+      highlights: [
+        { title: "Opening message", body: "A personalized greeting orients the parent in seconds." },
+        { title: "Individual session progress", body: "A direct route to the latest session's recap and suggested next steps." },
+        { title: "Overall subject progress", body: "Subject-level mastery at a glance, so parents can spot where help is needed." },
+        { title: "Service support entry", body: "Easy access to follow-up services, like renewing a plan." },
+        { title: "Schedule reminder", body: "Keeps parents aware of the next upcoming session." },
+        { title: "Learning history", body: "Quickly locate and revisit past sessions." },
+      ],
     },
     {
       kicker: "Final MVP · 02",
