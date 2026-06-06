@@ -12,7 +12,8 @@ export type Card = { title: string; body: string };
 export type Media =
   | { kind: "placeholder"; label: string; caption: string }
   | { kind: "image"; src: string; w: number; h: number; alt: string; caption: string }
-  | { kind: "video"; src: string; poster: string; alt: string; caption: string };
+  | { kind: "video"; src: string; poster: string; alt: string; caption: string }
+  | { kind: "photos"; items: { src: string; w: number; h: number; alt: string }[]; caption: string };
 
 export type Chapter = {
   kicker: string;
@@ -148,12 +149,12 @@ export const ecovacs = {
       solution:
         "We retrained the recognition system to reliably detect pet waste and steer around it mid-clean — turning the scariest failure mode into a non-event.",
       before: {
-        kind: "image",
-        src: `${IMG}/before-zones.png`,
-        w: 393,
-        h: 852,
-        alt: "Manually drawing no-go zones to fence off the mess",
-        caption: "Fencing off the mess by hand",
+        kind: "photos",
+        caption: "Ran over pet waste — smeared across the house",
+        items: [
+          { src: `${IMG}/before-pet-rug.png`, w: 899, h: 1352, alt: "Pet waste smeared in long streaks across the living-room rug" },
+          { src: `${IMG}/before-pet-robot.png`, w: 983, h: 1356, alt: "The robot's underside and roller brush caked with pet waste" },
+        ],
       },
       after: {
         kind: "video",

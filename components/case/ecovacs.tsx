@@ -10,18 +10,42 @@ const WIDE = "mx-auto w-[min(1080px,92vw)]";
 const PROSE = "max-w-[680px]"; // readable text width, left-aligned to the WIDE edge
 const GAP = "mt-24 sm:mt-36";
 
-/** One labelled before/after tile: a chip + caption over a uniform phone-screen frame. */
+function Chip({ children, accent }: { children: string; accent?: boolean }) {
+  return (
+    <span
+      className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${
+        accent ? "border-accent/40 bg-accent/[0.06] text-accent" : "border-border text-muted"
+      }`}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** One labelled before/after tile: a chip + caption over the media. Phone screens
+ *  and clips sit in a uniform phone frame; real photos render as stacked cards. */
 function MediaTile({ media, chip, accent = false }: { media: Media; chip: string; accent?: boolean }) {
+  if (media.kind === "photos") {
+    return (
+      <figure className="mx-auto w-full max-w-[270px]">
+        <figcaption className="mb-3 flex items-center gap-2.5">
+          <Chip accent={accent}>{chip}</Chip>
+          <span className="text-xs leading-tight text-muted">{media.caption}</span>
+        </figcaption>
+        <div className="space-y-3">
+          {media.items.map((it) => (
+            <div key={it.src} className="overflow-hidden rounded-2xl border border-border bg-fg/[0.02]">
+              <Image src={it.src} alt={it.alt} width={it.w} height={it.h} sizes="270px" className="h-auto w-full" />
+            </div>
+          ))}
+        </div>
+      </figure>
+    );
+  }
   return (
     <figure className="mx-auto w-full max-w-[300px]">
       <figcaption className="mb-3 flex items-center gap-2.5">
-        <span
-          className={`shrink-0 rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest ${
-            accent ? "border-accent/40 bg-accent/[0.06] text-accent" : "border-border text-muted"
-          }`}
-        >
-          {chip}
-        </span>
+        <Chip accent={accent}>{chip}</Chip>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
       </figcaption>
       <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
