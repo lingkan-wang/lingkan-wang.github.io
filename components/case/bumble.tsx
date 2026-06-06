@@ -157,7 +157,7 @@ export function BumbleCaseStudy() {
             </li>
           ))}
         </ol>
-        <div className="mt-8 grid max-w-[520px] grid-cols-3 gap-4">
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-5">
           {b.competitive.refs.map((r) => (
             <Image
               key={r.src}
@@ -165,7 +165,7 @@ export function BumbleCaseStudy() {
               alt={r.alt}
               width={r.w}
               height={r.h}
-              sizes="(max-width: 640px) 30vw, 170px"
+              sizes="(max-width: 640px) 45vw, 160px"
               className="h-auto w-full rounded-xl border border-border"
             />
           ))}
