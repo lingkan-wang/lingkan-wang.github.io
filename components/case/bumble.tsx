@@ -261,30 +261,6 @@ export function BumbleCaseStudy() {
         <ClipTile clip={b.crossPlatform.desktop.clip} radius="1rem" />
       </Reveal>
 
-      {/* MICROINTERACTIONS */}
-      <Reveal className={`${COL} ${GAP}`}>
-        <H2>Microinteractions</H2>
-        <Body text={b.microinteractions.intro} className="mt-5" />
-      </Reveal>
-      <Reveal className={`${WIDE} mt-8`}>
-        <div className="grid grid-cols-2 items-start gap-x-6 gap-y-10 sm:grid-cols-3">
-          {b.microinteractions.items.map((c) => (
-            <figure key={c.src} className="m-0">
-              <div
-                className="relative w-full overflow-hidden rounded-xl border border-border bg-fg/[0.02]"
-                style={{ aspectRatio: `${c.w} / ${c.h}` }}
-              >
-                <Clip src={c.src} poster={c.poster} alt={c.label ?? ""} radius="0.75rem" fit="cover" />
-              </div>
-              <figcaption className="mt-3">
-                <span className="block text-sm font-medium">{c.label}</span>
-                <span className="mt-0.5 block text-[13px] leading-6 text-muted">{c.caption}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </Reveal>
-
       {/* USER TESTING */}
       <Reveal className={`${COL} ${GAP}`}>
         <H2>User testing</H2>

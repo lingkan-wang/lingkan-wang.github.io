@@ -12,7 +12,7 @@ export type Clip = { src: string; poster: string; w: number; h: number; label?: 
 
 export const bumble = {
   hero: {
-    media: { src: `${IMG}/hero.png`, w: 2000, h: 1291, alt: "Interest Cards shown on desktop and mobile — a card reading ‘Looking for a running buddy at Tepper Gym this week’" } as Img,
+    media: { src: `${IMG}/hero.png`, w: 1773, h: 1208, alt: "Interest Cards across desktop, mobile, web, and Apple Watch" } as Img,
     meta: [
       { label: "Role", value: "Product Designer" },
       { label: "Skills", value: "UX/UI Design · Data Analysis · User Research" },
@@ -114,18 +114,6 @@ export const bumble = {
       body: "Desktop offers a larger canvas and more simultaneous control. I consolidated card editing onto a single screen, so users can adjust text, style, and location without page transitions.",
       clip: { src: `${IMG}/flow-desktop.mp4`, poster: `${IMG}/flow-desktop.jpg`, w: 1414, h: 862, label: "Desktop — publish flow" } as Clip,
     },
-  },
-
-  microinteractions: {
-    intro: "On pointer devices, hover states give feedback without cluttering the UI. Each microinteraction has one job — improving discoverability and reducing friction.",
-    items: [
-      { src: `${IMG}/mi-browse.mp4`, poster: `${IMG}/mi-browse.jpg`, w: 400, h: 390, label: "Navigation arrow", caption: "The background brightens and the arrow slides on hover — a subtle hint you can switch cards." },
-      { src: `${IMG}/mi-join.mp4`, poster: `${IMG}/mi-join.jpg`, w: 400, h: 544, label: "Join icon", caption: "Two rings move closer and apart — a playful cue symbolizing connection." },
-      { src: `${IMG}/mi-add.mp4`, poster: `${IMG}/mi-add.jpg`, w: 400, h: 816, label: "Add", caption: "The + rotates 45° and lifts two actions into view — progressive disclosure reduces clutter." },
-      { src: `${IMG}/mi-confirm.mp4`, poster: `${IMG}/mi-confirm.jpg`, w: 400, h: 520, label: "Button", caption: "Fills with yellow on hover — immediate feedback before the click improves perceived responsiveness." },
-      { src: `${IMG}/mi-select.mp4`, poster: `${IMG}/mi-select.jpg`, w: 368, h: 722, label: "Chat list", caption: "Hover reveals a clean white surface — clear feedback for the selected person." },
-      { src: `${IMG}/mi-publish.mp4`, poster: `${IMG}/mi-publish.jpg`, w: 400, h: 258, label: "Publish", caption: "An auto-play checkmark burst confirms the card went live, reducing uncertainty." },
-    ] as Clip[],
   },
 
   userTesting:
