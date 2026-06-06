@@ -140,7 +140,7 @@ function TradeOffCard({ t }: { t: TradeOff }) {
 }
 
 export function VarsityCaseStudy({ meta }: { meta: Project }) {
-  const { hero, brief, briefShot, research, jobs, personas, problem, tradeoffs, reframe, pillars, explorations, outcome, takeaways } =
+  const { hero, setup, briefShot, transcript, research, jobs, problem, tradeoffs, reframe, pillars, explorations, outcome, takeaways } =
     varsity;
 
   return (
@@ -173,18 +173,49 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         />
       </Reveal>
 
-      {/* BRIEF */}
-      <Reveal className={`${NARROW} ${GAP}`}>
-        <SectionLabel>Brief</SectionLabel>
-        <p className="mt-5 text-[15px] leading-7 text-fg/90">
-          <Emph text={brief} />
-        </p>
+      {/* THE BRIEF — motivation / challenge / solution */}
+      <Reveal className={`${WIDE} ${GAP}`}>
+        <SectionLabel>The brief</SectionLabel>
+        <div className="mt-6 grid gap-8 sm:grid-cols-3 sm:gap-10">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">Motivation</p>
+            <p className="mt-2 text-[15px] leading-7 text-fg/90">
+              <Emph text={setup.motivation} />
+            </p>
+          </div>
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">Challenge</p>
+            <p className="mt-2 text-[15px] leading-7 text-fg/90">
+              <Emph text={setup.challenge} />
+            </p>
+          </div>
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-accent">Solution</p>
+            <p className="mt-2 text-[15px] leading-7 text-fg/90">
+              <Emph text={setup.solution} />
+            </p>
+          </div>
+        </div>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
         <figure>
           <Shot shot={briefShot} />
           <figcaption className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
             Co-creation workshop with the Varsity Tutors team
+          </figcaption>
+        </figure>
+      </Reveal>
+
+      {/* THE CURRENT PARENT TRANSCRIPT */}
+      <Reveal className={`${NARROW} ${GAP}`}>
+        <SectionLabel>Look at the current parent transcript</SectionLabel>
+        <p className="mt-5 text-[15px] leading-7 text-fg/90">{transcript.body}</p>
+      </Reveal>
+      <Reveal className={`${WIDE} mt-8`}>
+        <figure className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
+          <Shot shot={transcript.shot} />
+          <figcaption className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
+            Before the dashboard — the raw session recaps parents had to judge progress from
           </figcaption>
         </figure>
       </Reveal>
@@ -235,62 +266,12 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
         </div>
       </Reveal>
 
-      {/* PERSONAS */}
-      <Reveal className={`${WIDE} ${GAP}`}>
-        <SectionLabel>Two parents, two horizons</SectionLabel>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {personas.map((p) => (
-            <div key={p.name} className="rounded-2xl border border-border p-5">
-              <div className="flex items-center gap-3">
-                <Image
-                  src={p.avatar}
-                  alt={p.name}
-                  width={48}
-                  height={48}
-                  className="size-12 rounded-full border border-border object-cover"
-                />
-                <div>
-                  <h3 className="text-[15px] font-semibold tracking-tight">{p.name}</h3>
-                  <p className="font-mono text-[11px] uppercase tracking-wider text-muted">{p.meta}</p>
-                </div>
-              </div>
-              <div className="mt-4 grid gap-3 text-[13px] leading-6 sm:grid-cols-2">
-                <div>
-                  <p className="font-medium">Motivation</p>
-                  <ul className="mt-1 list-disc space-y-1 pl-4 text-muted">
-                    {p.motivation.map((m) => (
-                      <li key={m}>{m}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <p className="font-medium">Needs</p>
-                  <ul className="mt-1 list-disc space-y-1 pl-4 text-muted">
-                    {p.needs.map((m) => (
-                      <li key={m}>{m}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Reveal>
-
       {/* PROBLEM */}
       <Reveal className={`${NARROW} ${GAP}`}>
         <SectionLabel>Problem</SectionLabel>
         <p className="mt-5 text-[15px] leading-7 text-fg/90">{problem.statement}</p>
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <figure className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
-          <Shot shot={problem.transcripts} />
-          <figcaption className="mt-3 text-center font-mono text-[10px] uppercase tracking-widest text-muted">
-            Before the dashboard — the raw session recaps parents had to judge progress from
-          </figcaption>
-        </figure>
-      </Reveal>
-      <Reveal className={`${WIDE} mt-6`}>
         <div className="rounded-2xl bg-fg/[0.025] p-5 sm:p-6">
           <Shot shot={problem.blueprint} />
         </div>
