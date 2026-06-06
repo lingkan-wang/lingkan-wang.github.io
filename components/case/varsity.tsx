@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Project } from "@/lib/projects";
-import { varsity, type Shot as ShotT, type TradeOff, type Matrix as MatrixT } from "@/lib/work/varsity";
+import { varsity, type Shot as ShotT, type ShotNote as ShotNoteT, type TradeOff, type Matrix as MatrixT } from "@/lib/work/varsity";
 import { Reveal } from "@/components/reveal";
 import { Placeholder } from "@/components/placeholder";
 import { Carousel } from "./carousel";
@@ -28,6 +28,34 @@ function Shot({ shot, className = "" }: { shot: ShotT; className?: string }) {
       sizes="(max-width: 1080px) 92vw, 1080px"
       className={`h-auto w-full rounded-2xl border border-border bg-white shadow-sm ring-1 ring-black/[0.03] ${className}`}
     />
+  );
+}
+
+/** Annotation under a split-layout component image: goal, data logic, learning-science principle. */
+function ShotNote({ note }: { note: ShotNoteT }) {
+  return (
+    <div className="px-0.5">
+      <h4 className="text-sm font-semibold tracking-tight text-fg">{note.title}</h4>
+      {note.logic.length > 0 && (
+        <ul className="mt-2 space-y-1.5">
+          {note.logic.map((l) => (
+            <li key={l} className="flex gap-2 text-[13px] leading-6 text-muted">
+              <span className="mt-[9px] size-1 shrink-0 rounded-full bg-fg/30" aria-hidden />
+              <span>{l}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {note.principle && (
+        <p className="mt-2.5 text-[12.5px] leading-6 text-fg/70">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-accent">
+            Learning science · {note.principle.name}
+          </span>
+          <br />
+          {note.principle.body}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -323,11 +351,14 @@ export function VarsityCaseStudy({ meta }: { meta: Project }) {
 
           <Reveal className="mt-8">
             {p.splitLayout ? (
-              <div className={`grid items-start gap-4 rounded-3xl ${p.tint} p-5 sm:grid-cols-2 sm:p-8`}>
-                <Shot shot={p.shots[0]} />
-                <div className="grid content-start gap-4">
+              <div className={`grid items-start gap-4 rounded-3xl ${p.tint} p-5 sm:grid-cols-2 sm:gap-6 sm:p-8`}>
+                <Shot shot={p.shots[0]} className="sm:sticky sm:top-24" />
+                <div className="grid content-start gap-7">
                   {p.shots.slice(1).map((s) => (
-                    <Shot key={s.src ?? s.alt} shot={s} />
+                    <figure key={s.src ?? s.alt} className="grid gap-3">
+                      <Shot shot={s} />
+                      {s.note && <ShotNote note={s.note} />}
+                    </figure>
                   ))}
                 </div>
               </div>

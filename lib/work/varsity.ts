@@ -30,7 +30,14 @@ export type TradeOff = {
   matrix?: Matrix; // decision-rationale plot
 };
 export type Feature = { title: string; body: string };
-export type Shot = { src?: string; alt: string; w: number; h: number; placeholder?: boolean; caption?: string };
+// Annotation shown under a split-layout component image: its goal, how the data is
+// derived, and the learning-science principle behind it.
+export type ShotNote = {
+  title: string;
+  logic: string[];
+  principle?: { name: string; body: string };
+};
+export type Shot = { src?: string; alt: string; w: number; h: number; placeholder?: boolean; caption?: string; note?: ShotNote };
 export type Pillar = {
   kicker: string;
   title: string;
@@ -220,10 +227,66 @@ export const varsity = {
       splitLayout: true,
       shots: [
         { src: `${IMG}/so-full.png`, alt: "Full session overview — report, skill highlights, growth, and home support", w: 1304, h: 2000 },
-        { src: `${IMG}/so-metrics.png`, alt: "Today's progress — accuracy, effective learning time, and skills covered", w: 2000, h: 718 },
-        { src: `${IMG}/so-skills.png`, alt: "Session Skills Highlight — skills to improve vs. mastered, with a worked example", w: 2000, h: 858 },
-        { src: `${IMG}/so-growth.png`, alt: "Learning growth over time vs. the platform average", w: 2000, h: 718 },
-        { src: `${IMG}/so-support.png`, alt: "Support at Home — positive, actionable cards for parents", w: 2000, h: 581 },
+        {
+          src: `${IMG}/so-metrics.png`,
+          alt: "Today's progress — accuracy, effective learning time, and skills covered",
+          w: 2000,
+          h: 718,
+          note: {
+            title: "Quickly tell parents what happened this session",
+            logic: [
+              "Accuracy Rate — inferred from the keywords and problem-solving phrases in the transcript.",
+              "Effective Learning Time — the transcript stripped of opening/closing chatter, leaving the focused tutor–student exchanges.",
+              "Skills Covered — carried into the skills view below.",
+            ],
+            principle: { name: "Formative Assessment", body: "Skill-level feedback after each session lets instruction adapt to how it actually went." },
+          },
+        },
+        {
+          src: `${IMG}/so-skills.png`,
+          alt: "Session Skills Highlight — skills to improve vs. mastered, with a worked example",
+          w: 2000,
+          h: 858,
+          note: {
+            title: "A deeper look at what was practiced and mastered",
+            logic: [
+              "Practiced skills matched to Knowledge Components (KCs) via subject-specific keywords.",
+              "Tutor–student dialogue classified as mastered, confused, or skipped.",
+              "AI generates a matched worked example for each KC.",
+            ],
+            principle: { name: "Dual Channels", body: "Text and a visual example shown together aid memory and comprehension." },
+          },
+        },
+        {
+          src: `${IMG}/so-growth.png`,
+          alt: "Learning growth over time vs. the platform average",
+          w: 2000,
+          h: 718,
+          note: {
+            title: "Long-term progression across sessions",
+            logic: [
+              "Skill-mastery data aggregated across every session.",
+              "Compared against platform-wide averages.",
+              "Cumulative growth surfaced for trend reading.",
+            ],
+            principle: { name: "Goal Setting", body: "Seeing progress against a benchmark helps families set realistic learning goals." },
+          },
+        },
+        {
+          src: `${IMG}/so-support.png`,
+          alt: "Support at Home — positive, actionable cards for parents",
+          w: 2000,
+          h: 581,
+          note: {
+            title: "Reinforce learning at home with actionable tips",
+            logic: [
+              "Cards recommended from recently practiced skills.",
+              "Messages tailored to session performance and behavior cues.",
+              "Parents can download or open the relevant materials.",
+            ],
+            principle: { name: "Growth Mindset", body: "Cards like “Celebrate Every Win” nudge positive reinforcement and continuous growth." },
+          },
+        },
       ],
     },
     {
