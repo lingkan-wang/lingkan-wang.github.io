@@ -235,9 +235,11 @@ export function BumbleCaseStudy() {
         <Body text={b.crossPlatform.androidIphone.body} className="mt-3" />
       </Reveal>
       <Reveal className={`${WIDE} mt-8`}>
-        <div className="mx-auto grid max-w-[820px] items-start gap-8 sm:grid-cols-2">
+        {/* Columns sized 1.565:1 so the wide annotated still (0.756) and the tall
+            phone clip (0.483) render at the same height — tops and bottoms align. */}
+        <div className="mx-auto grid max-w-[760px] items-start gap-8 sm:grid-cols-[1.565fr_1fr]">
           <Shot img={b.crossPlatform.androidIphone.img} />
-          <div className="mx-auto w-full max-w-[280px]">
+          <div className="mx-auto w-full max-w-[280px] sm:max-w-none">
             <ClipTile clip={b.crossPlatform.androidIphone.clip} />
           </div>
         </div>
