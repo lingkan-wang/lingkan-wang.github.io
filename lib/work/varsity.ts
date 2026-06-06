@@ -247,8 +247,8 @@ export const varsity = {
         { title: "Evidence per skill", body: "Each row shows the skill, correctness rate, and practice count — the proof behind the label." },
       ],
       shots: [
-        { src: `${IMG}/skill-overview.png`, alt: "Skill breakdown overview with mastery badges", w: 1600, h: 907 },
-        { src: `${IMG}/skill-detail.png`, alt: "Detailed skill list with mastery filter", w: 1600, h: 1229 },
+        { src: `${IMG}/skill-breakdown-hover.png`, alt: "Skill Breakdown — mastery levels explained on hover", w: 2200, h: 1551 },
+        { src: `${IMG}/skill-breakdown-final.png`, alt: "Skill Breakdown — full skill table with correctness and practice count", w: 2200, h: 1564 },
       ],
     },
   ] as Pillar[],
