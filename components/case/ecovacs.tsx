@@ -46,7 +46,7 @@ function MediaTile({ media, chip, accent = false }: { media: Media; chip: string
     );
   }
   return (
-    <figure className="w-full max-w-[300px]">
+    <figure className="w-full max-w-[250px]">
       <figcaption className="mb-3 flex items-center gap-2.5">
         <Chip accent={accent}>{chip}</Chip>
         <span className="text-xs leading-tight text-muted">{media.caption}</span>
