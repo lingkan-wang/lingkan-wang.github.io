@@ -16,6 +16,16 @@ export type CodedWork = {
 
 export const codedWork: CodedWork[] = [
   {
+    slug: "journey-globe",
+    title: "Journey — a 2D map that morphs into a 3D globe",
+    blurb:
+      "A dotted world map that morphs into an interactive 3D globe (Three.js / WebGL, with a custom vertex-shader morph). Hover a glowing pin to reveal a photo and a short story from each place I've lived and worked — plus a Map/Globe toggle and chronological journey arcs.",
+    tags: ["Three.js", "WebGL", "Shaders"],
+    year: 2026,
+    live: "https://lingkan-wang.github.io/journey-globe/",
+    offset: 0,
+  },
+  {
     slug: "bubble-todo",
     title: "Bubble To-do — a blow-a-bubble sticky note",
     blurb:
