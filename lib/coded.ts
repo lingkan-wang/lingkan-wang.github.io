@@ -22,7 +22,7 @@ export const codedWork: CodedWork[] = [
       "A dotted world map that morphs into an interactive 3D globe (Three.js / WebGL, with a custom vertex-shader morph). Hover a glowing pin to reveal a photo and a short story from each place I've lived and worked — plus a Map/Globe toggle and chronological journey arcs.",
     tags: ["Three.js", "WebGL", "Shaders"],
     year: 2026,
-    live: "https://lingkan-wang.github.io/journey-globe/?v=16",
+    live: "https://lingkan-wang.github.io/journey-globe/?v=17",
     offset: 0,
   },
   {
