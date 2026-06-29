@@ -82,18 +82,36 @@ export const languages = [
 export const now = "Recently graduated from CMU — open to product design & design-engineering roles.";
 export const location = "United States";
 
-// Spotify: "Liked Songs" (/collection/tracks) is private and can't be embedded for
-// visitors. Leave `embed` empty to show a link card; set it to a PUBLIC playlist embed
-// (open.spotify.com/embed/playlist/<id>) to render an inline player.
-// Featured track for the custom (Emil-style) music player — cover + 30s preview
-// are hosted locally in public/about/. Swap these to feature a different song.
-export const track = {
-  title: "若生命等候",
-  artist: "黄凯芹",
-  cover: "/about/track-cover.jpg",
-  src: "/about/track.mp3",
-  href: "https://open.spotify.com/playlist/3qoECMXj5TWW5k3pZigU2U",
-};
+// Retro media-player playlist for the About bento. Prev / next cycle through these
+// tracks; the device screen shows the current track's `cover`, and Play streams the
+// 30s `src` preview. Cover art (image-cdn-*.spotifycdn.com) and audio (p.scdn.co) are
+// hot-linked straight from Spotify's own CDN — served by Spotify, not re-hosted here.
+// `href` opens the full track on Spotify. To change the set, swap these from a track's
+// Spotify embed page (open.spotify.com/embed/track/<id> → audioPreview.url) + oEmbed.
+export type Track = { title: string; artist: string; cover: string; src: string; href: string };
+
+const sp = (id: string) => `https://open.spotify.com/track/${id}`;
+
+export const playlist: Track[] = [
+  { title: "Alone Again (Naturally)", artist: "Gilbert O'Sullivan", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e028abe680fa0e457ec3e75d46d", src: "https://p.scdn.co/mp3-preview/e46728130abf301569ad71819ced73253d78ca12", href: sp("54pvEYFocTlvIAQOfXSjqV") },
+  { title: "Reality", artist: "Vladimir Cosma, Richard Sanderson", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e020e27181dac939d599730bed0", src: "https://p.scdn.co/mp3-preview/a3fd1eb329704500f231961b4731d5c2bdd32995", href: sp("1gci2QBGH5nzPWePv6ATom") },
+  { title: "十年", artist: "Eason Chan", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02822b40ed87abd5054b48f0aa", src: "https://p.scdn.co/mp3-preview/dad366d4bfb6b1ec4f2a2853d4939e7918433bc5", href: sp("25pWemriUQVrZ3yIiS2IBf") },
+  { title: "命に嫌われている。", artist: "majiko", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02ba6d07e00a59d8a88a9cab35", src: "https://p.scdn.co/mp3-preview/8fb18c1d540872b1c87c66d1f12d5b44c312abb7", href: sp("2lXu7SNGIKHJ8EV2EetYFa") },
+  { title: "一格格", artist: "Janice Vidal", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e0285210004c1befc58facac950", src: "https://p.scdn.co/mp3-preview/d52228a9caa28748f699676896554e15f381f71a", href: sp("5Hmldq1s1Ap8cSZBXpZquV") },
+  { title: "Lugu Lugu Kan-Ibi", artist: "David Darling & The Wulu Bunun", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02e9e718c57ceefe9569a0bb17", src: "https://p.scdn.co/mp3-preview/b73e853d07500c321209bdd96b48c21c37c92111", href: sp("089GXdPoG2srzax51gQptD") },
+  { title: "Stand By Me", artist: "Ben E. King", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02c155b31ab9e86a3d96359811", src: "https://p.scdn.co/mp3-preview/6fb6a44b929cf182198629dc2443c20206cfcd9c", href: sp("7jmHyHMEqm9MJWiMAneF05") },
+  { title: "Vienna", artist: "Billy Joel", cover: "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e026ce61113662ecf693b605ee5", src: "https://p.scdn.co/mp3-preview/20063b69f912e042929de74af0b77271ec3376c5", href: sp("4U45aEWtQhrm8A5mxPaFZ7") },
+  { title: "Can't Help Falling in Love", artist: "Elvis Presley", cover: "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02b184226408f981e3dd17c606", src: "https://p.scdn.co/mp3-preview/ddb3e782f04a42c4380d839e23a7e675a5b1f9ec", href: sp("44AyOl4qVkzS48vBsbNXaC") },
+  { title: "Cordeiro De Nanã", artist: "Os Tincoãs", cover: "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02099dde456cd1d70b5c47a66e", src: "https://p.scdn.co/mp3-preview/abd562ab64fdf6a039f3a35627e8e7efb18854ea", href: sp("59HAcR0hVejI7Od0kgibFg") },
+];
+
+// "Liked Songs" (open.spotify.com/collection/tracks) is private — it can't be read or
+// embedded for visitors without each one logging into the owner's account — so the
+// player uses the explicit list above instead.
+export const playlistHref = "https://open.spotify.com/collection/tracks";
+
+// Back-compat: earlier code referenced a single featured `track`.
+export const track = playlist[0];
 
 export const wechat = {
   id: "Lynkan",
