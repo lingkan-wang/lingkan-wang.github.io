@@ -22,7 +22,7 @@ export const codedWork: CodedWork[] = [
       "A prize-claim agreement you sign by drawing on the pad or typing your name in a script font, then watch re-traced stroke-by-stroke to verify the claim. Canvas capture + replay, collapsible legal terms, and Pending → Processing → Completed states. Built for masii.",
     tags: ["Vanilla JS", "Canvas", "Signature"],
     year: 2026,
-    live: "https://lingkan-wang.github.io/masii-sign/",
+    live: "/masii-sign/",
     offset: 0,
   },
   {

@@ -44,7 +44,7 @@
     min-height: 100dvh;
     display: grid;
     place-items: safe center; /* center when it fits, top-align (scrollable) when taller than the frame */
-    padding: 32px 16px;
+    padding: 16px 14px;
     background: #fafafa; /* match portfolio coded-work frame */
     color: var(--text-primary);
     font-family: "Sora", "SF Pro Display", system-ui, sans-serif;
@@ -75,7 +75,7 @@
   .doc-card {
     position: relative;
     text-align: left;
-    padding: 18px;
+    padding: 14px;
     border-radius: var(--radius-xl);
     background: #101012; /* solid dark surface: a masii UI card on the light canvas */
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -119,11 +119,11 @@
   .badge[data-state="completed"]  { background: rgba(146, 230, 174, 0.12); color: var(--green); }
 
   /* skeleton agreement body */
-  .doc-body { margin-top: 16px; }
+  .doc-body { margin-top: 12px; }
   .lead {
-    margin: 0 0 14px;
-    font-size: 12.5px;
-    line-height: 1.5;
+    margin: 0 0 9px;
+    font-size: 11.5px;
+    line-height: 1.45;
     color: var(--text-tertiary);
   }
   .skeleton { display: grid; gap: 9px; }
@@ -139,14 +139,14 @@
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 12px;
+    gap: 8px;
     counter-reset: clause;
   }
   .clauses li {
     position: relative;
-    padding-left: 28px;
-    font-size: 12px;
-    line-height: 1.5;
+    padding-left: 23px;
+    font-size: 11px;
+    line-height: 1.4;
     color: var(--text-tertiary);
     counter-increment: clause;
   }
@@ -154,10 +154,10 @@
     content: counter(clause);
     position: absolute;
     left: 0;
-    top: 1px;
-    width: 18px;
-    height: 18px;
-    border-radius: 6px;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--border-soft);
     color: var(--text-secondary);
@@ -177,13 +177,13 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-top: 12px;
+    margin-top: 9px;
     padding: 0;
     background: none;
     border: none;
     color: var(--text-secondary);
     font-family: inherit;
-    font-size: 12.5px;
+    font-size: 11.5px;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.2s var(--ease);
@@ -203,19 +203,19 @@
     overflow: hidden;
     transition: height 0.4s var(--ease);
   }
-  .terms .clauses { margin-top: 14px; }
+  .terms .clauses { margin-top: 10px; }
 
   .divider {
     height: 1px;
-    margin: 18px 0 14px;
+    margin: 12px 0 10px;
     background: var(--divider);
   }
 
   .sig-label {
-    font-size: 12.5px;
+    font-size: 11.5px;
     font-weight: 500;
     color: var(--text-tertiary);
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
 
   /* ---------- Swappable slot ---------- */
@@ -231,19 +231,19 @@
   .slot-inner.in { opacity: 1; transform: none; }
 
   /* Add-signature button (white pill, per reference) */
-  .add-btn-wrap { display: flex; justify-content: center; padding: 8px 0 4px; }
+  .add-btn-wrap { display: flex; justify-content: center; padding: 4px 0 2px; }
   .add-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    height: 44px;
-    padding: 0 22px;
+    height: 40px;
+    padding: 0 20px;
     border: none;
     border-radius: var(--radius-pill);
     background: #fafafa;
     color: #0a0a0a;
     font-family: inherit;
-    font-size: 14.5px;
+    font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease), background-color 0.18s var(--ease);
@@ -264,16 +264,16 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 14px 4px;
+    padding: 9px 12px 3px;
     color: var(--text-tertiary);
-    font-size: 12.5px;
+    font-size: 11.5px;
     font-weight: 500;
   }
-  .pad-head svg { width: 15px; height: 15px; }
+  .pad-head svg { width: 14px; height: 14px; }
 
   .pad-surface {
     position: relative;
-    height: 156px;
+    height: 112px;
   }
   .pad-surface canvas {
     position: absolute;
@@ -290,7 +290,7 @@
     place-items: center;
     pointer-events: none;
     color: var(--text-muted);
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 400;
     font-family: "Caveat", cursive;
     transition: opacity 0.25s var(--ease);
@@ -316,7 +316,7 @@
     text-align: center;
     color: var(--text-primary);
     font-family: "Sacramento", "Caveat", cursive;
-    font-size: 46px;
+    font-size: 36px;
     line-height: 1.1;
     padding: 0 16px;
     caret-color: var(--accent-purple);
@@ -331,7 +331,7 @@
     justify-content: center;
     color: var(--text-primary);
     font-family: "Sacramento", "Caveat", cursive;
-    font-size: 46px;
+    font-size: 36px;
     line-height: 1.1;
     padding: 0 16px;
     clip-path: inset(0 100% 0 0);
@@ -345,7 +345,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 14px;
+    padding: 9px 12px;
   }
   .seg {
     display: inline-flex;
@@ -357,8 +357,8 @@
   .seg button {
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 26px;
+    width: 28px;
+    height: 24px;
     border: none;
     border-radius: 7px;
     background: transparent;
@@ -377,9 +377,9 @@
     background: transparent;
     color: var(--text-secondary);
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 12.5px;
     font-weight: 500;
-    padding: 8px 6px;
+    padding: 6px 6px;
     cursor: pointer;
     transition: color 0.2s var(--ease);
   }
@@ -391,10 +391,10 @@
     background: #fafafa;
     color: #0a0a0a;
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 12.5px;
     font-weight: 600;
-    height: 34px;
-    padding: 0 18px;
+    height: 32px;
+    padding: 0 16px;
     cursor: pointer;
     transition: transform 0.18s var(--ease), opacity 0.2s var(--ease), background-color 0.2s var(--ease);
   }
@@ -411,31 +411,31 @@
     display: grid;
     justify-items: center;
     text-align: center;
-    padding: 26px 18px 28px;
+    padding: 20px 16px 22px;
     border: 1px solid var(--border-soft);
     border-radius: var(--radius-lg);
     background: rgba(0, 0, 0, 0.22);
   }
   .check {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     display: grid;
     place-items: center;
     background: rgba(146, 230, 174, 0.14);
     color: var(--green);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     transform: scale(0.6);
     opacity: 0;
     animation: pop 0.5s var(--ease) forwards;
   }
   .check svg { width: 24px; height: 24px; }
   @keyframes pop { to { transform: scale(1); opacity: 1; } }
-  .success-title { font-size: 16px; font-weight: 600; }
-  .success-sub { margin-top: 6px; font-size: 13px; color: var(--text-tertiary); }
+  .success-title { font-size: 15px; font-weight: 600; }
+  .success-sub { margin-top: 5px; font-size: 12px; color: var(--text-tertiary); }
 
   .reset {
-    margin-top: 22px;
+    margin-top: 14px;
     background: transparent;
     border: none;
     color: var(--text-muted);
@@ -459,17 +459,17 @@
       </div>
 
       <div class="doc-body">
-        <p class="lead">By affixing your signature below, you certify that you are the verified winner of this Drop and the rightful holder of this masii account, and that you accept the Official Drop Rules and Prize Claim Terms in their entirety. Your signature is captured and re-traced solely to authenticate this claim and authorize release of the prize.</p>
+        <p class="lead">By signing, you certify you are the verified winner of this Drop and the rightful holder of this masii account, and you accept the Official Drop Rules and Prize Claim Terms below.</p>
         <button class="terms-toggle" id="termsToggle" aria-expanded="false" aria-controls="terms">
           <span class="terms-label">Read full terms</span>
           <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>
         </button>
         <div class="terms" id="terms">
           <ol class="clauses">
-            <li><b>Eligibility.</b> The prize is awarded to the entrant selected in this Drop's verified random draw. Claimants must be 18 or older and resident in an eligible region.</li>
-            <li><b>Identity.</b> The name and details on this masii account must match the claimant. Additional verification may be requested before release.</li>
-            <li><b>Delivery.</b> Verified prizes are dispatched within 14 business days. Prizes are non-transferable and carry no cash alternative.</li>
-            <li><b>Forfeiture.</b> masii may void this claim if the entry breached the Official Drop Rules or if verification is not completed within 30 days.</li>
+            <li><b>Eligibility.</b> Awarded to the entrant from this Drop's verified random draw; claimants must be 18+ and in an eligible region.</li>
+            <li><b>Identity.</b> The name on this masii account must match the claimant; extra verification may be requested before release.</li>
+            <li><b>Delivery.</b> Verified prizes ship within 14 business days. Non-transferable, no cash alternative.</li>
+            <li><b>Forfeiture.</b> masii may void the claim for a rules breach or if verification is not completed within 30 days.</li>
           </ol>
         </div>
       </div>
@@ -552,6 +552,10 @@
     state = "signing";
     strokes = [];
     mode = "draw";
+
+    // keep the whole signing area in the frame: collapse the terms if they're open
+    const tt = document.getElementById("termsToggle");
+    if (tt && tt.getAttribute("aria-expanded") === "true") tt.click();
 
     const pad = document.createElement("div");
     pad.className = "pad";
