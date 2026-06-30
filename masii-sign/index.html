@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>masii · Claim your Drop</title>
+<!-- Demo prototype: Google Fonts <link> is fine for a local prototype; self-host for production. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Sacramento&family=Caveat:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg-app: #090909;
+    --bg-surface-glass: rgba(22, 22, 22, 0.78);
+    --bg-control: #1f1f1f;
+    --bg-control-2: #242424;
+
+    --text-primary: #f4f4f5;
+    --text-secondary: #b7b5bd;
+    --text-tertiary: #76737b;
+    --text-muted: #55525a;
+
+    --border-soft: rgba(255, 255, 255, 0.08);
+    --border-medium: rgba(255, 255, 255, 0.14);
+    --divider: rgba(255, 255, 255, 0.07);
+
+    --accent-purple: #9b7cff;
+    --gold: #ffd449;
+    --green: #92e6ae;
+
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-pill: 999px;
+
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: grid;
+    place-items: safe center; /* center when it fits, top-align (scrollable) when taller than the frame */
+    padding: 16px 26px;
+    background: #fafafa; /* match portfolio coded-work frame */
+    color: var(--text-primary);
+    font-family: "Sora", "SF Pro Display", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* faint cool wash so the light canvas isn't flat dead-white */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(50% 40% at 50% 36%, rgba(21, 106, 243, 0.05), transparent 70%);
+    z-index: 0;
+  }
+
+  .stage {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 412px;
+    text-align: center;
+  }
+
+  /* ---------- Document card ---------- */
+  .doc-card {
+    position: relative;
+    text-align: left;
+    padding: 14px;
+    border-radius: var(--radius-xl);
+    background: #101012; /* solid dark surface: a masii UI card on the light canvas */
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 18px 44px rgba(15, 23, 42, 0.18),
+      0 4px 12px rgba(15, 23, 42, 0.10);
+  }
+
+  .doc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .doc-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    letter-spacing: 0.005em;
+  }
+
+  /* status badge */
+  .badge {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: color 0.4s var(--ease), background-color 0.4s var(--ease);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+  }
+  .badge[data-state="processing"] { background: rgba(255, 212, 73, 0.12); color: var(--gold); }
+  .badge[data-state="completed"]  { background: rgba(146, 230, 174, 0.12); color: var(--green); }
+
+  /* skeleton agreement body */
+  .doc-body { margin-top: 12px; }
+  .lead {
+    margin: 0 0 9px;
+    font-size: 11.5px;
+    line-height: 1.45;
+    color: var(--text-tertiary);
+  }
+  .skeleton { display: grid; gap: 9px; }
+  .bar {
+    height: 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* numbered agreement clauses */
+  .clauses {
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    counter-reset: clause;
+  }
+  .clauses li {
+    position: relative;
+    padding-left: 23px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--text-tertiary);
+    counter-increment: clause;
+  }
+  .clauses li::before {
+    content: counter(clause);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-soft);
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .clauses b {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  /* collapsible terms */
+  .terms-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 9px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s var(--ease);
+  }
+  .terms-toggle:hover { color: var(--text-primary); }
+  .terms-toggle .chev {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    transform-origin: center;
+    transition: transform 0.3s var(--ease);
+  }
+  .terms-toggle .chev svg { width: 14px; height: 14px; display: block; }
+  .terms-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+  .terms {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.4s var(--ease);
+  }
+  .terms .clauses { margin-top: 10px; }
+
+  .divider {
+    height: 1px;
+    margin: 12px 0 10px;
+    background: var(--divider);
+  }
+
+  .sig-label {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+  }
+
+  /* ---------- Swappable slot ---------- */
+  .slot {
+    overflow: hidden;
+    transition: height 0.45s var(--ease);
+  }
+  .slot-inner {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+  }
+  .slot-inner.in { opacity: 1; transform: none; }
+
+  /* Add-signature button (white pill, per reference) */
+  .add-btn-wrap { display: flex; justify-content: center; padding: 4px 0 2px; }
+  .add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 20px;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: #fafafa;
+    color: #0a0a0a;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease), background-color 0.18s var(--ease);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  }
+  .add-btn:hover { background: #fff; }
+  .add-btn:active { transform: translateY(1px) scale(0.99); }
+  .add-btn svg { width: 16px; height: 16px; }
+
+  /* ---------- Signature pad ---------- */
+  .pad {
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    background: rgba(0, 0, 0, 0.28);
+    overflow: hidden;
+  }
+  .pad-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px 3px;
+    color: var(--text-tertiary);
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .pad-head svg { width: 14px; height: 14px; }
+
+  .pad-surface {
+    position: relative;
+    height: 112px;
+  }
+  .pad-surface canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    touch-action: none;
+  }
+  .placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    font-weight: 400;
+    font-family: "Caveat", cursive;
+    transition: opacity 0.25s var(--ease);
+  }
+
+  /* type-mode field */
+  .type-field {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .pad[data-mode="type"] .type-field { display: flex; }
+  .pad[data-mode="type"] canvas,
+  .pad[data-mode="type"] .placeholder { display: none; }
+
+  .type-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    text-align: center;
+    color: var(--text-primary);
+    font-family: "Sacramento", "Caveat", cursive;
+    font-size: 36px;
+    line-height: 1.1;
+    padding: 0 16px;
+    caret-color: #fff;
+  }
+  .type-input::placeholder { color: var(--text-muted); }
+  /* element used to replay the typed signature with a reveal + glow */
+  .type-replay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    font-family: "Sacramento", "Caveat", cursive;
+    font-size: 36px;
+    line-height: 1.1;
+    padding: 0 16px;
+    clip-path: inset(0 100% 0 0);
+    white-space: nowrap;
+  }
+
+  .pad-divider { height: 1px; background: var(--border-soft); margin: 0 14px; }
+
+  /* toolbar */
+  .pad-tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+  }
+  .seg {
+    display: inline-flex;
+    padding: 3px;
+    gap: 2px;
+    border-radius: 10px;
+    background: var(--bg-control);
+  }
+  .seg button {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 24px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .seg button svg { width: 15px; height: 15px; }
+  .seg button.active { background: var(--bg-control-2); color: var(--text-primary); }
+  .seg button:disabled { cursor: default; }
+
+  .spacer { flex: 1; }
+
+  .ghost-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 500;
+    padding: 6px 6px;
+    cursor: pointer;
+    transition: color 0.2s var(--ease);
+  }
+  .ghost-btn:hover { color: var(--text-primary); }
+
+  .confirm-btn {
+    border: none;
+    border-radius: var(--radius-pill);
+    background: #fafafa;
+    color: #0a0a0a;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    height: 32px;
+    padding: 0 16px;
+    cursor: pointer;
+    transition: transform 0.18s var(--ease), opacity 0.2s var(--ease), background-color 0.2s var(--ease);
+  }
+  .confirm-btn:hover:not(:disabled) { background: #fff; }
+  .confirm-btn:active:not(:disabled) { transform: translateY(1px) scale(0.99); }
+  .confirm-btn:disabled {
+    background: var(--bg-control-2);
+    color: var(--text-muted);
+    cursor: default;
+  }
+
+  /* ---------- Success block ---------- */
+  .success {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    padding: 20px 16px 22px;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    background: rgba(0, 0, 0, 0.22);
+  }
+  .check {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(146, 230, 174, 0.14);
+    color: var(--green);
+    margin-bottom: 12px;
+    transform: scale(0.6);
+    opacity: 0;
+    animation: pop 0.5s var(--ease) forwards;
+  }
+  .check svg { width: 24px; height: 24px; }
+  @keyframes pop { to { transform: scale(1); opacity: 1; } }
+  .success-title { font-size: 15px; font-weight: 600; }
+  .success-sub { margin-top: 5px; font-size: 12px; color: var(--text-tertiary); }
+
+  .reset {
+    margin-top: 14px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+  }
+  .reset:hover { color: var(--text-secondary); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+  <main class="stage">
+    <section class="doc-card" aria-label="Prize claim agreement">
+      <div class="doc-head">
+        <span class="doc-name">AirPods Max Drop · Claim Agreement</span>
+        <span class="badge" id="badge" data-state="pending">Pending</span>
+      </div>
+
+      <div class="doc-body">
+        <p class="lead">By signing, you certify you are the verified winner of this Drop and the rightful holder of this masii account, and you accept the Official Drop Rules and Prize Claim Terms below.</p>
+        <button class="terms-toggle" id="termsToggle" aria-expanded="false" aria-controls="terms">
+          <span class="terms-label">Read full terms</span>
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>
+        </button>
+        <div class="terms" id="terms">
+          <ol class="clauses">
+            <li><b>Eligibility.</b> Awarded to the entrant from this Drop's verified random draw; claimants must be 18+ and in an eligible region.</li>
+            <li><b>Identity.</b> The name on this masii account must match the claimant; extra verification may be requested before release.</li>
+            <li><b>Delivery.</b> Verified prizes ship within 14 business days. Non-transferable, no cash alternative.</li>
+            <li><b>Forfeiture.</b> masii may void the claim for a rules breach or if verification is not completed within 30 days.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="sig-label">Winner signature</div>
+
+      <div class="slot" id="slot"><div class="slot-inner in" id="slotInner"></div></div>
+    </section>
+  </main>
+
+<script>
+(() => {
+  "use strict";
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---- icons (line glyphs, Lucide-style paths) ----
+  const ICON = {
+    pen:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    type: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/></svg>',
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+  };
+
+  const slot = document.getElementById("slot");
+  const badge = document.getElementById("badge");
+
+  let state = "idle";        // idle | signing | verifying | done
+  let mode = "draw";         // draw | type
+  let strokes = [];          // [[{x,y},...], ...]
+
+  // canvas refs (set when pad mounts)
+  let canvas, ctx, dpr = 1, drawing = false, current = null;
+
+  function setBadge(s, label) { badge.dataset.state = s; badge.textContent = label; }
+
+  /* Swap the slot content with a height + fade animation. */
+  function setSlot(node) {
+    const inner = document.createElement("div");
+    inner.className = "slot-inner";
+    inner.appendChild(node);
+
+    const startH = slot.offsetHeight;
+    slot.replaceChildren(inner);
+    const endH = inner.offsetHeight;
+
+    if (reduce) {
+      slot.style.height = "auto";
+      inner.classList.add("in");
+      return;
+    }
+    slot.style.height = startH + "px";
+    requestAnimationFrame(() => {
+      slot.style.height = endH + "px";
+      inner.classList.add("in");
+    });
+    slot.addEventListener("transitionend", function te(e) {
+      if (e.propertyName !== "height") return;
+      slot.style.height = "auto";
+      slot.removeEventListener("transitionend", te);
+    });
+  }
+
+  /* ---------------- idle: the Add signature button ---------------- */
+  function renderIdle() {
+    state = "idle";
+    setBadge("pending", "Pending");
+    const wrap = document.createElement("div");
+    wrap.className = "add-btn-wrap";
+    const btn = document.createElement("button");
+    btn.className = "add-btn";
+    btn.innerHTML = ICON.pen + "<span>Add signature</span>";
+    btn.addEventListener("click", renderPad);
+    wrap.appendChild(btn);
+    setSlot(wrap);
+  }
+
+  /* ---------------- signing: the pad ---------------- */
+  function renderPad() {
+    state = "signing";
+    strokes = [];
+    mode = "draw";
+
+    // keep the whole signing area in the frame: collapse the terms if they're open
+    const tt = document.getElementById("termsToggle");
+    if (tt && tt.getAttribute("aria-expanded") === "true") tt.click();
+
+    const pad = document.createElement("div");
+    pad.className = "pad";
+    pad.dataset.mode = "draw";
+    pad.innerHTML = `
+      <div class="pad-head"><span class="pad-icon">${ICON.pen}</span><span class="pad-mode">Draw signature</span></div>
+      <div class="pad-surface">
+        <canvas></canvas>
+        <div class="placeholder">Sign here</div>
+        <div class="type-field">
+          <input class="type-input" type="text" autocomplete="off" spellcheck="false"
+                 maxlength="22" placeholder="Type your name" aria-label="Type your signature" />
+        </div>
+        <div class="type-replay"></div>
+      </div>
+      <div class="pad-divider"></div>
+      <div class="pad-tools">
+        <div class="seg" role="tablist" aria-label="Signature mode">
+          <button class="seg-draw active" title="Draw" aria-label="Draw">${ICON.pen}</button>
+          <button class="seg-type" title="Type" aria-label="Type">${ICON.type}</button>
+        </div>
+        <span class="spacer"></span>
+        <button class="ghost-btn cancel">Cancel</button>
+        <button class="confirm-btn" disabled>Confirm</button>
+      </div>`;
+
+    setSlot(pad);
+
+    // wire up after layout
+    requestAnimationFrame(() => initPad(pad));
+  }
+
+  function initPad(pad) {
+    const placeholder = pad.querySelector(".placeholder");
+    const headIcon = pad.querySelector(".pad-icon");
+    const headMode = pad.querySelector(".pad-mode");
+    const segDraw = pad.querySelector(".seg-draw");
+    const segType = pad.querySelector(".seg-type");
+    const input = pad.querySelector(".type-input");
+    const cancel = pad.querySelector(".cancel");
+    const confirm = pad.querySelector(".confirm-btn");
+
+    canvas = pad.querySelector("canvas");
+    sizeCanvas();
+
+    function updateConfirm() {
+      const ok = mode === "draw"
+        ? strokes.some(s => s.length > 1)
+        : input.value.trim().length > 0;
+      confirm.disabled = !ok;
+    }
+
+    function switchMode(next) {
+      mode = next;
+      pad.dataset.mode = next;
+      segDraw.classList.toggle("active", next === "draw");
+      segType.classList.toggle("active", next === "type");
+      headIcon.innerHTML = next === "draw" ? ICON.pen : ICON.type;
+      headMode.textContent = next === "draw" ? "Draw signature" : "Type signature";
+      // single active signature: clear the other mode
+      if (next === "draw") { input.value = ""; }
+      else { clearCanvas(); placeholder.style.opacity = "1"; }
+      if (next === "type") setTimeout(() => input.focus(), 60);
+      updateConfirm();
+    }
+
+    segDraw.addEventListener("click", () => switchMode("draw"));
+    segType.addEventListener("click", () => switchMode("type"));
+    input.addEventListener("input", updateConfirm);
+    cancel.addEventListener("click", renderIdle);
+    confirm.addEventListener("click", () => verify(pad, input));
+
+    // ---- drawing ----
+    function pos(e) {
+      const r = canvas.getBoundingClientRect();
+      return { x: e.clientX - r.left, y: e.clientY - r.top };
+    }
+    canvas.addEventListener("pointerdown", (e) => {
+      if (mode !== "draw") return;
+      drawing = true;
+      try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
+      placeholder.style.opacity = "0";
+      current = [pos(e)];
+      strokes.push(current);
+    });
+    canvas.addEventListener("pointermove", (e) => {
+      if (!drawing || mode !== "draw") return;
+      const p = pos(e);
+      const prev = current[current.length - 1];
+      current.push(p);
+      strokePath(prev, p);
+    });
+    const end = () => { if (!drawing) return; drawing = false; current = null; updateConfirm(); };
+    canvas.addEventListener("pointerup", end);
+    canvas.addEventListener("pointercancel", end);
+    canvas.addEventListener("pointerleave", end);
+
+    window.addEventListener("resize", onResize);
+    function onResize() { if (state === "signing") { sizeCanvas(); redrawAll(); } }
+  }
+
+  function sizeCanvas() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const r = canvas.getBoundingClientRect();
+    canvas.width = Math.round(r.width * dpr);
+    canvas.height = Math.round(r.height * dpr);
+    ctx = canvas.getContext("2d");
+    ctx.scale(dpr, dpr);
+    setStroke();
+  }
+  function setStroke() {
+    ctx.lineWidth = 2.6;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = "#f4f4f5";
+  }
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    strokes = [];
+  }
+  function strokePath(a, b) {
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  }
+  function redrawAll() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    setStroke();
+    strokes.forEach(s => {
+      for (let i = 1; i < s.length; i++) strokePath(s[i - 1], s[i]);
+    });
+  }
+
+  /* ---------------- verifying: the replay ---------------- */
+  function verify(pad, input) {
+    if (state !== "signing") return;
+    state = "verifying";
+    setBadge("processing", "Processing");
+
+    // lock the toolbar
+    pad.querySelectorAll("button").forEach(b => b.disabled = true);
+    const confirm = pad.querySelector(".confirm-btn");
+    confirm.textContent = "Verifying…";
+
+    const onDone = () => setTimeout(() => renderSuccess(), 520);
+
+    if (mode === "draw") replayDraw(onDone);
+    else replayType(pad, input.value.trim(), onDone);
+  }
+
+  function replayDraw(done) {
+    // flatten points, marking sub-path starts
+    const pts = [];
+    strokes.forEach(s => s.forEach((p, i) => pts.push({ x: p.x, y: p.y, move: i === 0 })));
+    if (pts.length < 2 || reduce) { redrawAll(); done(); return; }
+
+    const duration = 1600;
+    const t0 = performance.now();
+
+    function frame(now) {
+      const prog = Math.min(1, (now - t0) / duration);
+      const target = Math.max(2, Math.floor(prog * pts.length));
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      setStroke();
+      // crisp body of the already-traced part
+      ctx.beginPath();
+      for (let i = 0; i < target; i++) {
+        const p = pts[i];
+        if (p.move || i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.stroke();
+      // purple glow on the leading head
+      const headStart = Math.max(1, target - 6);
+      ctx.save();
+      ctx.shadowColor = "rgba(155,124,255,0.9)";
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.moveTo(pts[headStart - 1].x, pts[headStart - 1].y);
+      for (let i = headStart; i < target; i++) {
+        const p = pts[i];
+        if (p.move) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      if (prog < 1) requestAnimationFrame(frame);
+      else { redrawAll(); done(); }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function replayType(pad, text, done) {
+    const input = pad.querySelector(".type-input");
+    const replay = pad.querySelector(".type-replay");
+    input.style.visibility = "hidden";
+    replay.textContent = text;
+    replay.style.display = "flex";
+
+    if (reduce) { replay.style.clipPath = "inset(0 0 0 0)"; done(); return; }
+
+    const duration = 1400;
+    const t0 = performance.now();
+    replay.style.textShadow = "0 0 16px rgba(155,124,255,0.65)";
+
+    function frame(now) {
+      const prog = Math.min(1, (now - t0) / duration);
+      const eased = 1 - Math.pow(1 - prog, 3);
+      replay.style.clipPath = `inset(0 ${(1 - eased) * 100}% 0 0)`;
+      if (prog < 1) requestAnimationFrame(frame);
+      else { replay.style.textShadow = "none"; done(); }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------------- done: success ---------------- */
+  function renderSuccess() {
+    state = "done";
+    setBadge("completed", "Completed");
+    const box = document.createElement("div");
+    box.className = "success";
+    box.innerHTML = `
+      <div class="check">${ICON.check}</div>
+      <div class="success-title">Claim verified</div>
+      <div class="success-sub">Your signature checks out. Your Drop is on its way.</div>
+      <button class="reset">Sign another</button>`;
+    box.querySelector(".reset").addEventListener("click", renderIdle);
+    setSlot(box);
+  }
+
+  /* ---------------- collapsible terms ---------------- */
+  (() => {
+    const toggle = document.getElementById("termsToggle");
+    const terms = document.getElementById("terms");
+    const label = toggle.querySelector(".terms-label");
+    let settle = null;
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      clearTimeout(settle);
+      const full = terms.scrollHeight;
+      // commit an explicit start height, force a reflow, then set the target so the
+      // transition runs. (Avoid rAF here: it is throttled when the tab is backgrounded.)
+      if (open) {
+        terms.style.height = full + "px";
+        void terms.offsetHeight;
+        terms.style.height = "0px";
+        toggle.setAttribute("aria-expanded", "false");
+        label.textContent = "Read full terms";
+      } else {
+        terms.style.height = "0px";
+        void terms.offsetHeight;
+        terms.style.height = full + "px";
+        toggle.setAttribute("aria-expanded", "true");
+        label.textContent = "Hide full terms";
+        // resolve to auto after the transition so later reflow can't clip the clauses
+        settle = setTimeout(() => { terms.style.height = "auto"; }, 420);
+      }
+    });
+  })();
+
+  renderIdle();
+})();
+</script>
+</body>
+</html>
