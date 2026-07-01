@@ -105,227 +105,230 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
 
   return (
     <div className="pt-20 sm:pt-24">
-      {/* ───────────── HERO ───────────── */}
-      <header className={SHELL}>
-        <Reveal>
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
-            <h1 className="max-w-3xl text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
-              {hero.title}
-            </h1>
-            <ul className="flex shrink-0 flex-wrap gap-2 sm:pt-2">
-              {hero.tags.map((t) => (
-                <li key={t}>
-                  <Chip>{t}</Chip>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">{hero.sub}</p>
-        </Reveal>
-        <Reveal delay={0.05} className="mt-10">
-          <Plate src={hero.media} alt={hero.mediaAlt} />
-        </Reveal>
-      </header>
-
-      {/* ───────────── BODY: sticky TOC + content ───────────── */}
-      <div className={`${SHELL} mt-20 sm:mt-24 md:grid md:grid-cols-[168px_minmax(0,1fr)] md:gap-10 lg:gap-14 xl:gap-20`}>
+      {/* ── LAYOUT: sticky TOC rail (left, from the top) + content column (right) ── */}
+      <div className={`${SHELL} md:grid md:grid-cols-[168px_minmax(0,1fr)] md:gap-10 lg:gap-14 xl:gap-20`}>
         <aside className="hidden md:block">
           <div className="sticky top-24">
             <CaseToc items={toc} eyebrow="Case Study" title={ecovacs.shortTitle} />
           </div>
         </aside>
 
-        <div className="min-w-0 space-y-24 sm:space-y-32">
-          {/* ─── OVERVIEW ─── */}
-          <section id="overview" className={GAP}>
-            <SectionHead label="Overview" title={overview.statement} />
-            <Reveal className={`mt-7 ${PROSE}`}>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-muted">Note</p>
-              <p className="mt-3 text-[15px] leading-7 text-fg/90">{overview.note}</p>
-            </Reveal>
-            <Reveal className="mt-10 border-t border-border pt-8">
-              <MetaGrid meta={overview.meta} />
-            </Reveal>
-            <Reveal className={`mt-10 ${PROSE}`}>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-muted">What I owned</p>
-              <ul className="mt-4 space-y-3">
-                {overview.scope.map((s) => (
-                  <Bullet key={s}>{s}</Bullet>
-                ))}
-              </ul>
-            </Reveal>
-          </section>
-
-          {/* ─── GOALS ─── */}
-          <section id="goals" className={GAP}>
-            <SectionHead label="Goals" title={goals.statement} />
-            <Reveal className={`mt-5 ${PROSE}`}>
-              <p className="text-[15px] leading-7 text-fg/90">{goals.intro}</p>
-            </Reveal>
-            <Reveal className="mt-8">
-              <div className="grid gap-4 sm:grid-cols-3">
-                {goals.items.map((g, i) => (
-                  <NumberedCard key={g.title} n={`0${i + 1}`} title={g.title} body={g.body} />
-                ))}
+        <div className="min-w-0">
+          {/* ───────────── HERO ───────────── */}
+          <header>
+            <Reveal>
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
+                <h1 className="max-w-3xl text-balance text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
+                  {hero.title}
+                </h1>
+                <ul className="flex shrink-0 flex-wrap gap-2 sm:pt-2">
+                  {hero.tags.map((t) => (
+                    <li key={t}>
+                      <Chip>{t}</Chip>
+                    </li>
+                  ))}
+                </ul>
               </div>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">{hero.sub}</p>
             </Reveal>
-          </section>
+            <Reveal delay={0.05} className="mt-10">
+              <Plate src={hero.media} alt={hero.mediaAlt} />
+            </Reveal>
+          </header>
 
-          {/* ─── CORE PROBLEMS ─── */}
-          <section id="problems" className={GAP}>
-            <SectionHead label="Core problems" title={problems.statement} />
-            <Reveal className={`mt-5 ${PROSE}`}>
-              <p className="text-[15px] leading-7 text-fg/90">{problems.intro}</p>
-            </Reveal>
-            <Reveal className="mt-8">
-              <div className="grid gap-4 sm:grid-cols-3">
-                {problems.cards.map((c) => (
-                  <div key={c.title} className="flex h-full flex-col rounded-2xl border border-border p-5">
-                    <div className="text-3xl font-semibold tracking-tight tabular-nums sm:text-[2rem]">
-                      <StatCounter value={c.stat.value} suffix={c.stat.suffix} />
-                    </div>
-                    <h3 className="mt-4 text-base font-semibold tracking-tight">{c.title}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-6 text-muted">{c.body}</p>
-                    <p className="mt-4 border-t border-border pt-3 text-xs leading-5 text-muted/80">{c.stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-            <Reveal className="mt-10">
-              <p className="mb-6 font-mono text-xs uppercase tracking-widest text-muted">In their words</p>
-              <div className="grid gap-4 sm:grid-cols-3">
-                {problems.voices.map((q) => (
-                  <QuoteCard key={q.name} {...q} />
-                ))}
-              </div>
-            </Reveal>
-          </section>
-
-          {/* ─── IMPACT (up front) ─── */}
-          <section id="impact" className={GAP}>
-            <SectionHead label="Impact" title={impact.statement} />
-            <Reveal className={`mt-5 ${PROSE}`}>
-              <p className="text-[15px] leading-7 text-fg/90">{impact.intro}</p>
-            </Reveal>
-            <Reveal className="mt-10 border-t border-border pt-10">
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
-                {impact.stats.map((s) => (
-                  <div key={s.label}>
-                    <dt className="text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
-                      <StatCounter value={s.value} suffix={s.suffix} />
-                    </dt>
-                    <dd className="mt-3 text-sm leading-6 text-muted">{s.label}</dd>
-                  </div>
-                ))}
-              </dl>
-            </Reveal>
-          </section>
-
-          {/* ─── DESIGN CHALLENGES (HMW) ─── */}
-          {challenges.map((ch) => (
-            <section key={ch.id} id={ch.id} className={GAP}>
-              <SectionHead label={`Challenge ${ch.num} · ${ch.feature}`} title={ch.hmw} />
-              <Reveal className={`mt-5 ${PROSE}`}>
-                <p className="text-[15px] leading-7 text-fg/90">{ch.approach}</p>
-                {ch.detail && (
-                  <ul className="mt-5 space-y-3">
-                    {ch.detail.map((d) => (
-                      <Bullet key={d}>{d}</Bullet>
-                    ))}
-                  </ul>
-                )}
+          {/* ───────────── SECTIONS ───────────── */}
+          <div className="mt-24 space-y-24 sm:mt-32 sm:space-y-32">
+            {/* ─── OVERVIEW ─── */}
+            <section id="overview" className={GAP}>
+              <SectionHead label="Overview" title={overview.statement} />
+              <Reveal className={`mt-7 ${PROSE}`}>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">Note</p>
+                <p className="mt-3 text-[15px] leading-7 text-fg/90">{overview.note}</p>
               </Reveal>
+              <Reveal className="mt-10 border-t border-border pt-8">
+                <MetaGrid meta={overview.meta} />
+              </Reveal>
+              <Reveal className={`mt-10 ${PROSE}`}>
+                <p className="font-mono text-[10px] uppercase tracking-widest text-muted">What I owned</p>
+                <ul className="mt-4 space-y-3">
+                  {overview.scope.map((s) => (
+                    <Bullet key={s}>{s}</Bullet>
+                  ))}
+                </ul>
+              </Reveal>
+            </section>
 
-              {/* before (col 1) / after [+ then] (col 2) */}
-              <Reveal className="mt-9">
-                <div className="grid items-start gap-x-8 gap-y-10 sm:grid-cols-2">
-                  <MediaTile media={ch.before} chip="Before" />
-                  {ch.extras && ch.extras.length > 0 ? (
-                    <div className="flex gap-4">
-                      <div className="min-w-0 flex-1">
-                        <MediaTile media={ch.after} chip="After" accent />
-                      </div>
-                      {ch.extras.map((m, i) => (
-                        <div key={i} className="min-w-0 flex-1">
-                          <MediaTile media={m} chip="Then" />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <MediaTile media={ch.after} chip="After" accent />
-                  )}
+            {/* ─── GOALS ─── */}
+            <section id="goals" className={GAP}>
+              <SectionHead label="Goals" title={goals.statement} />
+              <Reveal className={`mt-5 ${PROSE}`}>
+                <p className="text-[15px] leading-7 text-fg/90">{goals.intro}</p>
+              </Reveal>
+              <Reveal className="mt-8">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {goals.items.map((g, i) => (
+                    <NumberedCard key={g.title} n={`0${i + 1}`} title={g.title} body={g.body} />
+                  ))}
                 </div>
               </Reveal>
+            </section>
 
-              {ch.note && (
-                <Reveal className="mt-6">
-                  <div className="rounded-2xl border border-border bg-fg/[0.02] p-6 sm:p-7">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{ch.note.title}</p>
-                    <p className="mt-3 text-[15px] leading-7 text-fg/90">{ch.note.body}</p>
+            {/* ─── CORE PROBLEMS ─── */}
+            <section id="problems" className={GAP}>
+              <SectionHead label="Core problems" title={problems.statement} />
+              <Reveal className={`mt-5 ${PROSE}`}>
+                <p className="text-[15px] leading-7 text-fg/90">{problems.intro}</p>
+              </Reveal>
+              <Reveal className="mt-8">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {problems.cards.map((c) => (
+                    <div key={c.title} className="flex h-full flex-col rounded-2xl border border-border p-5">
+                      <div className="text-3xl font-semibold tracking-tight tabular-nums sm:text-[2rem]">
+                        <StatCounter value={c.stat.value} suffix={c.stat.suffix} />
+                      </div>
+                      <h3 className="mt-4 text-base font-semibold tracking-tight">{c.title}</h3>
+                      <p className="mt-2 flex-1 text-sm leading-6 text-muted">{c.body}</p>
+                      <p className="mt-4 border-t border-border pt-3 text-xs leading-5 text-muted/80">{c.stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+              <Reveal className="mt-10">
+                <p className="mb-6 font-mono text-xs uppercase tracking-widest text-muted">In their words</p>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {problems.voices.map((q) => (
+                    <QuoteCard key={q.name} {...q} />
+                  ))}
+                </div>
+              </Reveal>
+            </section>
+
+            {/* ─── IMPACT (up front) ─── */}
+            <section id="impact" className={GAP}>
+              <SectionHead label="Impact" title={impact.statement} />
+              <Reveal className={`mt-5 ${PROSE}`}>
+                <p className="text-[15px] leading-7 text-fg/90">{impact.intro}</p>
+              </Reveal>
+              <Reveal className="mt-10 border-t border-border pt-10">
+                <dl className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
+                  {impact.stats.map((s) => (
+                    <div key={s.label}>
+                      <dt className="text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl">
+                        <StatCounter value={s.value} suffix={s.suffix} />
+                      </dt>
+                      <dd className="mt-3 text-sm leading-6 text-muted">{s.label}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </Reveal>
+            </section>
+
+            {/* ─── DESIGN CHALLENGES (HMW) ─── */}
+            {challenges.map((ch) => (
+              <section key={ch.id} id={ch.id} className={GAP}>
+                <SectionHead label={`Challenge ${ch.num} · ${ch.feature}`} title={ch.hmw} />
+                <Reveal className={`mt-5 ${PROSE}`}>
+                  <p className="text-[15px] leading-7 text-fg/90">{ch.approach}</p>
+                  {ch.detail && (
+                    <ul className="mt-5 space-y-3">
+                      {ch.detail.map((d) => (
+                        <Bullet key={d}>{d}</Bullet>
+                      ))}
+                    </ul>
+                  )}
+                </Reveal>
+
+                {/* before (col 1) / after [+ then] (col 2) */}
+                <Reveal className="mt-9">
+                  <div className="grid items-start gap-x-8 gap-y-10 sm:grid-cols-2">
+                    <MediaTile media={ch.before} chip="Before" />
+                    {ch.extras && ch.extras.length > 0 ? (
+                      <div className="flex gap-4">
+                        <div className="min-w-0 flex-1">
+                          <MediaTile media={ch.after} chip="After" accent />
+                        </div>
+                        {ch.extras.map((m, i) => (
+                          <div key={i} className="min-w-0 flex-1">
+                            <MediaTile media={m} chip="Then" />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <MediaTile media={ch.after} chip="After" accent />
+                    )}
                   </div>
                 </Reveal>
-              )}
-            </section>
-          ))}
 
-          {/* ─── MORE IMPROVEMENTS ─── */}
-          <section id="more" className={GAP}>
-            <SectionHead label="More improvements" title="More that rounded out the X2." />
-            <Reveal className={`mt-5 ${PROSE}`}>
-              <p className="text-[15px] leading-7 text-fg/90">{improvements.intro}</p>
-            </Reveal>
-            <div className="mt-12 space-y-16 sm:mt-14 sm:space-y-24">
-              {improvements.items.map((it, i) => (
-                <Reveal key={it.title}>
-                  <div className="grid items-center gap-8 sm:grid-cols-2 sm:gap-12">
-                    <div className={i % 2 === 1 ? "sm:order-2" : ""}>
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{it.kicker}</p>
-                      <h3 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[1.7rem]">{it.title}</h3>
-                      <p className="mt-4 max-w-prose text-[15px] leading-7 text-fg/90">{it.body}</p>
+                {ch.note && (
+                  <Reveal className="mt-6">
+                    <div className="rounded-2xl border border-border bg-fg/[0.02] p-6 sm:p-7">
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{ch.note.title}</p>
+                      <p className="mt-3 text-[15px] leading-7 text-fg/90">{ch.note.body}</p>
                     </div>
-                    <div className={i % 2 === 1 ? "sm:order-1" : ""}>
-                      <div className={`flex justify-center ${it.media.length > 1 ? "gap-3 sm:gap-4" : ""}`}>
-                        {it.media.map((m, j) => {
-                          const two = it.media.length > 1;
-                          return (
-                            <div key={j} className={`w-full max-w-[250px] ${two ? "min-w-0 flex-1" : "mx-auto"}`}>
-                              <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
-                                {m.video ? (
-                                  <ShotVideo src={m.video} poster={m.poster} alt={it.title} />
-                                ) : (
-                                  <Image src={m.img!} alt={it.title} fill sizes="250px" className="rounded-[2.5rem] object-cover object-top" />
-                                )}
+                  </Reveal>
+                )}
+              </section>
+            ))}
+
+            {/* ─── MORE IMPROVEMENTS ─── */}
+            <section id="more" className={GAP}>
+              <SectionHead label="More improvements" title="More that rounded out the X2." />
+              <Reveal className={`mt-5 ${PROSE}`}>
+                <p className="text-[15px] leading-7 text-fg/90">{improvements.intro}</p>
+              </Reveal>
+              <div className="mt-12 space-y-16 sm:mt-14 sm:space-y-24">
+                {improvements.items.map((it, i) => (
+                  <Reveal key={it.title}>
+                    <div className="grid items-center gap-8 sm:grid-cols-2 sm:gap-12">
+                      <div className={i % 2 === 1 ? "sm:order-2" : ""}>
+                        <p className="font-mono text-[10px] uppercase tracking-widest text-accent">{it.kicker}</p>
+                        <h3 className="mt-3 text-2xl font-semibold tracking-tight sm:text-[1.7rem]">{it.title}</h3>
+                        <p className="mt-4 max-w-prose text-[15px] leading-7 text-fg/90">{it.body}</p>
+                      </div>
+                      <div className={i % 2 === 1 ? "sm:order-1" : ""}>
+                        <div className={`flex justify-center ${it.media.length > 1 ? "gap-3 sm:gap-4" : ""}`}>
+                          {it.media.map((m, j) => {
+                            const two = it.media.length > 1;
+                            return (
+                              <div key={j} className={`w-full max-w-[250px] ${two ? "min-w-0 flex-1" : "mx-auto"}`}>
+                                <div className="relative aspect-[400/838] w-full overflow-hidden rounded-[2.5rem] border border-border bg-white">
+                                  {m.video ? (
+                                    <ShotVideo src={m.video} poster={m.poster} alt={it.title} />
+                                  ) : (
+                                    <Image src={m.img!} alt={it.title} fill sizes="250px" className="rounded-[2.5rem] object-cover object-top" />
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </section>
-
-          {/* ─── NEXT STEPS ─── */}
-          <section id="next" className={GAP}>
-            <SectionHead label="Next steps" title={nextSteps.statement} />
-            <Reveal className={`mt-5 ${PROSE}`}>
-              <p className="text-[15px] leading-7 text-fg/90">{nextSteps.body}</p>
-            </Reveal>
-          </section>
-
-          {/* ─── TAKEAWAYS ─── */}
-          <section id="takeaways" className={GAP}>
-            <SectionHead label="Takeaways" title="What this taught me." />
-            <Reveal className={`mt-6 ${PROSE}`}>
-              <div className="space-y-8">
-                {takeaways.map((t, i) => (
-                  <Takeaway key={t.title} n={`0${i + 1}`} title={t.title} body={t.body} />
+                  </Reveal>
                 ))}
               </div>
-            </Reveal>
-          </section>
+            </section>
+
+            {/* ─── NEXT STEPS ─── */}
+            <section id="next" className={GAP}>
+              <SectionHead label="Next steps" title={nextSteps.statement} />
+              <Reveal className={`mt-5 ${PROSE}`}>
+                <p className="text-[15px] leading-7 text-fg/90">{nextSteps.body}</p>
+              </Reveal>
+            </section>
+
+            {/* ─── TAKEAWAYS ─── */}
+            <section id="takeaways" className={GAP}>
+              <SectionHead label="Takeaways" title="What this taught me." />
+              <Reveal className={`mt-6 ${PROSE}`}>
+                <div className="space-y-8">
+                  {takeaways.map((t, i) => (
+                    <Takeaway key={t.title} n={`0${i + 1}`} title={t.title} body={t.body} />
+                  ))}
+                </div>
+              </Reveal>
+            </section>
+          </div>
         </div>
       </div>
     </div>
