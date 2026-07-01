@@ -1,12 +1,17 @@
 // Structured content for the Ecovacs DEEBOT X2 case study.
-// Feature-led narrative (marco.fyi-style): cinematic intro → 3 feature chapters
-// → careful rollout → qualitative impact → takeaways. Images in /public/work/ecovacs/.
-// VIDEO slots are placeholders until the Vimeo demos are exported in.
+// Storytelling structure modeled on georgialyu.com/brix.html: a sticky left
+// table-of-contents, then Overview -> Goals -> Problems (quantified) -> Impact
+// (up front) -> three HMW design challenges -> More -> Next steps -> Takeaways.
+// Numbers are the real captioned metrics from the original research/impact data.
+// Media lives in /public/work/ecovacs/.
 const IMG = "/work/ecovacs";
 
 export type Meta = { label: string; items: string[] };
 export type Quote = { name: string; quote: string; avatar: string };
 export type Card = { title: string; body: string };
+export type Stat = { value: number; suffix?: string; label: string };
+export type ProblemCard = { stat: Stat; title: string; body: string };
+
 // A before/after media unit. `placeholder` = footage not yet supplied (shows a
 // labelled box); `video` = a real demo clip with a poster frame.
 export type Media =
@@ -15,11 +20,13 @@ export type Media =
   | { kind: "video"; src: string; poster: string; alt: string; caption: string }
   | { kind: "photos"; items: { src: string; w: number; h: number; alt: string }[]; caption: string };
 
-export type Chapter = {
-  kicker: string;
-  title: string;
-  problem: string;
-  solution: string;
+export type Challenge = {
+  id: string; // anchor + TOC id
+  num: string; // "01"
+  feature: string; // short label for the TOC, e.g. "Mapping"
+  hmw: string; // the How-Might-We question (section headline)
+  approach: string; // how we solved it
+  detail?: string[]; // optional supporting points
   before: Media;
   after: Media;
   extras?: Media[]; // additional "after" clips (e.g. the result screen)
@@ -36,37 +43,74 @@ export type ImprovementItem = {
 };
 
 export const ecovacs = {
+  shortTitle: "DEEBOT X2",
+
   hero: {
-    kicker: "Product Builder · 2024 · Ecovacs Robotics",
-    headline: "Robot vacuums promised autonomy. They shipped a manual.",
-    sub: "Reworking the DEEBOT X2 from a robot you operate into one you trust — one-tap AI cleaning, a map that draws itself, and pet-safe navigation.",
-    meta: [
-      { label: "Role", items: ["Product Builder"] },
-      { label: "Team", items: ["Product Design", "Software Eng", "Machine Learning", "Hardware R&D", "Product Mgmt"] },
-      { label: "Skills", items: ["Product Strategy", "Research Synthesis", "Interaction Design", "System Logic", "Prototyping"] },
-      { label: "Timeline", items: ["May–Aug 2024", "12 weeks"] },
-    ] as Meta[],
+    title: "Robot vacuums promised autonomy. They shipped a manual.",
+    tags: ["B2C", "AI Smart Home", "Consumer Mobile"],
+    sub: "Reworking the DEEBOT X2 from a robot you operate into one you trust: one-tap AI cleaning, a map that draws itself, and pet-safe navigation.",
     media: `${IMG}/hero.webp`,
     mediaAlt: "DEEBOT X2 app — auto mapping, AI cleaning, and Lab features",
   },
 
-  problem: {
+  overview: {
+    statement: "An AI auto-cleaning experience that replaces complex manual setup with one-tap intelligent control.",
+    note: "ECOVACS positioned the DEEBOT X2 as fully autonomous, but rising customer complaints told another story. The hardware was capable; the experience still asked people to edit maps, choose between a dozen settings, and hope it avoided the worst messes. I led the design that closed the gap between what the robot could do and how intelligent it actually felt.",
+    meta: [
+      { label: "Role", items: ["Product Designer"] },
+      { label: "Team", items: ["Product Design", "Software Eng", "Machine Learning", "Hardware R&D", "Product Mgmt"] },
+      { label: "Skills", items: ["Product Strategy", "Research Synthesis", "Interaction Design", "System Logic", "Prototyping"] },
+      { label: "Timeline", items: ["May to Aug 2024", "12 weeks"] },
+    ] as Meta[],
+    scope: [
+      "Defined success metrics and guardrails, and aligned five teams on one product contract.",
+      "Turned usability findings into a prioritized roadmap, MVP scope, and acceptance criteria.",
+      "Partnered with Robotics, ML, and Eng so the UI matched real robot constraints, model confidence, and failure modes.",
+      "Shipped an AI hosting system that cut configuration without sacrificing safety or cleaning quality.",
+    ],
+  },
+
+  goals: {
+    statement: "Make autonomy feel effortless, and earn trust at the riskiest moments.",
     intro:
-      "The X2 was packed with capability — but TikTok and e-commerce reviews told another story. People found it complicated and, at worst, untrustworthy. Three pain points came up again and again.",
-    cards: [
+      "The X2 did not need more features. It needed fewer decisions and more confidence. Three goals framed the work:",
+    items: [
       {
-        title: "Setup was a chore",
-        body: "Before the first clean, users had to divide rooms by hand, draw virtual walls, and walk through a long setup. A rough first impression — and it hit almost everyone.",
+        title: "Make mapping feel truly automatic",
+        body: "Auto-mapping existed, but users still split rooms, renamed spaces, and fixed boundaries. Cut those corrections so mapping feels confident on its own, especially for first-timers who expect plug-and-play.",
       },
       {
-        title: "Too many knobs",
-        body: "Suction, water flow, cleaning passes… more than ten parameters, with no clear way to choose. The product felt complicated instead of smart.",
+        title: "Take decisions off the user",
+        body: "Instead of asking people to configure the robot, shift the call to the system: let AI read floor types and usage patterns, then recommend or apply the right settings.",
       },
       {
-        title: "Pet-waste accidents",
-        body: "Sometimes the robot failed to recognize pet waste and smeared it across the house. Rare — but catastrophic. It broke trust instantly.",
+        title: "Design for trust in high-risk moments",
+        body: "Pet-waste failures destroyed trust. Prioritize high-risk detection and clear system feedback so the robot feels dependable, not unpredictable.",
       },
     ] as Card[],
+  },
+
+  problems: {
+    statement: "Autonomy that still felt manual.",
+    intro:
+      "The X2 was packed with capability, but TikTok and e-commerce reviews told another story: people found it complicated and, at worst, untrustworthy. We combined complaint analysis, App Store review mining, and interviews with pet owners and first-timers. Three pain points came up again and again.",
+    cards: [
+      {
+        stat: { value: 38, suffix: "%", label: "of negative feedback tied to mapping confusion and manual editing" },
+        title: "Setup was a chore",
+        body: "Before the first clean, users divided rooms by hand, drew virtual walls, and walked a long setup. A rough first impression that hit almost everyone.",
+      },
+      {
+        stat: { value: 72, suffix: "%", label: "of testers hesitated or changed cleaning settings before starting" },
+        title: "Too many knobs",
+        body: "Suction, water flow, cleaning passes: more than ten parameters, with no clear way to choose. The product felt complicated instead of smart.",
+      },
+      {
+        stat: { value: 33, suffix: "%", label: "of runs failed to avoid high-risk obstacles in pet-home tests" },
+        title: "Pet-waste accidents",
+        body: "Sometimes the robot failed to recognize pet waste and smeared it across the house. Rare, but catastrophic. It broke trust instantly.",
+      },
+    ] as ProblemCard[],
     voices: [
       { name: "Robert Rose", quote: "I thought it was automatic, but I still had to redraw the map myself. It feels more manual than smart.", avatar: `${IMG}/avatar-1.jpg` },
       { name: "Alex Smith", quote: "There are too many cleaning settings. I don't know which one to choose.", avatar: `${IMG}/avatar-2.jpg` },
@@ -74,27 +118,31 @@ export const ecovacs = {
     ] as Quote[],
   },
 
-  priorities: {
+  impact: {
+    statement: "The autonomy finally felt like autonomy.",
     intro:
-      "We had more requests than we could build — voice control, scheduling, and more. So instead of guessing, we ranked every issue by two things:",
-    criteria: [
-      "How much it hurts the core experience",
-      "How broadly it hits users — or how severe it is when it does",
-    ],
-    bets: [
-      { title: "Mapping", body: "Shapes the very first experience and touches almost every user." },
-      { title: "AI auto-cleaning", body: "Simplifies the core daily job by removing manual configuration." },
-      { title: "Pet-waste detection", body: "Low-frequency, high-severity — when it fails, trust is gone." },
-    ] as Card[],
+      "After launch, the experience told a different story than the complaints that started it. Setup got out of the way, the AI mode became the default behavior, and trust returned.",
+    stats: [
+      { value: 93, suffix: "%", label: "less setup time with one-tap AI cleaning" },
+      { value: 65, suffix: "%", label: "fewer manual interactions per clean" },
+      { value: 92, suffix: "%", label: "preferred AI cleaning over manual mode" },
+      { value: 50, suffix: "%", label: "lift in purchase intent" },
+    ] as Stat[],
   },
 
-  chapters: [
+  challenges: [
     {
-      kicker: "Solution 01 · Mapping",
-      title: "A map that draws itself.",
-      problem: "Manual room-splitting and virtual walls turned setup into a chore.",
-      solution:
-        "Now the robot generates the map, divides rooms, and labels each room type on its own. Users only review and make small tweaks — setup goes from a task to a glance.",
+      id: "mapping",
+      num: "01",
+      feature: "Mapping",
+      hmw: "How might we make setup something that just happens, not a chore?",
+      approach:
+        "Now the robot generates the map, divides rooms, and labels each room type on its own. People only review and make small tweaks. Setup goes from a task to a glance.",
+      detail: [
+        "A contextual first-run prompt gives simple prep tips, then guides users in when no map exists yet.",
+        "Mapping runs long, so interruptions are explicit: early-exit warnings prevent accidental data loss.",
+        "After the scan, people name the floor and adjust labels only for the rare correction.",
+      ],
       before: {
         kind: "image",
         src: `${IMG}/before-mapping.png`,
@@ -112,11 +160,17 @@ export const ecovacs = {
       },
     },
     {
-      kicker: "Solution 02 · AI Auto-Cleaning",
-      title: "One tap. The robot decides the rest.",
-      problem: "A dozen cleaning settings users didn't know how to choose.",
-      solution:
-        "Tap Start, and the system reads each room's type and floor material to pick the strategy itself — suction, water, passes. The experience shifts from manual control to something that behaves like an agent working on your behalf.",
+      id: "cleaning",
+      num: "02",
+      feature: "AI Cleaning",
+      hmw: "How might we replace a dozen settings with a single, trustworthy tap?",
+      approach:
+        "Tap Start, and the system reads each room's type and floor material to pick the strategy itself: suction, water, passes. The experience shifts from manual control to something that behaves like an agent working on your behalf.",
+      detail: [
+        "AI hosting sits at the whole-home cleaning entry, visible and one tap away, not buried in settings.",
+        "Advanced parameters move to a separate custom tab, so power users keep full control.",
+        "A first-time explainer sets expectations, a live status shows AI is driving, and a post-clean report makes every decision traceable.",
+      ],
       before: {
         kind: "image",
         src: `${IMG}/before-cleaning.png`,
@@ -130,7 +184,7 @@ export const ecovacs = {
         src: `${IMG}/demo-ai-cleaning.mp4`,
         poster: `${IMG}/demo-ai-cleaning-poster.jpg`,
         alt: "AI auto-cleaning — one tap and the robot picks the strategy",
-        caption: "One tap — AI picks the strategy",
+        caption: "One tap, AI picks the strategy",
       },
       extras: [
         {
@@ -138,19 +192,20 @@ export const ecovacs = {
           src: `${IMG}/demo-ai-cleaning-result.mp4`,
           poster: `${IMG}/demo-ai-cleaning-result-poster.jpg`,
           alt: "Cleaning complete — the robot hands back a clear report",
-          caption: "…and hands back a cleaning report",
+          caption: "Then hands back a report",
         },
       ],
     },
     {
-      kicker: "Solution 03 · Pet-Safe Navigation",
-      title: "Never smear it again.",
-      problem: "A single pet-waste accident was enough to lose a user for good.",
-      solution:
-        "We retrained the recognition system to reliably detect pet waste and steer around it mid-clean — turning the scariest failure mode into a non-event.",
+      id: "pet",
+      num: "03",
+      feature: "Pet-Safe",
+      hmw: "How might we make the scariest failure a non-event?",
+      approach:
+        "We retrained the recognition system to reliably detect pet waste and steer around it mid-clean, turning the worst failure mode into a non-event.",
       before: {
         kind: "photos",
-        caption: "Ran over pet waste — smeared across the house",
+        caption: "Ran over pet waste, smeared across the house",
         items: [
           { src: `${IMG}/before-pet-rug.png`, w: 899, h: 1352, alt: "Pet waste smeared in long streaks across the living-room rug" },
           { src: `${IMG}/before-pet-robot.png`, w: 983, h: 1356, alt: "The robot's underside and roller brush caked with pet waste" },
@@ -165,31 +220,10 @@ export const ecovacs = {
       },
       note: {
         title: "An honest trade-off",
-        body: "In build, a real constraint surfaced: pet-waste detection and fine-particle cleaning couldn't run at the same time. Rather than silently pick one, we designed a clear toggle with an explanation — so users make an informed choice for their own home.",
+        body: "In build, a real constraint surfaced: pet-waste detection and fine-particle cleaning could not run at the same time. Rather than silently pick one, we shipped a clear toggle with an explanation, so people make an informed choice for their own home.",
       },
     },
-  ] as Chapter[],
-
-  rollout: {
-    title: "Shipping it carefully.",
-    intro:
-      "The feature wasn't fully stable yet, so we didn't push it to everyone at once. We launched it as an experimental “Lab” feature first — which paid off in three ways:",
-    reasons: [
-      { title: "The right early users", body: "People who opt into experimental features tolerate rough edges and are eager to try new things." },
-      { title: "Real-world data", body: "We learned actual accuracy and usage patterns from real homes, not just internal tests." },
-      { title: "A safe exit", body: "If something broke, we could roll it back fast — without hurting the overall product." },
-    ] as Card[],
-    outro: "Once the data stabilized and we trusted the quality, we rolled it out more broadly.",
-  },
-
-  impact: {
-    headline: "The autonomy finally felt like autonomy.",
-    results: [
-      "Users got started much faster, with far less setup friction.",
-      "Adoption of the AI cleaning mode climbed.",
-      "Complaints about complexity fell — replaced by feedback that the product felt smarter and easier to use.",
-    ],
-  },
+  ] as Challenge[],
 
   improvements: {
     intro:
@@ -198,13 +232,13 @@ export const ecovacs = {
       {
         kicker: "Yiko · Voice",
         title: "Just say it out loud.",
-        body: "We refined Yiko, the on-device voice assistant — start a clean, send the robot to a specific room, or pause it, all hands-free without ever opening the app.",
+        body: "We refined Yiko, the on-device voice assistant, so people can start a clean, send the robot to a specific room, or pause it, all hands-free without ever opening the app.",
         media: [{ video: `${IMG}/demo-yiko.mp4`, poster: `${IMG}/demo-yiko-poster.jpg` }],
       },
       {
         kicker: "Onboarding",
-        title: "Guided Custom Cleaning Experience",
-        body: "Guided onboarding was introduced to help users learn how to add custom cleaning areas, select zones on the map, and activate AI-assisted cleaning. With contextual instructions embedded directly in the interface, advanced cleaning features become easier to understand and more approachable for new users.",
+        title: "Guided custom cleaning.",
+        body: "Guided onboarding helps users learn how to add custom cleaning areas, select zones on the map, and turn on AI-assisted cleaning. Contextual instructions sit right in the interface, so advanced features feel approachable for new users.",
         media: [
           { img: `${IMG}/improvement-guided.png`, w: 1332, h: 2896 },
           { img: `${IMG}/improvement-guided-2.png`, w: 1332, h: 2896 },
@@ -212,8 +246,8 @@ export const ecovacs = {
       },
       {
         kicker: "Scheduling",
-        title: "Smarter Scheduling Across Cleaning Modes",
-        body: "The scheduling flow was expanded to support full-home, custom, and zone-based cleaning with repeat options and reusable presets. This gives users greater flexibility to plan routines in advance and tailor cleaning tasks to different rooms, floors, and household scenarios.",
+        title: "Smarter scheduling across modes.",
+        body: "The scheduling flow now supports full-home, custom, and zone-based cleaning with repeat options and reusable presets. People can plan routines in advance and tailor tasks to different rooms, floors, and household scenarios.",
         media: [
           { img: `${IMG}/improvement-scheduling.png`, w: 1332, h: 2896 },
           { img: `${IMG}/improvement-scheduling-2.png`, w: 1332, h: 2896 },
@@ -222,10 +256,15 @@ export const ecovacs = {
     ] as ImprovementItem[],
   },
 
+  nextSteps: {
+    statement: "Where this goes next.",
+    body: "After launch, we extended the Yiko settings architecture to support growing AI capabilities: voice control with a reviewable interaction history, intelligent error detection that replaces error codes with visual fixes, and smart consumables reminders.",
+  },
+
   takeaways: [
     {
       title: "Start with real household behavior",
-      body: "The sharpest insights came from messy real homes — pets, clutter, first-time setups — not the lab. Design for the room, not the spec sheet.",
+      body: "People do not think in cleaning modes. They think in outcomes: make my home clean, and do not bother me. The value came from removing decisions, not adding options.",
     },
     {
       title: "Design for trust, not just automation",
@@ -233,7 +272,7 @@ export const ecovacs = {
     },
     {
       title: "AI should feel invisible but dependable",
-      body: "The win wasn't more controls — it was fewer. The system makes the call, stays transparent about it, and earns the right to be trusted by default.",
+      body: "The win was not more controls, it was fewer. The system makes the call, stays transparent about it, and earns the right to be trusted by default.",
     },
   ] as Card[],
 };
