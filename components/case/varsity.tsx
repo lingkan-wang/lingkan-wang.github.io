@@ -7,19 +7,9 @@ import { Carousel } from "./carousel";
 import { StatCounter } from "./stat-counter";
 import { Emph, MetaGrid, NumberedCard, Takeaway } from "./elements";
 import { CaseToc, type TocItem } from "./case-toc";
-import { CaseShell, SectionHead, MiniLabel, Bullet, Chip, GAP, STAGE } from "./scaffold";
+import { CaseShell, SectionHead, SubHead, MiniLabel, Bullet, Chip, GAP, STAGE } from "./scaffold";
 
 const BODY = "text-base leading-[1.4] text-fg/90"; // reference body: 16px
-
-/** A within-section sub-heading (smaller than a SectionHead), for merged blocks. */
-function SubHead({ label, title }: { label: string; title: string }) {
-  return (
-    <>
-      <p className="font-mono text-[0.8rem] uppercase tracking-[0.06em] text-muted">{label}</p>
-      <h3 className="mt-2 text-[1.5rem] font-normal leading-[1.2] tracking-tight sm:text-[1.7rem]">{title}</h3>
-    </>
-  );
-}
 
 /** A bordered, rounded screenshot — or a labelled placeholder when no asset yet. */
 function Shot({ shot, className = "" }: { shot: ShotT; className?: string }) {

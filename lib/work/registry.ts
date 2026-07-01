@@ -3,6 +3,7 @@ import type { Project } from "@/lib/projects";
 import { EcovacsCaseStudy } from "@/components/case/ecovacs";
 import { VarsityCaseStudy } from "@/components/case/varsity";
 import { BumbleCaseStudy } from "@/components/case/bumble";
+import { KwaiCaseStudy } from "@/components/case/kwai";
 
 /**
  * Slugs that render a bespoke, richly-composed case study instead of the generic
@@ -12,4 +13,5 @@ export const richCaseStudies: Record<string, ComponentType<{ meta: Project }>> =
   "ecovacs-ai-cleaning": EcovacsCaseStudy,
   "varsity-tutors-parent-dashboard": VarsityCaseStudy,
   "bumble-interest-cards": BumbleCaseStudy,
+  "kwai-guild-dashboard": KwaiCaseStudy,
 };

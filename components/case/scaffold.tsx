@@ -58,6 +58,16 @@ export function MiniLabel({ children, accent }: { children: ReactNode; accent?: 
   );
 }
 
+/** A within-section sub-heading (smaller than SectionHead) for merged blocks. */
+export function SubHead({ label, title }: { label: string; title: string }) {
+  return (
+    <>
+      <MiniLabel>{label}</MiniLabel>
+      <h3 className="mt-2 text-[1.5rem] font-normal leading-[1.2] tracking-tight sm:text-[1.7rem]">{title}</h3>
+    </>
+  );
+}
+
 /** A bulleted list item with an accent dot. */
 export function Bullet({ children }: { children: ReactNode }) {
   return (
