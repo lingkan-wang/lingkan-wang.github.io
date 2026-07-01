@@ -5,46 +5,10 @@ import { ecovacs } from "@/lib/work/ecovacs";
 import { Reveal } from "@/components/reveal";
 import { Plate } from "./shots";
 import { ShotVideo } from "./shot-video";
-import { SectionLabel, MetaGrid, QuoteCard, NumberedCard, Takeaway } from "./elements";
+import { MetaGrid, QuoteCard, NumberedCard, Takeaway } from "./elements";
 import { CaseToc, type TocItem } from "./case-toc";
 import { Stage, StageScreen, StageArrow, PhoneFrame } from "./stage";
-
-const SHELL = "mx-auto w-[min(1180px,92vw)]";
-const PROSE = "max-w-none"; // text runs to the content-column right edge (aligns with cards)
-const GAP = "scroll-mt-24"; // clears the sticky top nav on anchor jumps
-
-function Chip({ children, accent }: { children: string; accent?: boolean }) {
-  return (
-    <span
-      className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-[0.8rem] uppercase tracking-[0.06em] ${
-        accent ? "border-accent/40 bg-accent/[0.06] text-accent" : "border-border text-muted"
-      }`}
-    >
-      {children}
-    </span>
-  );
-}
-
-/** A section's eyebrow label + large headline, revealed together. */
-function SectionHead({ label, title }: { label: string; title: string }) {
-  return (
-    <Reveal>
-      <SectionLabel>{label}</SectionLabel>
-      <h2 className="mt-3 text-[2rem] font-normal leading-[1.3] sm:text-[2.4rem]">
-        {title}
-      </h2>
-    </Reveal>
-  );
-}
-
-function Bullet({ children }: { children: React.ReactNode }) {
-  return (
-    <li className="flex gap-3 text-base leading-[1.4] text-fg/90">
-      <span className="mt-[11px] size-1.5 shrink-0 rounded-full bg-accent" />
-      <span>{children}</span>
-    </li>
-  );
-}
+import { SHELL, PROSE, GAP, Chip, SectionHead, Bullet } from "./scaffold";
 
 export function EcovacsCaseStudy(_props: { meta: Project }) {
   const { hero, overview, goals, problems, impact, challenges, improvements, nextSteps, takeaways } = ecovacs;
