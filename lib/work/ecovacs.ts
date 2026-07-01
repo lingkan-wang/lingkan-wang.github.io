@@ -1,8 +1,8 @@
 // Structured content for the Ecovacs DEEBOT X2 case study.
-// Storytelling structure modeled on georgialyu.com/brix.html: a sticky left
-// table-of-contents, then Overview -> Goals -> Problems (quantified) -> Impact
-// (up front) -> three HMW design challenges -> More -> Next steps -> Takeaways.
-// Numbers are the real captioned metrics from the original research/impact data.
+// Storytelling structure modeled on georgialyu.com/opusclip.html: a sticky left
+// table-of-contents, then Overview -> Goals -> Problems -> Impact (up front) ->
+// three HMW design challenges -> More -> Next steps -> Takeaways.
+// Impact and problem framing is qualitative on purpose: no fabricated metrics.
 // Media lives in /public/work/ecovacs/.
 const IMG = "/work/ecovacs";
 
@@ -10,7 +10,8 @@ export type Meta = { label: string; items: string[] };
 export type Quote = { name: string; quote: string; avatar: string };
 export type Card = { title: string; body: string };
 export type Stat = { value: number; suffix?: string; label: string };
-export type ProblemCard = { stat: Stat; title: string; body: string };
+export type ProblemCard = { tag: string; title: string; body: string };
+export type Outcome = { kicker: string; statement: string; support: string };
 
 // A before/after media unit. `placeholder` = footage not yet supplied (shows a
 // labelled box); `video` = a real demo clip with a poster frame.
@@ -46,7 +47,7 @@ export const ecovacs = {
   shortTitle: "DEEBOT X2",
 
   hero: {
-    title: "Robot vacuums promised autonomy. They shipped a manual.",
+    title: "AI-powered Autonomous Home Cleaning System",
     tags: ["B2C", "AI Smart Home", "Consumer Mobile"],
     sub: "Reworking the DEEBOT X2 from a robot you operate into one you trust: one-tap AI cleaning, a map that draws itself, and pet-safe navigation.",
     media: `${IMG}/hero.webp`,
@@ -96,17 +97,17 @@ export const ecovacs = {
       "The X2 was packed with capability, but TikTok and e-commerce reviews told another story: people found it complicated and, at worst, untrustworthy. We combined complaint analysis, App Store review mining, and interviews with pet owners and first-timers. Three pain points came up again and again.",
     cards: [
       {
-        stat: { value: 38, suffix: "%", label: "of negative feedback tied to mapping confusion and manual editing" },
+        tag: "First impression",
         title: "Setup was a chore",
         body: "Before the first clean, users divided rooms by hand, drew virtual walls, and walked a long setup. A rough first impression that hit almost everyone.",
       },
       {
-        stat: { value: 72, suffix: "%", label: "of testers hesitated or changed cleaning settings before starting" },
+        tag: "Everyday friction",
         title: "Too many knobs",
         body: "Suction, water flow, cleaning passes: more than ten parameters, with no clear way to choose. The product felt complicated instead of smart.",
       },
       {
-        stat: { value: 33, suffix: "%", label: "of runs failed to avoid high-risk obstacles in pet-home tests" },
+        tag: "Trust-breaker",
         title: "Pet-waste accidents",
         body: "Sometimes the robot failed to recognize pet waste and smeared it across the house. Rare, but catastrophic. It broke trust instantly.",
       },
@@ -122,12 +123,23 @@ export const ecovacs = {
     statement: "The autonomy finally felt like autonomy.",
     intro:
       "After launch, the experience told a different story than the complaints that started it. Setup got out of the way, the AI mode became the default behavior, and trust returned.",
-    stats: [
-      { value: 93, suffix: "%", label: "less setup time with one-tap AI cleaning" },
-      { value: 65, suffix: "%", label: "fewer manual interactions per clean" },
-      { value: 92, suffix: "%", label: "preferred AI cleaning over manual mode" },
-      { value: 50, suffix: "%", label: "lift in purchase intent" },
-    ] as Stat[],
+    outcomes: [
+      {
+        kicker: "Setup",
+        statement: "Setup got out of the way",
+        support: "One-tap AI cleaning replaced manual map editing, room-splitting, and the long first-run setup.",
+      },
+      {
+        kicker: "Adoption",
+        statement: "AI cleaning became the default",
+        support: "People let the system read the room and pick the strategy, instead of tuning a dozen settings by hand.",
+      },
+      {
+        kicker: "Trust",
+        statement: "Trust came back",
+        support: "Pet-waste, the scariest failure, became a non-event, and feedback shifted from “too complex” to “feels smart.”",
+      },
+    ] as Outcome[],
   },
 
   challenges: [

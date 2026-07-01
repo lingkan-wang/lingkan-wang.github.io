@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 
 export function SectionLabel({ children }: { children: ReactNode }) {
-  return <p className="font-mono text-xs uppercase tracking-widest text-muted">{children}</p>;
+  return <p className="font-mono text-[0.8rem] uppercase tracking-[0.06em] text-muted">{children}</p>;
 }
 
 /** Renders *emphasis* spans as medium-weight (not italic) for a refined look. */
@@ -28,8 +28,8 @@ export function MetaGrid({ meta }: { meta: readonly { label: string; items: read
     <dl className="grid grid-cols-2 gap-x-8 gap-y-7 sm:grid-cols-4">
       {meta.map((m) => (
         <div key={m.label}>
-          <dt className="font-mono text-[10px] uppercase tracking-widest text-muted">{m.label}</dt>
-          <dd className="mt-2 space-y-0.5 text-sm text-fg/90">
+          <dt className="font-mono text-[0.8rem] uppercase tracking-[0.06em] text-muted">{m.label}</dt>
+          <dd className="mt-1.5 space-y-0.5 text-sm text-fg/90">
             {m.items.map((it) => (
               <div key={it}>{it}</div>
             ))}
@@ -43,7 +43,7 @@ export function MetaGrid({ meta }: { meta: readonly { label: string; items: read
 export function QuoteCard({ name, quote, avatar }: { name: string; quote: string; avatar: string }) {
   return (
     <figure className="flex h-full flex-col rounded-2xl border border-border bg-fg/[0.02] p-5 transition-colors hover:border-fg/20">
-      <blockquote className="flex-1 text-[15px] leading-7 text-fg/90">“{quote}”</blockquote>
+      <blockquote className="flex-1 text-base leading-[1.4] text-fg/90">“{quote}”</blockquote>
       <figcaption className="mt-4 flex items-center gap-2.5">
         <Image src={avatar} alt="" width={32} height={32} className="size-8 rounded-full object-cover" />
         <span className="text-sm font-medium">{name}</span>
@@ -56,7 +56,7 @@ export function NumberedCard({ n, title, body }: { n: string; title: string; bod
   return (
     <div className="rounded-2xl border border-border p-5 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-fg/20">
       <span className="font-mono text-xs text-accent">{n}</span>
-      <h3 className="mt-2 text-base font-semibold tracking-tight">{title}</h3>
+      <h3 className="mt-2 text-base font-normal tracking-tight">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
     </div>
   );
@@ -66,8 +66,8 @@ export function Takeaway({ n, title, body }: { n: string; title: string; body: s
   return (
     <div className="border-t border-border pt-5">
       <span className="font-mono text-xs text-muted">{n}</span>
-      <h3 className="mt-1 text-lg font-semibold tracking-tight">{title}</h3>
-      <p className="mt-2 text-[15px] leading-7 text-fg/90">{body}</p>
+      <h3 className="mt-1 text-lg font-normal tracking-tight">{title}</h3>
+      <p className="mt-2 text-base leading-[1.4] text-fg/90">{body}</p>
     </div>
   );
 }

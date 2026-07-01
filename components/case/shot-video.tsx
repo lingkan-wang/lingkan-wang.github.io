@@ -37,8 +37,10 @@ export function ShotVideo({ src, poster, alt }: { src: string; poster?: string; 
       preload="metadata"
       aria-label={alt}
       // clip-path reliably clips the composited video layer (border-radius alone
-      // is ignored on a playing <video> in some browsers, leaking the corners)
-      style={{ clipPath: "inset(0 round 2.5rem)" }}
+      // is ignored on a playing <video> in some browsers, leaking the corners).
+      // Inset 2px to crop the clip's dark canvas corners + edge slivers, and round
+      // just inside the baked device-frame corner so nothing jagged shows.
+      style={{ clipPath: "inset(2px round 1.4rem)" }}
       className="absolute inset-0 h-full w-full object-cover"
     />
   );
