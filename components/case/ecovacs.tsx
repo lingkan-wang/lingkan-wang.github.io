@@ -128,8 +128,8 @@ export function EcovacsCaseStudy(_props: { meta: Project }) {
       </header>
 
       {/* ───────────── BODY: sticky TOC + content ───────────── */}
-      <div className={`${SHELL} mt-20 sm:mt-24 lg:grid lg:grid-cols-[176px_minmax(0,1fr)] lg:gap-14 xl:gap-20`}>
-        <aside className="hidden lg:block">
+      <div className={`${SHELL} mt-20 sm:mt-24 md:grid md:grid-cols-[168px_minmax(0,1fr)] md:gap-10 lg:gap-14 xl:gap-20`}>
+        <aside className="hidden md:block">
           <div className="sticky top-24">
             <CaseToc items={toc} eyebrow="Case Study" title={ecovacs.shortTitle} />
           </div>
