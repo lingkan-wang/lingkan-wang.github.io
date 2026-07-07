@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>File transfer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: #e2e2e2;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+    -webkit-user-select: none; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #stage { position: fixed; inset: 0; }
+
+  .item {
+    position: absolute;
+    left: 0; top: 0;
+    width: 176px; height: 176px;
+    will-change: transform;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  /* 视觉层：悬停上弹只动它，命中区域(父级)不动，避免鼠标在边缘时抖动 */
+  .item .ph {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    will-change: transform, border-radius;
+    transition: transform .18s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .item .x {
+    position: absolute;
+    top: 0; right: 0;
+    width: 34px; height: 34px;
+    border: none; padding: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(0,0,0,.28);
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transform-origin: 100% 0;
+    transition: opacity .12s ease;
+  }
+  .item .x::before, .item .x::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 14px; height: 2px;
+    border-radius: 1px;
+    background: #3c3c3c;
+  }
+  .item .x::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .item .x::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+  .item.show-x .x { opacity: 1; pointer-events: auto; }
+
+  .endpoint {
+    position: absolute;
+    left: 0; top: 0;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 0 2.5px #fff, 0 4px 12px rgba(0,0,0,.18);
+    cursor: grab;
+    touch-action: none;
+    z-index: 3000;
+    will-change: transform;
+  }
+  .endpoint:active { cursor: grabbing; }
+  .endpoint::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 50%; bottom: -22px;
+    transform: translateX(-50%);
+    font-size: 11px; font-weight: 600;
+    color: #9a9a9a;
+    letter-spacing: .02em;
+  }
+
+  #hint {
+    position: fixed;
+    left: 50%; bottom: 28px;
+    transform: translateX(-50%);
+    font-size: 13px;
+    color: #a8a8a8;
+    white-space: nowrap;
+    letter-spacing: .04em;
+    transition: opacity .6s ease;
+    pointer-events: none;
+    z-index: 4000;
+  }
+  #hint.gone { opacity: 0; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hint">Drag an avatar · hover a photo, ✕ to unsend</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const PHOTOS = Array.from({ length: 8 }, (_, i) => `assets/photo-${i + 1}.jpg`);
+  PHOTOS.forEach(src => { const im = new Image(); im.src = src; });
+
+  const FLIGHT_MS = 2000;   // 单张照片从 A 飞到 B 的时长
+  const EMIT_MS   = 250;    // 发射间隔，同屏约 8 张
+  const BASE      = 176;    // .item 的 CSS 基准尺寸，缩放靠 transform
+  const MAX_SIZE  = 176;    // 参考视频里最大约 176px(964 宽画布)
+  const MIN_SIZE  = 10;
+  const CIRCLE_BELOW = 72;  // 小于该尺寸呈正圆，以上是圆角方形
+  const SQUARE_RADIUS = 26;
+  const ARC_LIFT  = 0.55;   // 控制点抬升 = 0.55 * AB 距离
+  const ARC_BIAS  = 0.45;   // 控制点在 A→B 方向上的位置(偏向 A)
+  const STIFFNESS = 0.10;   // 弹簧刚度
+  const DAMPING   = 0.85;   // 弹簧阻尼
+
+  const stage = document.getElementById('stage');
+  const hint = document.getElementById('hint');
+
+  let W = innerWidth, H = innerHeight;
+  // 参考视频 964x720：A(0.27, 0.44)  B(0.74, 0.71)
+  const A = { x: 0, y: 0 };
+  const B = { x: 0, y: 0 };
+  function seedPositions() {
+    A.x = W * 0.27; A.y = H * 0.44;
+    B.x = W * 0.74; B.y = H * 0.71;
+  }
+  seedPositions();
+  const scaleFactor = () => Math.max(0.45, Math.min(W / 964, H / 720, 1.5));
+
+  function makeEndpoint(label, src, pt) {
+    const el = document.createElement('div');
+    el.className = 'endpoint';
+    el.dataset.label = label;
+    el.style.backgroundImage = `url(${src})`;
+    stage.appendChild(el);
+
+    let pointerId = null, dx = 0, dy = 0;
+    el.addEventListener('pointerdown', e => {
+      pointerId = e.pointerId;
+      dx = pt.x - e.clientX;
+      dy = pt.y - e.clientY;
+      hint.classList.add('gone');
+      try { el.setPointerCapture(pointerId); } catch (_) {}
+    });
+    el.addEventListener('pointermove', e => {
+      if (e.pointerId !== pointerId) return;
+      pt.x = e.clientX + dx;
+      pt.y = e.clientY + dy;
+    });
+    const release = e => { if (e.pointerId === pointerId) pointerId = null; };
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+    return el;
+  }
+
+  const elA = makeEndpoint('A', 'assets/avatar-a.jpg', A);
+  const elB = makeEndpoint('B', 'assets/avatar-b.jpg', B);
+
+  // 飞行物对象池
+  const HOVER_MIN_SIZE = 64;  // 小于该尺寸不响应 hover(太小点不准)
+  const HOVER_LIFT = 16;      // 悬停时照片单独上弹的视觉高度(px)
+  const DIE_MS = 150;         // 移除动画时长
+  const POOL = Math.ceil(FLIGHT_MS / EMIT_MS) + 3; // 冗余槽位：有照片被悬停冻结时发射不断流
+  const items = [];
+  for (let i = 0; i < POOL; i++) {
+    const el = document.createElement('div');
+    el.className = 'item';
+    const ph = document.createElement('div');
+    ph.className = 'ph';
+    const xBtn = document.createElement('button');
+    xBtn.className = 'x';
+    xBtn.setAttribute('aria-label', 'Remove this photo');
+    ph.appendChild(xBtn);
+    el.appendChild(ph);
+    stage.appendChild(el);
+    const it = { el, ph, xBtn, active: false, born: 0, x: 0, y: 0, vx: 0, vy: 0,
+                 z: -1, s: 1, size: 0, paused: false, dieT: 0, src: '', hoverable: false };
+    items.push(it);
+
+    // 悬停暂停 + 单独上弹 + 显示叉号；冻结期间尺寸不变，反向缩放一次即可
+    el.addEventListener('pointerenter', () => {
+      if (!it.active || it.dieT) return;
+      it.paused = true;
+      it.vx = 0; it.vy = 0;
+      xBtn.style.transform = `scale(${1 / it.s}) translate(35%, -35%)`;
+      ph.style.transform = `translateY(${-HOVER_LIFT / it.s}px)`;
+      it.z = 2500; // 悬停置顶：高于所有飞行照片，低于头像(3000)
+      el.style.zIndex = it.z;
+      el.classList.add('show-x');
+    });
+    el.addEventListener('pointerleave', () => {
+      it.paused = false;
+      ph.style.transform = 'translateY(0)';
+      el.classList.remove('show-x');
+    });
+    xBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      removeItem(it);
+    });
+  }
+
+  let photoCursor = 0;
+  function spawn(item, bornAt) {
+    item.active = true;
+    item.born = bornAt;
+    item.x = A.x; item.y = A.y;
+    item.vx = 0; item.vy = 0;
+    item.paused = false;
+    item.dieT = 0;
+    item.hoverable = false;
+    photoCursor %= PHOTOS.length;
+    item.src = PHOTOS[photoCursor];
+    item.ph.style.backgroundImage = `url(${item.src})`;
+    item.ph.style.transform = 'translateY(0)';
+    item.el.style.visibility = 'visible';
+    photoCursor = (photoCursor + 1) % PHOTOS.length;
+  }
+
+  // 点叉号：这张照片退出传送队列，本次飞行原地消失
+  function removeItem(it) {
+    if (it.dieT) return;
+    const idx = PHOTOS.indexOf(it.src);
+    if (idx > -1) {
+      PHOTOS.splice(idx, 1);
+      if (photoCursor > idx) photoCursor--;
+    }
+    it.dieT = 0.001;
+    it.el.classList.remove('show-x');
+    it.el.style.pointerEvents = 'none';
+    it.hoverable = false;
+    if (!PHOTOS.length) {
+      hint.textContent = 'All photos removed';
+      hint.classList.remove('gone');
+    }
+  }
+
+  function deactivate(it) {
+    it.active = false;
+    it.paused = false;
+    it.dieT = 0;
+    it.el.classList.remove('show-x');
+    it.el.style.visibility = 'hidden';
+    it.el.style.opacity = '';
+    it.ph.style.transform = 'translateY(0)';
+  }
+
+  function sizeAt(p) {
+    // 不对称钟形：峰值在 p≈0.42 处
+    const f = Math.sin(Math.PI * Math.pow(p, 0.8));
+    return (MIN_SIZE + (MAX_SIZE - MIN_SIZE) * f) * scaleFactor();
+  }
+
+  // 动画时钟：只随帧推进，后台节流时自动暂停而不是跳帧
+  let animMs = 0;
+  let nextEmit = 200;
+  let last = performance.now();
+  let rafId = 0;
+
+  function frame(now) {
+    rafId = requestAnimationFrame(frame);
+    stepAnim(Math.min(now - last, 50));
+    last = now;
+  }
+
+  function stepAnim(stepMs) {
+    animMs += stepMs;
+    const dt = Math.min(3, stepMs / (1000 / 60)); // 以 60fps 为基准归一化
+
+    // 二次贝塞尔控制点：AB 连线上偏 A 处向上抬起
+    const dxAB = B.x - A.x, dyAB = B.y - A.y;
+    const dist = Math.hypot(dxAB, dyAB) || 1;
+    const cx = A.x + dxAB * ARC_BIAS;
+    const cy = A.y + dyAB * ARC_BIAS - dist * ARC_LIFT;
+
+    while (animMs >= nextEmit) {
+      const free = items.find(it => !it.active);
+      if (free && PHOTOS.length) spawn(free, animMs);
+      nextEmit += EMIT_MS;
+    }
+
+    for (const it of items) {
+      if (!it.active) continue;
+
+      // 移除动画：原地缩小淡出
+      if (it.dieT) {
+        it.dieT += stepMs;
+        const k = Math.max(0, 1 - it.dieT / DIE_MS);
+        if (k === 0) { deactivate(it); continue; }
+        it.el.style.transform =
+          `translate3d(${it.x - (it.size * k) / 2}px, ${it.y - (it.size * k) / 2}px, 0) scale(${it.s * k})`;
+        it.el.style.opacity = k;
+        continue;
+      }
+
+      // 悬停冻结：进度和位置都停住，出生时间随钟推移
+      if (it.paused) {
+        it.born += stepMs;
+        continue;
+      }
+
+      const p = (animMs - it.born) / FLIGHT_MS;
+      if (p >= 1) {
+        deactivate(it);
+        continue;
+      }
+      // 目标点：贝塞尔曲线上的位置
+      const q = 1 - p;
+      const tx = q * q * A.x + 2 * q * p * cx + p * p * B.x;
+      const ty = q * q * A.y + 2 * q * p * cy + p * p * B.y;
+      // 弹簧追踪，拖动端点时产生自然的滞后弧
+      it.vx = (it.vx + (tx - it.x) * STIFFNESS * dt) * Math.pow(DAMPING, dt);
+      it.vy = (it.vy + (ty - it.y) * STIFFNESS * dt) * Math.pow(DAMPING, dt);
+      it.x += it.vx * dt;
+      it.y += it.vy * dt;
+
+      const size = sizeAt(p);
+      const s = size / BASE;
+      it.size = size; it.s = s;
+      // 尺寸小于阈值呈正圆，大于阈值收敛到 26px 圆角
+      const visualR = size < CIRCLE_BELOW
+        ? size / 2
+        : Math.min(size / 2, SQUARE_RADIUS + Math.max(0, CIRCLE_BELOW - size));
+      it.el.style.transform =
+        `translate3d(${it.x - size / 2}px, ${it.y - size / 2}px, 0) scale(${s})`;
+      it.el.style.transformOrigin = '0 0';
+      it.ph.style.borderRadius = `${visualR / s}px`;
+      const z = 1000 + Math.round(size);
+      if (z !== it.z) { it.z = z; it.el.style.zIndex = z; }
+      const hoverable = size >= HOVER_MIN_SIZE * scaleFactor(); // 阈值随画布缩放，小窗口嵌入时也能悬停
+      if (hoverable !== it.hoverable) {
+        it.hoverable = hoverable;
+        it.el.style.pointerEvents = hoverable ? 'auto' : 'none';
+      }
+    }
+
+    elA.style.transform = `translate3d(${A.x - 26}px, ${A.y - 26}px, 0)`;
+    elB.style.transform = `translate3d(${B.x - 26}px, ${B.y - 26}px, 0)`;
+  }
+
+  function onResize() {
+    const ow = W, oh = H;
+    W = innerWidth; H = innerHeight;
+    if (ow > 0 && oh > 0 && W > 0 && H > 0) {
+      A.x *= W / ow; A.y *= H / oh;
+      B.x *= W / ow; B.y *= H / oh;
+    } else {
+      seedPositions();
+    }
+    if (![A.x, A.y, B.x, B.y].every(Number.isFinite)) seedPositions();
+  }
+  addEventListener('resize', onResize);
+
+  function onVisibility() {
+    if (document.hidden) {
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+    } else if (!rafId) {
+      last = performance.now();
+      rafId = requestAnimationFrame(frame);
+    }
+  }
+  document.addEventListener('visibilitychange', onVisibility);
+
+  addEventListener('pagehide', () => {
+    cancelAnimationFrame(rafId);
+    removeEventListener('resize', onResize);
+    document.removeEventListener('visibilitychange', onVisibility);
+  }, { once: true });
+
+  // 测试钩子：手动推进动画(ms)，不依赖 rAF
+  window.__step = ms => { for (let t = 0; t < ms; t += 16.7) stepAnim(16.7); };
+
+  rafId = requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
