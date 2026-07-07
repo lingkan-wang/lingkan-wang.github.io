@@ -62,7 +62,7 @@
   .endpoint {
     position: absolute;
     left: 0; top: 0;
-    width: 52px; height: 52px;
+    width: 44px; height: 44px;
     border-radius: 50%;
     background-size: cover;
     background-position: center;
@@ -96,7 +96,9 @@
     z-index: 4000;
   }
   #hint.gone { opacity: 0; }
-  @media (max-width: 480px) { #hint { font-size: 11px; } }
+  @media (max-width: 480px) {
+    #hint { font-size: 11px; white-space: normal; text-align: center; max-width: 86vw; line-height: 1.5; }
+  }
 </style>
 </head>
 <body>
@@ -323,6 +325,7 @@
       const size = sizeAt(p);
       const s = size / BASE;
       it.size = size; it.s = s;
+      it.ph.style.borderRadius = `${26 + 62 * p}px`; // 越接近接收者越圆
       it.el.style.transform =
         `translate3d(${it.x - size / 2}px, ${it.y - size / 2}px, 0) scale(${s})`;
       it.el.style.transformOrigin = '0 0';
@@ -335,8 +338,8 @@
       }
     }
 
-    elA.style.transform = `translate3d(${A.x - 26}px, ${A.y - 26}px, 0)`;
-    elB.style.transform = `translate3d(${B.x - 26}px, ${B.y - 26}px, 0)`;
+    elA.style.transform = `translate3d(${A.x - 22}px, ${A.y - 22}px, 0)`;
+    elB.style.transform = `translate3d(${B.x - 22}px, ${B.y - 22}px, 0)`;
   }
 
   function onResize() {
