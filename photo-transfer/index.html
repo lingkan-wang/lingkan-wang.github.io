@@ -8,7 +8,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; overflow: hidden; }
   body {
-    background: #e2e2e2;
+    background: #fafafa;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
     -webkit-user-select: none; user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -29,7 +29,8 @@
     inset: 0;
     background-size: cover;
     background-position: center;
-    will-change: transform, border-radius;
+    border-radius: 26px; /* 基准 176px 时 26px，随 scale 等比缩放，形状恒定 */
+    will-change: transform;
     transition: transform .18s cubic-bezier(.34, 1.56, .64, 1);
   }
   .item .x {
@@ -95,6 +96,7 @@
     z-index: 4000;
   }
   #hint.gone { opacity: 0; }
+  @media (max-width: 480px) { #hint { font-size: 11px; } }
 </style>
 </head>
 <body>
@@ -113,8 +115,6 @@
   const BASE      = 176;    // .item 的 CSS 基准尺寸，缩放靠 transform
   const MAX_SIZE  = 176;    // 参考视频里最大约 176px(964 宽画布)
   const MIN_SIZE  = 10;
-  const CIRCLE_BELOW = 72;  // 小于该尺寸呈正圆，以上是圆角方形
-  const SQUARE_RADIUS = 26;
   const ARC_LIFT  = 0.55;   // 控制点抬升 = 0.55 * AB 距离
   const ARC_BIAS  = 0.45;   // 控制点在 A→B 方向上的位置(偏向 A)
   const STIFFNESS = 0.10;   // 弹簧刚度
@@ -160,8 +160,8 @@
     return el;
   }
 
-  const elA = makeEndpoint('A', 'assets/avatar-a.jpg', A);
-  const elB = makeEndpoint('B', 'assets/avatar-b.jpg', B);
+  const elA = makeEndpoint('Jack', 'assets/avatar-a.jpg', A);
+  const elB = makeEndpoint('Wendy', 'assets/avatar-b.jpg', B);
 
   // 飞行物对象池
   const HOVER_MIN_SIZE = 64;  // 小于该尺寸不响应 hover(太小点不准)
@@ -323,14 +323,9 @@
       const size = sizeAt(p);
       const s = size / BASE;
       it.size = size; it.s = s;
-      // 尺寸小于阈值呈正圆，大于阈值收敛到 26px 圆角
-      const visualR = size < CIRCLE_BELOW
-        ? size / 2
-        : Math.min(size / 2, SQUARE_RADIUS + Math.max(0, CIRCLE_BELOW - size));
       it.el.style.transform =
         `translate3d(${it.x - size / 2}px, ${it.y - size / 2}px, 0) scale(${s})`;
       it.el.style.transformOrigin = '0 0';
-      it.ph.style.borderRadius = `${visualR / s}px`;
       const z = 1000 + Math.round(size);
       if (z !== it.z) { it.z = z; it.el.style.zIndex = z; }
       const hoverable = size >= HOVER_MIN_SIZE * scaleFactor(); // 阈值随画布缩放，小窗口嵌入时也能悬停
