@@ -165,6 +165,16 @@
   const elA = makeEndpoint('Jack', 'assets/avatar-a.jpg', A);
   const elB = makeEndpoint('Wendy', 'assets/avatar-b.jpg', B);
 
+  // 头像随画布等比缩放(基准 52px@964 宽)，与照片保持恒定比例
+  let epR = 22;
+  function syncAvatarSize() {
+    const d = Math.max(28, Math.round(52 * scaleFactor()));
+    epR = d / 2;
+    elA.style.width = elA.style.height = `${d}px`;
+    elB.style.width = elB.style.height = `${d}px`;
+  }
+  syncAvatarSize();
+
   // 飞行物对象池
   const HOVER_MIN_SIZE = 64;  // 小于该尺寸不响应 hover(太小点不准)
   const HOVER_LIFT = 16;      // 悬停时照片单独上弹的视觉高度(px)
@@ -338,8 +348,8 @@
       }
     }
 
-    elA.style.transform = `translate3d(${A.x - 22}px, ${A.y - 22}px, 0)`;
-    elB.style.transform = `translate3d(${B.x - 22}px, ${B.y - 22}px, 0)`;
+    elA.style.transform = `translate3d(${A.x - epR}px, ${A.y - epR}px, 0)`;
+    elB.style.transform = `translate3d(${B.x - epR}px, ${B.y - epR}px, 0)`;
   }
 
   function onResize() {
@@ -352,6 +362,7 @@
       seedPositions();
     }
     if (![A.x, A.y, B.x, B.y].every(Number.isFinite)) seedPositions();
+    syncAvatarSize();
   }
   addEventListener('resize', onResize);
 
