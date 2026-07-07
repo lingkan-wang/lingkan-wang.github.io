@@ -16,6 +16,16 @@ export type CodedWork = {
 
 export const codedWork: CodedWork[] = [
   {
+    slug: "photo-transfer",
+    title: "Transfer — photos that fly from A to B",
+    blurb:
+      "A file-transfer motion study recreated 1:1 from a reference video: photos pop out of one avatar, arc across a spring-following bezier, and shrink into the other. Drag either avatar and the stream lags elastically. Hover a photo mid-flight to freeze it and hit ✕ to unsend it before it lands.",
+    tags: ["Vanilla JS", "Spring Physics", "Bezier"],
+    year: 2026,
+    live: "/photo-transfer/",
+    offset: 0,
+  },
+  {
     slug: "masii-sign",
     title: "Sign to claim — a signature that replays to verify",
     blurb:
