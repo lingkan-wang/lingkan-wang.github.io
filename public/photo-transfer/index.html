@@ -29,7 +29,7 @@
     inset: 0;
     background-size: cover;
     background-position: center;
-    border-radius: 26px; /* 基准 176px 时 26px，随 scale 等比缩放，形状恒定 */
+    border-radius: 14px; /* 初始圆角，随飞行进度由 JS 递增 */
     will-change: transform;
     transition: transform .18s cubic-bezier(.34, 1.56, .64, 1);
   }
@@ -335,7 +335,7 @@
       const size = sizeAt(p);
       const s = size / BASE;
       it.size = size; it.s = s;
-      it.ph.style.borderRadius = `${26 + 62 * p}px`; // 越接近接收者越圆
+      it.ph.style.borderRadius = `${14 + 74 * p * p}px`; // 圆角整体更小，靠近接收者后半程才快速变圆(p=1 为正圆)
       it.el.style.transform =
         `translate3d(${it.x - size / 2}px, ${it.y - size / 2}px, 0) scale(${s})`;
       it.el.style.transformOrigin = '0 0';
