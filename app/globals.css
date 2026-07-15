@@ -47,6 +47,18 @@ body {
   color: var(--color-muted);
 }
 
+/* Spotify-style playlist page (/coded) micro-animations. The reduced-motion
+   block below neutralizes all of these via !important. */
+@keyframes vinyl-rotate { to { transform: rotate(360deg); } }
+.vinyl-disc { transform-box: fill-box; transform-origin: center; }
+.vinyl-disc.is-spinning { animation: vinyl-rotate 6s linear infinite; }
+
+@keyframes eq-bounce { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+.eq-bar { transform-origin: bottom; animation: eq-bounce 0.9s ease-in-out infinite; }
+.eq-bar:nth-child(1) { animation-delay: 0s; }
+.eq-bar:nth-child(2) { animation-delay: 0.35s; }
+.eq-bar:nth-child(3) { animation-delay: 0.15s; }
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
