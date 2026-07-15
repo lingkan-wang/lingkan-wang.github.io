@@ -77,14 +77,14 @@ function HmwList({ items }: { items: string[] }) {
   );
 }
 
-/** Closing reflections, each tagged with an ↑ (what worked) or → (what's next). */
-function Reflections({ items }: { items: { arrow: string; text: string }[] }) {
+/** Closing reflections as a simple bulleted list. */
+function Reflections({ items }: { items: string[] }) {
   return (
     <ul className="mt-6 space-y-5">
-      {items.map((r) => (
-        <li key={r.text} className="flex gap-4">
-          <span className={`mt-0.5 text-lg leading-none ${r.arrow === "↑" ? "text-accent" : "text-muted"}`}>{r.arrow}</span>
-          <span className="text-pretty text-base leading-[1.5] text-fg/90">{r.text}</span>
+      {items.map((text) => (
+        <li key={text} className="flex gap-4">
+          <span className="mt-[0.5rem] size-1.5 shrink-0 rounded-full bg-fg/40" aria-hidden />
+          <span className="text-pretty text-base leading-[1.5] text-fg/90">{text}</span>
         </li>
       ))}
     </ul>
@@ -118,7 +118,6 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
     { id: "principles", label: "Principles" },
     { id: "process", label: "Process" },
     { id: "decisions", label: "Decisions" },
-    { id: "system", label: "System" },
     { id: "handoff", label: "Handoff" },
     { id: "engineering", label: "Engineering" },
     { id: "outcome", label: "Outcome" },
@@ -154,10 +153,10 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
   ];
 
   const reflections = [
-    { arrow: "↑", text: "The real insight was not visual. Once I named the three traps, guilt, gambling, and flexing, every screen had a clear job." },
-    { arrow: "↑", text: "Splitting MAS from GoodPrint solved the hardest problem: how to reward giving without letting money become the status." },
-    { arrow: "→", text: 'The line between "exciting" and "casino" is thinner than it looks. It lives in small calls, like whether you ever show a countdown next to a prize.' },
-    { arrow: "→", text: "Next time I would test the three-second home screen with real users before building the full system, not after." },
+    "The real insight was not visual. Once I named the three traps, guilt, gambling, and flexing, every screen had a clear job.",
+    "Splitting MAS from GoodPrint solved the hardest problem: how to reward giving without letting money become the status.",
+    'The line between "exciting" and "casino" is thinner than it looks. It lives in small calls, like whether you ever show a countdown next to a prize.',
+    "Next time I would test the three-second home screen with real users before building the full system, not after.",
   ];
 
   const sourceTree = {
@@ -374,16 +373,6 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
           </Reveal>
         </section>
 
-        {/* ─── DESIGN SYSTEM ─── */}
-        <section id="system" className={GAP}>
-          <SectionHead label="Design system" title="A dark, high-density system, built to ship." />
-          <Reveal className="mt-12 space-y-5">
-            <P text="A dark, high-density system inspired by Robinhood's mobile app: deep black surfaces, crisp white type, one brand blue (#4041E5), and glow used only on prizes and key moments." />
-            <P text="Tokens, around ten core components, a 52-icon set, and one fixed spacing standard." />
-            <P text="150+ screens across five tabs (Home, Draws, Feed, Shop, Profile) and onboarding, wired into a clickable prototype. Every screen traces back to a rule in the brief, so design and product never drifted apart." />
-          </Reveal>
-        </section>
-
         {/* ─── DESIGNER HANDOFF ─── */}
         <section id="handoff" className={GAP}>
           <SectionHead label="Handoff" title="Designer handoff" />
@@ -408,14 +397,9 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
 
         {/* ─── OUTCOME ─── */}
         <section id="outcome" className={GAP}>
-          <SectionHead label="Outcome" title="A full V1 system, built to pass the three-trap test." />
+          <SectionHead label="Outcome" title="Roughly four times faster than a manual build." />
           <Reveal className="mt-12">
-            <P text="Delivered a full V1 design system and 150+ prototyped screens, with every reward and impact screen built to pass the three-trap test." />
-          </Reveal>
-
-          <Reveal className="mt-16">
-            <SubHead label="AI vs traditional" title="Roughly four times faster than a manual build." />
-            <P text="The workflow is the other outcome. Reconstructed from the session logs, the AI-assisted pipeline took 111.5 active hours. My estimate for the same deliverables built by hand in Figma, as a senior designer, is around 440 hours: about four times the work, or an eleven-week build delivered in 17.5 days." className="mt-5" />
+            <P text="The workflow itself is the outcome. Reconstructed from the session logs, the AI-assisted pipeline took 111.5 active hours. My estimate for the same deliverables built by hand in Figma, as a senior designer, is around 440 hours: about four times the work, or an eleven-week build delivered in 17.5 days." />
           </Reveal>
           <Reveal className="mt-8">
             <div className="overflow-hidden rounded-2xl border border-border">
