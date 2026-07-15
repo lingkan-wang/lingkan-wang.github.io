@@ -13,6 +13,7 @@ import { DataNote } from "./data-note";
 import { Statement } from "./statement";
 import { Triptych } from "./triptych";
 import { Opportunities } from "./opportunities";
+import { WorkflowChart, ModuleIterations } from "./workflow-chart";
 
 export function Prose({ children }: { children: ReactNode }) {
   return <div className="case-prose mx-auto max-w-[680px] px-6">{children}</div>;
@@ -55,4 +56,6 @@ export const mdxComponents = {
   Statement,
   Triptych,
   Opportunities,
+  WorkflowChart,
+  ModuleIterations,
 };

@@ -5,6 +5,7 @@ import { VarsityCaseStudy } from "@/components/case/varsity";
 import { BumbleCaseStudy } from "@/components/case/bumble";
 import { KwaiCaseStudy } from "@/components/case/kwai";
 import { TaimerCaseStudy } from "@/components/case/taimer";
+import { MasiiCaseStudy } from "@/components/case/masii";
 
 /**
  * Slugs that render a bespoke, richly-composed case study instead of the generic
@@ -16,4 +17,5 @@ export const richCaseStudies: Record<string, ComponentType<{ meta: Project }>> =
   "bumble-interest-cards": BumbleCaseStudy,
   "kwai-guild-dashboard": KwaiCaseStudy,
   "taimer-ai": TaimerCaseStudy,
+  masii: MasiiCaseStudy,
 };
