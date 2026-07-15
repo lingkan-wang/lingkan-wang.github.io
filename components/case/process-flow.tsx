@@ -79,7 +79,7 @@ function Preview({ s }: { s: ProcessStep }) {
  * preview (a file browser, image(s), or a clip). Hover on desktop, tap on
  * touch, arrow-key friendly via focus. Pure state, no timers or observers.
  */
-export function ProcessFlow({ steps }: { steps: ProcessStep[] }) {
+export function ProcessFlow({ steps, source }: { steps: ProcessStep[]; source?: { href: string; label: string } }) {
   const [active, setActive] = useState(0);
   const reduce = useReducedMotion();
   const s = steps[active];
@@ -115,7 +115,7 @@ export function ProcessFlow({ steps }: { steps: ProcessStep[] }) {
         <Arrow dir="right" onClick={() => setActive((p) => (p + 1) % steps.length)} />
         <div className={`rounded-2xl border border-border bg-[#fafafa] p-5 dark:bg-white/[0.03] sm:p-8`}>
           <div className="grid items-center gap-6 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] sm:gap-10">
-            <div>
+            <div className="flex flex-col self-stretch">
               <p className="font-mono text-[0.75rem] uppercase tracking-[0.06em] text-muted">
                 Step {active + 1} of {steps.length}
               </p>
@@ -131,6 +131,22 @@ export function ProcessFlow({ steps }: { steps: ProcessStep[] }) {
                   <p className="mt-3 text-[15px] leading-[1.5] text-muted">{s.detail}</p>
                 </motion.div>
               </AnimatePresence>
+              {source && (
+                <a
+                  href={source.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group mt-auto inline-flex w-fit items-center gap-2 pt-8 text-[13px] font-medium text-muted transition-colors hover:text-accent"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden>
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.968 6.817H1.677l7.73-8.835L1.254 2.25h6.83l4.712 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                  <span>{source.label}</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="12" height="12" aria-hidden className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                    <path d="M7 17 17 7M17 7H8M17 7v9" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </a>
+              )}
             </div>
 
             <div className="flex min-h-[240px] min-w-0 items-center justify-center sm:min-h-[300px]">

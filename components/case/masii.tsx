@@ -359,7 +359,7 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
             <P text="There was no user base yet, so the research was the product itself. I read the PRD and the UX Bible, mapped every rule to a screen, and pressure-tested each design against the three traps before adding any polish." />
             <P text="Here is the whole pipeline, end to end. Hover or tap any step to see what happened there." />
           </Reveal>
-          <ProcessFlow steps={processSteps} />
+          <ProcessFlow steps={processSteps} source={{ href: "https://x.com/WangLingkan/status/2076001006836732255", label: "See the full process on X" }} />
         </section>
 
         {/* ─── DESIGN DECISIONS ─── */}
