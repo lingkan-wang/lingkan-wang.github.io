@@ -54,24 +54,24 @@ export function ReportCaveat() {
             role="dialog"
             aria-modal="true"
             aria-label="Masii AI efficiency analysis — full report"
-            className="relative z-10 flex h-[88vh] w-full max-w-[1180px] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.6)]"
+            className="relative z-10 flex h-[88vh] w-full max-w-[1180px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#08090d] shadow-[0_40px_100px_-30px_rgba(0,0,0,0.85)]"
             initial={reduce ? false : { opacity: 0, scale: 0.985, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reduce ? undefined : { opacity: 0, scale: 0.985, y: 10 }}
             transition={{ duration: durations.enter, ease: easeOut }}
           >
-            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-black/[0.08] px-5 py-3.5">
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 bg-white/[0.02] px-5 py-3.5">
               <div className="min-w-0">
-                <p className="truncate text-[14px] font-medium text-[#111827]">Masii · AI efficiency analysis</p>
-                <p className="mt-0.5 truncate text-[11.5px] text-black/45">Reconstructed from Claude Code session logs · 50 sessions · 351 rounds</p>
+                <p className="truncate text-[14px] font-medium text-white/90">Masii · AI efficiency analysis</p>
+                <p className="mt-0.5 truncate text-[11.5px] text-white/45">Reconstructed from Claude Code session logs · 50 sessions · 351 rounds</p>
               </div>
               <div className="flex items-center gap-3">
-                <span className="hidden text-[11.5px] text-black/35 sm:block">Click outside to close</span>
+                <span className="hidden text-[11.5px] text-white/35 sm:block">Click outside to close</span>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close report"
-                  className="grid size-8 shrink-0 place-items-center rounded-full text-black/50 transition-colors hover:bg-black/[0.06] hover:text-black"
+                  className="grid size-8 shrink-0 place-items-center rounded-full text-white/50 transition-colors hover:bg-white/10 hover:text-white"
                 >
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
                     <path d="M18 6 6 18M6 6l12 12" />
@@ -82,7 +82,7 @@ export function ReportCaveat() {
             <iframe
               src={REPORT_SRC}
               title="Masii AI efficiency analysis report"
-              className="min-h-0 w-full flex-1 bg-white"
+              className="min-h-0 w-full flex-1 bg-[#08090d]"
             />
           </motion.div>
         </motion.div>
