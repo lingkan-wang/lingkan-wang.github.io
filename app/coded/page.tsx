@@ -1,76 +1,63 @@
 import type { Metadata } from "next";
 import { codedWork } from "@/lib/coded";
+import { Reveal } from "@/components/reveal";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: `Coded Work — ${site.name}` };
 
+const FRAME_H = 420; // uniform visible height for every project frame
+
 export default function CodedWorkPage() {
   return (
-    <div className="mx-auto max-w-[1080px] px-6 py-16 sm:py-20">
-      <header className="max-w-2xl">
-        <p className="font-mono text-[0.8rem] uppercase tracking-[0.06em] text-muted">Coded Work</p>
-        <h1 className="mt-3 text-pretty text-3xl font-normal leading-[1.1] tracking-tight sm:text-4xl">
-          Things I design and build.
-        </h1>
-        <p className="mt-5 text-base leading-7 text-muted">
-          Small interaction studies and tools, each shown as a live, fully playable demo embedded from
-          its GitHub Pages build. Every one runs right here in the frame, or open it full screen.
+    <div className="mx-auto max-w-[1080px] px-6 pb-28 pt-20 sm:pt-28">
+      <Reveal>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Coded Work</h1>
+        <p className="mt-4 max-w-[640px] text-[15px] leading-7 text-muted">
+          Interactive components I design and build — live and playable right here. Have a click.
         </p>
-      </header>
+      </Reveal>
 
-      <div className="mt-12 grid gap-6 sm:mt-14 sm:grid-cols-2">
-        {codedWork.map((p) => (
-          <article
-            key={p.slug}
-            className="flex flex-col overflow-hidden rounded-2xl border border-border bg-bg transition-colors hover:border-fg/25"
-          >
-            {/* live, fully-playable demo (offset crops the embed's own top heading) */}
-            <div className="relative h-[300px] overflow-hidden border-b border-border bg-white">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <iframe
-                src={p.live}
-                title={`${p.title} — live demo`}
-                loading="lazy"
-                style={{ height: `calc(100% + ${p.offset}px)`, marginTop: -p.offset }}
-                className="block w-full"
-              />
-            </div>
-
-            {/* meta */}
-            <div className="flex flex-1 flex-col p-5">
-              <div className="flex items-baseline justify-between gap-3">
-                <h2 className="text-[15px] font-semibold tracking-tight text-fg">{p.title}</h2>
-                <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted">{p.year}</span>
+      <div className="mt-12 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2">
+        {codedWork.map((p, i) => (
+          <Reveal key={p.slug} delay={(i % 2) * 0.05}>
+            <article>
+              {/* live, fully-playable demo — all interaction happens inside the frame.
+                  Uniform height; `offset` crops the demo's own heading off the top. */}
+              <div className="overflow-hidden rounded-xl border border-border bg-[#fafafa]" style={{ height: FRAME_H }}>
+                <iframe
+                  src={p.live}
+                  title={`${p.title} — live demo`}
+                  loading="lazy"
+                  style={{ height: FRAME_H + p.offset, marginTop: -p.offset }}
+                  className="block w-full"
+                />
               </div>
-              <p className="mt-2 text-[13px] leading-relaxed text-muted">{p.blurb}</p>
-              <div className="mt-4 flex flex-wrap items-center gap-2 pt-1">
+
+              <div className="mt-4 flex items-baseline justify-between gap-4">
+                <h2 className="text-lg font-medium tracking-tight">{p.title}</h2>
+                <span className="shrink-0 font-mono text-xs text-muted">{p.year}</span>
+              </div>
+
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {p.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted"
-                  >
+                  <span key={t} className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-muted">
                     {t}
                   </span>
                 ))}
-                <a
-                  href={p.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ml-auto inline-flex items-center gap-1 rounded-full border border-border px-3 py-1 text-[12px] font-medium text-muted transition-colors hover:border-accent hover:text-accent"
-                >
-                  Open live ↗
-                </a>
-                {p.download && (
-                  <a
-                    href={p.download}
-                    className="inline-flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-[12px] font-semibold text-white transition-transform hover:scale-[1.03]"
-                  >
-                    ↓ macOS app
-                  </a>
-                )}
               </div>
-            </div>
-          </article>
+
+              <p className="mt-2 max-w-prose text-[13px] leading-snug text-muted">{p.blurb}</p>
+
+              {p.download && (
+                <a
+                  href={p.download}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-[12px] font-medium text-muted transition-colors hover:border-foreground/30 hover:text-foreground"
+                >
+                  ↓ Download desktop app (macOS)
+                </a>
+              )}
+            </article>
+          </Reveal>
         ))}
       </div>
     </div>
