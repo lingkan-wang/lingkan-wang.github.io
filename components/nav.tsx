@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { site } from "@/lib/site";
@@ -35,13 +34,8 @@ function SocialLinks() {
 }
 
 export function Nav() {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
-
-  // /coded is a full-screen immersive "Spotify playlist" page with its own
-  // dark chrome and a floating back button, so hide the global nav there.
-  if (pathname === "/coded" || pathname?.startsWith("/coded/")) return null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur">
