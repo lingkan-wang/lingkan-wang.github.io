@@ -8,10 +8,14 @@ export function Reveal({
   children,
   delay = 0,
   className,
+  margin = "-10% 0px",
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
+  /** viewport root margin; use a positive bottom value to trigger earlier
+   *  (content finishes fading in before it scrolls into clear view). */
+  margin?: string;
 }) {
   const reduce = useReducedMotion();
 
@@ -25,7 +29,7 @@ export function Reveal({
       variants={revealVariants}
       initial="hidden"
       whileInView="shown"
-      viewport={{ once: true, margin: "-10% 0px" }}
+      viewport={{ once: true, margin }}
       transition={{ ...enterTransition, delay }}
     >
       {children}
