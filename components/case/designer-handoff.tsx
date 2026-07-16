@@ -82,12 +82,10 @@ export function DesignerHandoff({ items }: { items: HandoffItem[] }) {
                 transition={{ duration: durations.enter, ease: easeOut }}
               >
                 {s.src ? (
-                  <div className="grid aspect-[16/10] place-items-center bg-[#141414] p-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.src} alt={s.alt ?? s.title} className="max-h-full max-w-full rounded-md object-contain" loading="lazy" />
-                  </div>
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={s.src} alt={s.alt ?? s.title} className="block h-auto w-full" loading="lazy" />
                 ) : (
-                  <div className="p-4">
+                  <div className="grid aspect-[16/10] place-items-center bg-[#141414] p-4">
                     <MediaPlaceholder label={s.label} caption="drop the Figma screenshot here" />
                   </div>
                 )}
