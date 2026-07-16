@@ -7,7 +7,6 @@ import { NumberedCard } from "./elements";
 import { ProcessFlow } from "./process-flow";
 import { SolutionCarousel } from "./solution-carousel";
 import { DesignerHandoff, type HandoffItem } from "./designer-handoff";
-import { EngineerHandoff } from "./engineer-handoff";
 import { EfficiencyChart } from "./efficiency-chart";
 import { ReportCaveat } from "./report-dialog";
 
@@ -121,7 +120,6 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
     { id: "process", label: "Process" },
     { id: "decisions", label: "Decisions" },
     { id: "handoff", label: "Handoff" },
-    { id: "engineering", label: "Engineering" },
     { id: "outcome", label: "Outcome" },
   ];
 
@@ -371,17 +369,6 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
           </Reveal>
           <Reveal className="mt-6">
             <DesignerHandoff items={handoffItems} />
-          </Reveal>
-        </section>
-
-        {/* ─── ENGINEER HANDOFF ─── */}
-        <section id="engineering" className={GAP}>
-          <SectionHead label="Handoff" title="Engineer handoff" />
-          <Reveal className="mt-12">
-            <P text="A documented dark Liquid Glass system: tokens, components, and states, spec'd so the build starts from a system, not a screenshot." />
-          </Reveal>
-          <Reveal className="mt-6">
-            <EngineerHandoff />
           </Reveal>
         </section>
 
