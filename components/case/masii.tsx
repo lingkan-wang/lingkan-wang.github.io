@@ -8,6 +8,8 @@ import { ProcessFlow } from "./process-flow";
 import { SolutionCarousel } from "./solution-carousel";
 import { DesignerHandoff, type HandoffItem } from "./designer-handoff";
 import { EngineerHandoff } from "./engineer-handoff";
+import { EfficiencyChart } from "./efficiency-chart";
+import { ReportCaveat } from "./report-dialog";
 
 const IMG = "/work/masii";
 const BODY = "text-base leading-[1.5] text-fg/90";
@@ -180,7 +182,7 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
     { key: "ia", label: "IA", title: "Information architecture", detail: "A full sitemap plus a per-tab breakdown: five tabs and every screen under them, so the shape of the product was settled first. Click an image to open it full size.", srcs: [`${IMG}/ia.png`, `${IMG}/ia-tabs.png`], alt: "FigJam sitemap and per-tab breakdown of the five tabs" },
     { key: "workflow", label: "Workflow", title: "User flows", detail: "The V1 user flow: the daily-return loop, the first-run onboarding branch, and where Moves earn MAS. Click to open it full size.", src: `${IMG}/workflow.png`, alt: "The V1 user flow with the onboarding branch" },
     { key: "lofi", label: "Lo-fi", title: "Low-fidelity", detail: "Six modules of wireframes, plus every empty and edge state, so structure and copy could be argued before style could distract.", src: `${IMG}/lofi-board.png`, alt: "A board of all the low-fidelity wireframes across six modules" },
-    { key: "review", label: "Review", title: "Review the lo-fi", detail: "Claude Code played reviewer and audited the low-fidelity screens against the brief; I checked the information architecture by hand to make sure every flow still held.", alt: "A reviewer pass plus a hand IA check" },
+    { key: "review", label: "Review", title: "Review the lo-fi", detail: "Claude Code played reviewer and audited the low-fidelity screens against the brief; I checked the information architecture by hand to make sure every flow still held.", src: `${IMG}/review.png`, alt: "Two review passes: Claude audits the lo-fi screens, then I verify the information architecture by hand" },
     { key: "style", label: "Style", title: "Define the visual style", detail: "I hand-designed a few hi-fi screens to lock the dark Liquid Glass language, the reference every other screen would follow.", src: `${IMG}/style-ref.png`, alt: "Hand-designed reference hi-fi screens that set the style" },
     { key: "hifi", label: "Hi-fi", title: "High-fidelity", detail: "With the style set, roughly 150 hi-fi screens across six modules, generated to match and wired into a clickable prototype.", src: `${IMG}/hifi-board.png`, alt: "A board of all the high-fidelity screens across six modules" },
     { key: "polish", label: "Visual polish", title: "Manual polish", detail: "The final pass: hand-tuning hi-fi details across the whole product, the human touch on top of the generated screens.", src: `${IMG}/canvas-overview.png`, alt: "The full Figma canvas with every module's screens laid out" },
@@ -207,16 +209,6 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
     { key: "library", label: "Component library", title: "~10 components, one 52-icon set", desc: "Reusable components with variants and a single icon system (coolicons), so every screen is built from the same parts." },
     { key: "prototype", label: "Prototype flows", title: "Wired into a clickable prototype", desc: "Hundreds of connections link the screens and their edge states, so the file opens as a working prototype, not a static board." },
     { key: "states", label: "Every state", title: "Empty, loading, error, offline", desc: "Each screen's states are designed in the file, so nothing is left for engineering to guess." },
-  ];
-
-  const comparison = [
-    ["Requirements & PRD", "11.5h", "16h", "1.4×"],
-    ["IA & user flows", "13h", "20h", "1.5×"],
-    ["Low-fidelity", "40h", "110h", "2.8×"],
-    ["Style exploration", "14h", "36h", "2.6×"],
-    ["High-fidelity", "31h", "250h", "8.1×"],
-    ["Review & wrap-up", "2.4h", "10h", "4.2×"],
-    ["Total", "111.5h", "≈442h", "≈4×"],
   ];
 
   return (
@@ -402,35 +394,10 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
             <P text="The workflow itself is the outcome. Reconstructed from the session logs, the AI-assisted pipeline took 111.5 active hours. My estimate for the same deliverables built by hand in Figma, as a senior designer, is around 440 hours: about four times the work, or an eleven-week build delivered in 17.5 days." />
           </Reveal>
           <Reveal className="mt-8">
-            <div className="overflow-hidden rounded-2xl border border-border">
-              <div className="grid grid-cols-[1.4fr_1fr_1fr_0.8fr] border-b border-border bg-fg/[0.02] font-mono text-[0.72rem] uppercase tracking-[0.06em] text-muted">
-                <div className="p-4">Phase</div>
-                <div className="p-4">AI-assisted</div>
-                <div className="p-4">Manual Figma (est.)</div>
-                <div className="p-4 text-accent">Faster</div>
-              </div>
-              {comparison.map((r, i) => (
-                <div key={r[0]} className={`grid grid-cols-[1.4fr_1fr_1fr_0.8fr] border-b border-border text-sm leading-6 last:border-0 ${i === comparison.length - 1 ? "bg-fg/[0.02] font-medium" : ""}`}>
-                  <div className="p-4 text-muted">{r[0]}</div>
-                  <div className="p-4 tabular-nums text-fg">{r[1]}</div>
-                  <div className="p-4 tabular-nums text-fg/60">{r[2]}</div>
-                  <div className="p-4 tabular-nums font-medium text-accent">{r[3]}</div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-          <Reveal className="mt-10">
-            <StatGrid
-              cols="sm:grid-cols-3"
-              items={[
-                { value: "≈4×", label: "Less active time than a manual Figma build" },
-                { value: "≈330h", label: "Estimated hours saved on this project" },
-                { value: "17.5 days", label: "Delivered, vs an estimated 11-week manual build" },
-              ]}
-            />
+            <EfficiencyChart />
           </Reveal>
           <Reveal className="mt-4">
-            <p className="text-[13px] leading-6 text-muted">The manual-Figma hours are my own senior-designer estimate, anchored to the actuals, not a measured baseline. Treat this as an existence proof, not a controlled study.</p>
+            <ReportCaveat />
           </Reveal>
 
           <Reveal className="mt-16">
