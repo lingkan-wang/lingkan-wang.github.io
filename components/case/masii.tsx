@@ -205,11 +205,9 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
   ];
 
   const handoffItems: HandoffItem[] = [
-    { key: "pages", label: "Page groups", title: "Split by module and fidelity", desc: "Lo-fi and hi-fi sections mirror each other across Home, Draws, Feed, Shop, Profile, and onboarding, with separate pages for components and tokens.", src: `${IMG}/canvas-overview.png`, alt: "The full Figma file, organized by module and fidelity" },
-    { key: "library", label: "Component library", title: "~10 components, one 52-icon set", desc: "Reusable components with variants and a single icon system (coolicons), so every screen is built from the same parts." },
-    { key: "prototype", label: "Prototype flows", title: "Wired into a clickable prototype", desc: "Hundreds of connections link the screens and their edge states, so the file opens as a working prototype, not a static board." },
-    { key: "states", label: "Every state", title: "Empty, loading, error, offline", desc: "Each screen's states are designed in the file, so nothing is left for engineering to guess." },
-  ];
+    { key: "pages", label: "Page groups", title: "Split by module and fidelity", desc: "Lo-fi and hi-fi sections mirror each other across Home, Draws, Feed, Shop, Profile, and onboarding, with separate pages for components and tokens.", src: `${IMG}/page-groups.png`, alt: "The Figma file organized by module: five sections mirrored across lo-fi and hi-fi" },
+    { key: "library", label: "Component library", title: "~11 components on one token system", desc: "Foundations (color, type, glass effects) and about eleven core components with variants and properties, on a single consistent icon set, all bound to shared tokens so every screen is built from the same parts.", src: `${IMG}/component-library.png`, alt: "The Masii component library: foundations, icon set, and components on one board" },
+    { key: "prototype", label: "Prototype flows", title: "Wired into a clickable prototype", desc: "Hundreds of connections link the screens and their edge states, so the file opens as a working prototype, not a static board.", src: `${IMG}/prototype-flows.png`, alt: "The prototype view: flow starting points and hundreds of connections between screens" },  ];
 
   return (
     <CaseShell toc={<CaseToc items={toc} eyebrow="Case Study" title="Masii" />}>
