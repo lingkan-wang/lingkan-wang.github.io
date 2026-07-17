@@ -3,6 +3,7 @@
 import { type CSSProperties, type SVGProps, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { PiOpenAiLogoFill } from "react-icons/pi";
+import { FaCloud } from "react-icons/fa6";
 import {
   SiFramer,
   SiGithub,
@@ -10,7 +11,6 @@ import {
   SiNextdotjs,
   SiNotion,
   SiReact,
-  SiTailwindcss,
   SiTypescript,
   SiVercel,
 } from "react-icons/si";
@@ -48,7 +48,7 @@ const tools = [
   { name: "React", icon: SiReact, color: "#61dafb", href: "https://react.dev" },
   { name: "Next.js", icon: SiNextdotjs, color: "light-dark(#000000, #ffffff)", href: "https://nextjs.org" },
   { name: "TypeScript", icon: SiTypescript, color: "#3178c6", href: "https://typescriptlang.org" },
-  { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06b6d4", href: "https://tailwindcss.com" },
+  { name: "Cloud", icon: FaCloud, color: "#60a5fa", href: "https://cloud.google.com" },
   { name: "OpenAI", icon: PiOpenAiLogoFill, color: "light-dark(#000000, #ffffff)", href: "https://openai.com" },
   { name: "Linear", icon: SiLinear, color: "#5e6ad2", href: "https://linear.app" },
   { name: "Notion", icon: SiNotion, color: "light-dark(#000000, #ffffff)", href: "https://notion.so" },
