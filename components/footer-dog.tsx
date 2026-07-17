@@ -114,7 +114,7 @@ export function FooterDog() {
         x: target,
         transition: {
           duration: Math.max(1.5, Math.min(4.8, distance / 74)),
-          ease: "linear",
+          ease: "easeInOut",
         },
       });
 
