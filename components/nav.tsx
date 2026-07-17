@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { SiGithub } from "react-icons/si";
 import { site } from "@/lib/site";
 import { ThemeToggle } from "./theme-toggle";
 import { Logo } from "./logo";
@@ -23,11 +24,8 @@ function SocialLinks() {
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
       </a>
-      <a href={`mailto:${site.email}`} aria-label="Email" className={iconLink}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <rect x="3" y="5" width="18" height="14" rx="2" />
-          <path d="m3 7 9 6 9-6" />
-        </svg>
+      <a href={site.links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className={iconLink}>
+        <SiGithub size={16} aria-hidden="true" />
       </a>
     </>
   );
