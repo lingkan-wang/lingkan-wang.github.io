@@ -125,9 +125,23 @@
   }
 }
 
+@keyframes footer-dog-breathe {
+  from {
+    transform: scaleX(var(--dog-face)) scaleY(0.997) translateY(0.4px);
+  }
+
+  to {
+    transform: scaleX(var(--dog-face)) scaleY(1.009) translateY(-1.2px);
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .dogButton:hover {
     --dog-shadow: var(--color-shadow-strong, color-mix(in srgb, var(--color-fg) 14%, transparent));
+  }
+
+  .dogButton:not(.dogButtonStanding):hover .walkSprite {
+    animation: footer-dog-breathe 1.3s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
   }
 
   .dogButton:hover .sprite {
@@ -137,7 +151,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .spriteMoving,
-  .spriteMoving.spriteInView {
+  .spriteMoving.spriteInView,
+  .dogButton:not(.dogButtonStanding):hover .walkSprite {
     animation: none;
   }
 }
