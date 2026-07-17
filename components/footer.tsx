@@ -15,6 +15,7 @@ import {
   SiVercel,
 } from "react-icons/si";
 import { site } from "@/lib/site";
+import { FooterDog } from "@/components/footer-dog";
 
 function FigmaIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -177,11 +178,9 @@ export function Footer() {
             </p>
           </section>
 
-          <div
-            className="hidden min-h-[360px] lg:block"
-            data-footer-dog-slot
-            aria-hidden="true"
-          />
+          <div className="mt-14 min-w-0 lg:mt-0" data-footer-dog-slot>
+            <FooterDog />
+          </div>
         </div>
       </div>
     </footer>
