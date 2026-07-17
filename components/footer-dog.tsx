@@ -185,7 +185,13 @@ export function FooterDog() {
       const distance = Math.hypot(target.x - current.x, target.y - current.y);
 
       if (distance < 3) {
-        if (mode === "wander") scheduleWander(24);
+        if (mode === "command") {
+          wanderZoneRef.current = makeWanderZone(target);
+          setMoving(false);
+          scheduleWander(1000);
+        } else {
+          scheduleWander(24);
+        }
         return;
       }
 
@@ -199,7 +205,7 @@ export function FooterDog() {
         walkerX.set(target.x);
         walkerY.set(target.y);
         setMoving(false);
-        if (mode === "command") scheduleWander(650);
+        if (mode === "command") scheduleWander(1000);
         return;
       }
 
@@ -214,8 +220,12 @@ export function FooterDog() {
       const completeAxis = () => {
         completedAxes += 1;
         if (completedAxes < 2 || version !== motionVersion || !canAnimate()) return;
-        if (mode === "command") scheduleWander(650);
-        else scheduleWander(24);
+        if (mode === "command") {
+          setMoving(false);
+          scheduleWander(1000);
+        } else {
+          scheduleWander(24);
+        }
       };
 
       moveAnimationsRef.current = [
