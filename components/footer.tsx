@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { PiOpenAiLogoFill } from "react-icons/pi";
 import {
   SiFigma,
@@ -54,6 +55,7 @@ const tools = [
 ] as const;
 
 export function Footer() {
+  const pathname = usePathname();
   const [californiaTime, setCaliforniaTime] = useState("--:--");
 
   useEffect(() => {
@@ -79,6 +81,10 @@ export function Footer() {
       document.removeEventListener("visibilitychange", updateWhenVisible);
     };
   }, []);
+
+  if (pathname === "/about" || pathname === "/playground") {
+    return null;
+  }
 
   return (
     <footer className="px-6 pb-20 pt-16 sm:pb-24 sm:pt-20" aria-label="Site footer">
@@ -115,16 +121,6 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
-
-            <div className="grid min-w-0 gap-1 sm:grid-cols-[152px_minmax(0,1fr)] sm:items-baseline sm:gap-0">
-              <p className="text-muted">Curated finds</p>
-              <a className="site-footer-link" href="/playground#writing">
-                <span className="site-footer-link__text">What shapes how I think and build</span>
-                <span className="shrink-0" aria-hidden="true">
-                  →
-                </span>
-              </a>
             </div>
           </div>
         </section>
