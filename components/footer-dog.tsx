@@ -126,7 +126,7 @@ export function FooterDog() {
         x: target,
         transition: {
           duration: Math.max(1.5, Math.min(4.8, distance / 74)),
-          ease: "linear",
+          ease: [0.45, 0, 0.55, 1],
         },
       });
 
@@ -243,7 +243,7 @@ export function FooterDog() {
             aria-hidden="true"
           />
           <span
-            className={`${styles.sprite} ${styles.standSprite}`}
+            className={classNames(styles.sprite, styles.standSprite)}
             style={{ "--dog-face": facingRight ? -1 : 1 } as React.CSSProperties}
             aria-hidden="true"
           />

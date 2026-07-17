@@ -116,7 +116,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .spriteMoving {
+  .spriteMoving,
+  .spriteMoving.spriteInView {
     animation: none;
   }
 }
