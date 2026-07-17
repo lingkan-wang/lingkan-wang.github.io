@@ -1,17 +1,19 @@
 .area {
-  position: relative;
-  min-height: 220px;
-  overflow: visible;
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
 }
 
 .walker {
   position: absolute;
   z-index: 1;
-  bottom: 18px;
+  top: 0;
   left: 0;
   width: clamp(112px, 16vw, 138px);
   aspect-ratio: 512 / 560;
   cursor: grab;
+  pointer-events: auto;
   touch-action: none;
   will-change: transform;
 }
@@ -48,6 +50,55 @@
   outline-offset: 2px;
 }
 
+.greeting {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: calc(100% - 30px);
+  width: max-content;
+  max-width: 150px;
+  padding: 6px 9px;
+  border: 1px solid color-mix(in srgb, var(--color-fg) 14%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--color-fg) 9%, transparent);
+  color: var(--color-fg);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 5px) scale(0.96);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 150ms ease,
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    visibility 0s linear 200ms;
+}
+
+.greeting::after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 1px solid color-mix(in srgb, var(--color-fg) 14%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-fg) 14%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+  content: "";
+  transform: translate(-50%, -4px) rotate(45deg);
+}
+
+.dogButton:focus-visible .greeting {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0) scale(1);
+  transition-delay: 0s;
+}
+
 .sprite {
   position: absolute;
   inset: 0;
@@ -66,8 +117,8 @@
 }
 
 .walkSprite {
-  background-image: url("/dog/footer-dog-walk.png");
-  background-size: 200% 100%;
+  background-image: url("/dog/footer-dog-walk-v2.png");
+  background-size: 400% 100%;
   opacity: 1;
 }
 
@@ -87,17 +138,27 @@
 
 .spriteMoving.spriteInView {
   animation:
-    footer-dog-frames 360ms step-end infinite,
-    footer-dog-bob 180ms ease-in-out infinite alternate;
+    footer-dog-frames 440ms step-end infinite,
+    footer-dog-bob 220ms ease-in-out infinite alternate;
 }
 
 @keyframes footer-dog-frames {
   0%,
-  49.99% {
+  24.99% {
     background-position: 0 0;
   }
 
+  25%,
+  49.99% {
+    background-position: 33.333% 0;
+  }
+
   50%,
+  74.99% {
+    background-position: 66.667% 0;
+  }
+
+  75%,
   100% {
     background-position: 100% 0;
   }
@@ -113,9 +174,13 @@
   }
 }
 
-@media (min-width: 1024px) {
-  .area {
-    min-height: 360px;
+@keyframes footer-dog-breathe {
+  from {
+    transform: scaleX(var(--dog-face)) scaleY(0.997) translateY(0.4px);
+  }
+
+  to {
+    transform: scaleX(var(--dog-face)) scaleY(1.009) translateY(-1.2px);
   }
 }
 
@@ -124,14 +189,56 @@
     --dog-shadow: var(--color-shadow-strong, color-mix(in srgb, var(--color-fg) 14%, transparent));
   }
 
+  .dogButton:hover .greeting {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0) scale(1);
+    transition-delay: 0s;
+  }
+
+  .dogButton:not(.dogButtonStanding):hover .walkSprite {
+    animation: footer-dog-breathe 1.3s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  }
+
   .dogButton:hover .sprite {
     filter: drop-shadow(5px 8px 0 var(--dog-shadow)) brightness(1.03);
   }
 }
 
+.dogButton .greetingSuppressed,
+.dogButton:hover .greetingSuppressed,
+.dogButton:focus-visible .greetingSuppressed,
+.dogButtonStanding .greeting,
+.dogButtonStanding:hover .greeting,
+.dogButtonStanding:focus-visible .greeting {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 5px) scale(0.96);
+  transition:
+    opacity 80ms ease-in,
+    transform 80ms ease-in,
+    visibility 0s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .spriteMoving,
-  .spriteMoving.spriteInView {
+  .spriteMoving.spriteInView,
+  .dogButton:not(.dogButtonStanding):hover .walkSprite {
     animation: none;
+  }
+
+  .greeting,
+  .dogButton:hover .greeting,
+  .dogButton:focus-visible .greeting {
+    transform: translate(-50%, 0);
+    transition: opacity 100ms linear;
+  }
+
+  .dogButton .greetingSuppressed,
+  .dogButton:hover .greetingSuppressed,
+  .dogButton:focus-visible .greetingSuppressed,
+  .dogButtonStanding .greeting {
+    opacity: 0;
+    visibility: hidden;
   }
 }
