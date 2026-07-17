@@ -35,6 +35,11 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transform-origin: 50% 88%;
+  transition: scale 120ms ease-out;
+}
+
+.dogButton:active {
+  scale: 0.97;
 }
 
 .dogButton:focus-visible {
@@ -55,7 +60,9 @@
   transform-origin: center;
   user-select: none;
   will-change: transform, opacity;
-  transition: opacity 110ms ease-out;
+  transition:
+    opacity 110ms ease-out,
+    filter 120ms ease-out;
 }
 
 .walkSprite {
