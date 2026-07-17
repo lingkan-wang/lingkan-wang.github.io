@@ -14,6 +14,8 @@
 }
 
 .dogButton {
+  --dog-shadow: rgb(10 10 10 / 10%);
+
   position: relative;
   display: block;
   width: 100%;
@@ -35,76 +37,65 @@
 }
 
 .sprite {
+  position: absolute;
+  inset: 0;
   display: block;
-  width: 100%;
-  height: 100%;
-  background-image: url("/dog/footer-dog-walk.png");
   background-repeat: no-repeat;
   background-position: 0 0;
-  background-size: 200% 100%;
-  filter: drop-shadow(5px 7px 0 rgb(10 10 10 / 10%));
+  filter: drop-shadow(5px 7px 0 var(--dog-shadow));
   image-rendering: pixelated;
   transform: scaleX(var(--dog-face));
   transform-origin: center;
   user-select: none;
-  will-change: transform, background-position;
+  will-change: transform, opacity;
+  transition: opacity 110ms ease-out;
 }
 
-.spriteMoving {
-  animation: footer-dog-steps 460ms linear infinite;
-}
-
-.bubble {
-  position: absolute;
-  z-index: 2;
-  top: 10px;
-  left: 50%;
-  padding: 6px 8px;
-  border: 1px solid var(--color-fg);
-  border-radius: 999px;
-  background: var(--color-bg);
-  box-shadow: 2px 2px 0 var(--color-fg);
-  font-family: var(--font-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 7px) scale(0.9);
-  transition:
-    opacity 130ms linear,
-    transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
-  white-space: nowrap;
-}
-
-.bubbleVisible {
+.walkSprite {
+  background-image: url("/dog/footer-dog-walk.png");
+  background-size: 200% 100%;
   opacity: 1;
-  transform: translate(-50%, 0) scale(1);
 }
 
-@keyframes footer-dog-steps {
+.standSprite {
+  background-image: url("/dog/footer-dog-stand.png");
+  background-size: 100% 100%;
+  opacity: 0;
+}
+
+.dogButtonStanding .walkSprite {
+  opacity: 0;
+}
+
+.dogButtonStanding .standSprite {
+  opacity: 1;
+}
+
+.spriteMoving.spriteInView {
+  animation:
+    footer-dog-frames 360ms step-end infinite,
+    footer-dog-bob 180ms ease-in-out infinite alternate;
+}
+
+@keyframes footer-dog-frames {
   0%,
-  24.99%,
   49.99% {
     background-position: 0 0;
-    transform: scaleX(var(--dog-face)) translateY(0);
-  }
-
-  25% {
-    background-position: 0 0;
-    transform: scaleX(var(--dog-face)) translateY(-2px);
   }
 
   50%,
-  74.99%,
   100% {
     background-position: 100% 0;
+  }
+}
+
+@keyframes footer-dog-bob {
+  from {
     transform: scaleX(var(--dog-face)) translateY(0);
   }
 
-  75% {
-    background-position: 100% 0;
-    transform: scaleX(var(--dog-face)) translateY(-2px);
+  to {
+    transform: scaleX(var(--dog-face)) translateY(-1.5px);
   }
 }
 
@@ -115,13 +106,18 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .dogButton:hover {
+    --dog-shadow: rgb(10 10 10 / 14%);
+  }
+
   .dogButton:hover .sprite {
-    filter: drop-shadow(5px 8px 0 rgb(10 10 10 / 14%)) brightness(1.03);
+    filter: drop-shadow(5px 8px 0 var(--dog-shadow)) brightness(1.03);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .spriteMoving {
+  .spriteMoving,
+  .spriteMoving.spriteInView {
     animation: none;
   }
 }
