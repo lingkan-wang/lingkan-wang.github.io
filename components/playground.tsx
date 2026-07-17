@@ -3,12 +3,21 @@
 import {
   type CSSProperties,
   type KeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
   type PointerEvent,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { PiDotsSixVertical } from "react-icons/pi";
+import {
+  PiChatCircleDots,
+  PiCheckCircle,
+  PiDotsSixVertical,
+  PiHeart,
+  PiPaperPlaneTilt,
+  PiSmiley,
+  PiSmileySad,
+} from "react-icons/pi";
 import { MusicCard } from "@/components/about/music-card";
 import { codedWork } from "@/lib/coded";
 import { research } from "@/lib/research";
@@ -156,11 +165,87 @@ type DragState = {
   originY: number;
   itemWidth: number;
   itemHeight: number;
+  moved: boolean;
 };
+
+function FloatingFeedback() {
+  const [state, setState] = useState<"closed" | "open" | "sent">("closed");
+  const [rating, setRating] = useState<"bad" | "okay" | "love" | null>(null);
+
+  if (state === "closed") {
+    return (
+      <button
+        type="button"
+        className="little-feedback-trigger"
+        onClick={() => setState("open")}
+      >
+        <PiChatCircleDots aria-hidden="true" className="h-5 w-5" />
+        <span>Feedback</span>
+      </button>
+    );
+  }
+
+  if (state === "sent") {
+    return (
+      <button
+        type="button"
+        className="little-feedback-success"
+        onClick={() => {
+          setRating(null);
+          setState("closed");
+        }}
+      >
+        <PiCheckCircle aria-hidden="true" className="h-5 w-5" />
+        <span>Thank you</span>
+      </button>
+    );
+  }
+
+  const ratings = [
+    { id: "bad" as const, label: "Bad", Icon: PiSmileySad },
+    { id: "okay" as const, label: "Okay", Icon: PiSmiley },
+    { id: "love" as const, label: "Love it", Icon: PiHeart },
+  ];
+
+  return (
+    <div className="little-feedback-popover">
+      <div>
+        <p className="text-[13px] font-medium">How was your experience?</p>
+        <p className="mt-0.5 text-[11px] text-muted">Pick one, then send it my way.</p>
+      </div>
+
+      <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Feedback rating">
+        {ratings.map(({ id, label, Icon }) => (
+          <button
+            key={id}
+            type="button"
+            aria-pressed={rating === id}
+            className="little-feedback-rating"
+            onClick={() => setRating(id)}
+          >
+            <Icon aria-hidden="true" className="h-5 w-5" />
+            <span>{label}</span>
+          </button>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        disabled={!rating}
+        className="little-feedback-send"
+        onClick={() => setState("sent")}
+      >
+        <PiPaperPlaneTilt aria-hidden="true" className="h-4 w-4" />
+        <span>Send feedback</span>
+      </button>
+    </div>
+  );
+}
 
 function LittleRubbish() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState | null>(null);
+  const suppressClickRef = useRef<string | null>(null);
   const topZ = useRef(4);
   const [dragging, setDragging] = useState<string | null>(null);
   const [interacting, setInteracting] = useState<string | null>(null);
@@ -183,7 +268,6 @@ function LittleRubbish() {
     const placement = placements[slug];
     if (!item || !placement) return;
 
-    event.preventDefault();
     bringToFront(slug);
     setDragging(slug);
 
@@ -196,6 +280,7 @@ function LittleRubbish() {
       originY: placement.y,
       itemWidth: item.offsetWidth,
       itemHeight: item.offsetHeight,
+      moved: false,
     };
   }
 
@@ -219,6 +304,13 @@ function LittleRubbish() {
   function toggleInteraction(slug: string) {
     bringToFront(slug);
     setInteracting((current) => (current === slug ? null : slug));
+  }
+
+  function suppressClickAfterDrag(slug: string, event: ReactMouseEvent<HTMLElement>) {
+    if (suppressClickRef.current !== slug) return;
+    event.preventDefault();
+    event.stopPropagation();
+    suppressClickRef.current = null;
   }
 
   function moveWithKeyboard(slug: string, event: KeyboardEvent<HTMLButtonElement>) {
@@ -251,14 +343,18 @@ function LittleRubbish() {
   }
 
   useEffect(() => {
-    if (!dragging) return;
-
     function move(event: globalThis.PointerEvent) {
       const drag = dragRef.current;
       const canvas = canvasRef.current;
       if (!drag || drag.pointerId !== event.pointerId || !canvas) return;
 
       event.preventDefault();
+      if (
+        Math.abs(event.clientX - drag.startX) > 3 ||
+        Math.abs(event.clientY - drag.startY) > 3
+      ) {
+        drag.moved = true;
+      }
       const maxX = Math.max(0, canvas.clientWidth - drag.itemWidth);
       const maxY = Math.max(0, canvas.clientHeight - drag.itemHeight);
       const x = Math.min(maxX, Math.max(0, drag.originX + event.clientX - drag.startX));
@@ -271,7 +367,14 @@ function LittleRubbish() {
     }
 
     function end(event: globalThis.PointerEvent) {
-      if (dragRef.current?.pointerId !== event.pointerId) return;
+      const drag = dragRef.current;
+      if (!drag || drag.pointerId !== event.pointerId) return;
+      if (drag.moved) {
+        suppressClickRef.current = drag.slug;
+        window.setTimeout(() => {
+          if (suppressClickRef.current === drag.slug) suppressClickRef.current = null;
+        }, 0);
+      }
       dragRef.current = null;
       setDragging(null);
     }
@@ -284,7 +387,7 @@ function LittleRubbish() {
       window.removeEventListener("pointerup", end);
       window.removeEventListener("pointercancel", end);
     };
-  }, [dragging]);
+  }, []);
 
   return (
     <Reveal>
@@ -317,33 +420,42 @@ function LittleRubbish() {
               className="little-rubbish-item"
               style={itemStyle}
               onPointerDown={(event) => handleItemPointerDown(project.slug, event)}
+              onClickCapture={(event) => suppressClickAfterDrag(project.slug, event)}
             >
               <div className="little-rubbish-preview">
-                <iframe
-                  src={project.live}
-                  title={`${project.title} — live demo`}
-                  loading="lazy"
-                  style={{
-                    height: placement.previewHeight + project.offset,
-                  }}
-                  className="block w-full"
-                />
-                <div className="little-rubbish-drag-surface" aria-hidden="true" />
-                <button
-                  type="button"
-                  data-interact-toggle
-                  aria-pressed={interacting === project.slug}
-                  aria-label={
-                    interacting === project.slug
-                      ? `Switch ${project.title} to move mode`
-                      : `Interact with ${project.title}`
-                  }
-                  className="little-rubbish-interact-toggle"
-                  onPointerDown={(event) => event.stopPropagation()}
-                  onClick={() => toggleInteraction(project.slug)}
-                >
-                  {interacting === project.slug ? "Move" : "Interact"}
-                </button>
+                {project.slug === "feedback-popover" ? (
+                  <div className="little-feedback-stage">
+                    <FloatingFeedback />
+                  </div>
+                ) : (
+                  <>
+                    <iframe
+                      src={project.live}
+                      title={`${project.title} — live demo`}
+                      loading="lazy"
+                      style={{
+                        height: placement.previewHeight + project.offset,
+                      }}
+                      className="block w-full"
+                    />
+                    <div className="little-rubbish-drag-surface" aria-hidden="true" />
+                    <button
+                      type="button"
+                      data-interact-toggle
+                      aria-pressed={interacting === project.slug}
+                      aria-label={
+                        interacting === project.slug
+                          ? `Switch ${project.title} to move mode`
+                          : `Interact with ${project.title}`
+                      }
+                      className="little-rubbish-interact-toggle"
+                      onPointerDown={(event) => event.stopPropagation()}
+                      onClick={() => toggleInteraction(project.slug)}
+                    >
+                      {interacting === project.slug ? "Move" : "Interact"}
+                    </button>
+                  </>
+                )}
               </div>
 
               <div
@@ -390,25 +502,10 @@ function LittleRubbish() {
             } as CSSProperties
           }
           onPointerDown={(event) => handleItemPointerDown("music-player", event)}
+          onClickCapture={(event) => suppressClickAfterDrag("music-player", event)}
         >
           <div className="little-rubbish-preview">
             <MusicCard />
-            <div className="little-rubbish-drag-surface" aria-hidden="true" />
-            <button
-              type="button"
-              data-interact-toggle
-              aria-pressed={interacting === "music-player"}
-              aria-label={
-                interacting === "music-player"
-                  ? "Switch Music Player — a tiny listening machine to move mode"
-                  : "Interact with Music Player — a tiny listening machine"
-              }
-              className="little-rubbish-interact-toggle"
-              onPointerDown={(event) => event.stopPropagation()}
-              onClick={() => toggleInteraction("music-player")}
-            >
-              {interacting === "music-player" ? "Move" : "Interact"}
-            </button>
           </div>
 
           <div
