@@ -140,9 +140,63 @@ body {
 }
 
 .little-rubbish-preview {
+  position: relative;
   height: auto;
   overflow: visible;
   background: transparent;
+}
+
+.little-rubbish-drag-surface {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: grab;
+  touch-action: none;
+}
+
+.little-rubbish-item[data-dragging="true"] .little-rubbish-drag-surface {
+  cursor: grabbing;
+}
+
+.little-rubbish-item[data-interacting="true"] .little-rubbish-drag-surface {
+  pointer-events: none;
+}
+
+.little-rubbish-interact-toggle {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 6;
+  padding: 4px 8px;
+  color: var(--color-fg);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  line-height: 1;
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-fg) 14%, transparent);
+  border-radius: 999px;
+  opacity: 0;
+  backdrop-filter: blur(8px);
+  transition:
+    opacity 140ms ease,
+    background-color 140ms ease;
+}
+
+.little-rubbish-item:hover .little-rubbish-interact-toggle,
+.little-rubbish-item[data-interacting="true"] .little-rubbish-interact-toggle,
+.little-rubbish-interact-toggle:focus-visible {
+  opacity: 1;
+}
+
+.little-rubbish-interact-toggle:hover {
+  background: var(--color-bg);
+}
+
+.little-rubbish-interact-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 .little-rubbish-caption {
@@ -161,6 +215,11 @@ body {
 }
 
 @media (min-width: 768px) {
+  .little-rubbish-drag-surface,
+  .little-rubbish-interact-toggle {
+    display: block;
+  }
+
   .little-rubbish-item {
     position: absolute;
     left: var(--little-x);

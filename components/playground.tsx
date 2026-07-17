@@ -163,6 +163,7 @@ function LittleRubbish() {
   const dragRef = useRef<DragState | null>(null);
   const topZ = useRef(4);
   const [dragging, setDragging] = useState<string | null>(null);
+  const [interacting, setInteracting] = useState<string | null>(null);
   const [placements, setPlacements] = useState<Record<string, LittlePlacement>>(
     initialLittlePlacements,
   );
@@ -175,7 +176,7 @@ function LittleRubbish() {
     }));
   }
 
-  function startDrag(slug: string, event: PointerEvent<HTMLDivElement>) {
+  function startDrag(slug: string, event: PointerEvent<HTMLElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
 
     const item = event.currentTarget.closest<HTMLElement>("[data-little-item]");
@@ -196,6 +197,28 @@ function LittleRubbish() {
       itemWidth: item.offsetWidth,
       itemHeight: item.offsetHeight,
     };
+  }
+
+  function handleItemPointerDown(slug: string, event: PointerEvent<HTMLElement>) {
+    const target = event.target as Element;
+    if (target.closest("[data-interact-toggle]")) return;
+    if (!window.matchMedia("(min-width: 768px)").matches) {
+      bringToFront(slug);
+      return;
+    }
+
+    const fromCaption = Boolean(target.closest(".little-rubbish-caption"));
+    if (interacting === slug && !fromCaption) {
+      bringToFront(slug);
+      return;
+    }
+
+    startDrag(slug, event);
+  }
+
+  function toggleInteraction(slug: string) {
+    bringToFront(slug);
+    setInteracting((current) => (current === slug ? null : slug));
   }
 
   function moveWithKeyboard(slug: string, event: KeyboardEvent<HTMLButtonElement>) {
@@ -288,10 +311,12 @@ function LittleRubbish() {
             <article
               key={project.slug}
               data-little-item
+              data-project={project.slug}
               data-dragging={dragging === project.slug ? "true" : "false"}
+              data-interacting={interacting === project.slug ? "true" : "false"}
               className="little-rubbish-item"
               style={itemStyle}
-              onPointerDown={() => bringToFront(project.slug)}
+              onPointerDown={(event) => handleItemPointerDown(project.slug, event)}
             >
               <div className="little-rubbish-preview">
                 <iframe
@@ -303,11 +328,26 @@ function LittleRubbish() {
                   }}
                   className="block w-full"
                 />
+                <div className="little-rubbish-drag-surface" aria-hidden="true" />
+                <button
+                  type="button"
+                  data-interact-toggle
+                  aria-pressed={interacting === project.slug}
+                  aria-label={
+                    interacting === project.slug
+                      ? `Switch ${project.title} to move mode`
+                      : `Interact with ${project.title}`
+                  }
+                  className="little-rubbish-interact-toggle"
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onClick={() => toggleInteraction(project.slug)}
+                >
+                  {interacting === project.slug ? "Move" : "Interact"}
+                </button>
               </div>
 
               <div
                 className="little-rubbish-caption mt-3 flex cursor-grab touch-none items-start justify-between gap-4 rounded-md outline-none active:cursor-grabbing"
-                onPointerDown={(event) => startDrag(project.slug, event)}
               >
                 <div className="min-w-0">
                   <h2 className="text-[13px] font-medium leading-snug tracking-tight">
@@ -335,7 +375,9 @@ function LittleRubbish() {
 
         <article
           data-little-item
+          data-project="music-player"
           data-dragging={dragging === "music-player" ? "true" : "false"}
+          data-interacting={interacting === "music-player" ? "true" : "false"}
           className="little-rubbish-item"
           style={
             {
@@ -347,15 +389,30 @@ function LittleRubbish() {
               "--little-z": placements["music-player"].z,
             } as CSSProperties
           }
-          onPointerDown={() => bringToFront("music-player")}
+          onPointerDown={(event) => handleItemPointerDown("music-player", event)}
         >
           <div className="little-rubbish-preview">
             <MusicCard />
+            <div className="little-rubbish-drag-surface" aria-hidden="true" />
+            <button
+              type="button"
+              data-interact-toggle
+              aria-pressed={interacting === "music-player"}
+              aria-label={
+                interacting === "music-player"
+                  ? "Switch Music Player — a tiny listening machine to move mode"
+                  : "Interact with Music Player — a tiny listening machine"
+              }
+              className="little-rubbish-interact-toggle"
+              onPointerDown={(event) => event.stopPropagation()}
+              onClick={() => toggleInteraction("music-player")}
+            >
+              {interacting === "music-player" ? "Move" : "Interact"}
+            </button>
           </div>
 
           <div
             className="little-rubbish-caption mt-3 flex cursor-grab touch-none items-start justify-between gap-4 rounded-md outline-none active:cursor-grabbing"
-            onPointerDown={(event) => startDrag("music-player", event)}
           >
             <div className="min-w-0">
               <h2 className="text-[13px] font-medium leading-snug tracking-tight">
