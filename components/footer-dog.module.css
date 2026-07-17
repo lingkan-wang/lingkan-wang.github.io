@@ -1,16 +1,23 @@
 .area {
   position: relative;
   min-height: 220px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .walker {
   position: absolute;
-  bottom: -10px;
+  z-index: 1;
+  bottom: 18px;
   left: 0;
   width: clamp(112px, 16vw, 138px);
   aspect-ratio: 512 / 560;
+  cursor: grab;
+  touch-action: none;
   will-change: transform;
+}
+
+.walker:active {
+  cursor: grabbing;
 }
 
 .dogButton {
@@ -24,7 +31,7 @@
   border: 0;
   background: transparent;
   color: var(--color-fg);
-  cursor: pointer;
+  cursor: inherit;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transform-origin: 50% 88%;

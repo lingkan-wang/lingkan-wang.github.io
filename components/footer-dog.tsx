@@ -76,6 +76,11 @@ export function FooterDog() {
   const standTimerRef = useRef<number | undefined>(undefined);
   const interactingRef = useRef(false);
   const inViewRef = useRef(false);
+  const hoveredRef = useRef(false);
+  const draggingRef = useRef(false);
+  const didDragRef = useRef(false);
+  const freePositionRef = useRef(false);
+  const resumeMotionRef = useRef<() => void>(() => undefined);
   const moveControls = useAnimationControls();
   const reactionControls = useAnimationControls();
   const reduceMotion = useReducedMotion();
@@ -91,23 +96,95 @@ export function FooterDog() {
 
     let cancelled = false;
     let wanderTimer: number | undefined;
+    let followIdleTimer: number | undefined;
+    let motionVersion = 0;
+    let followingPointer = false;
 
-    const clampPosition = () => {
+    const bounds = () => {
       const min = 8;
+      if (freePositionRef.current) {
+        const areaBox = area.getBoundingClientRect();
+        return {
+          min: -areaBox.left + 8,
+          max: window.innerWidth - areaBox.left - dog.offsetWidth - 8,
+        };
+      }
+
       const max = Math.max(min, area.clientWidth - dog.offsetWidth - 8);
-      currentXRef.current = Math.max(min, Math.min(max, currentXRef.current));
-      moveControls.set({ x: currentXRef.current });
+      return { min, max };
     };
 
-    const chooseDestination = async () => {
-      if (cancelled || reduceMotion || !inViewRef.current) return;
-      if (interactingRef.current) {
-        wanderTimer = window.setTimeout(chooseDestination, 220);
+    const clampTarget = (target: number) => {
+      const { min, max } = bounds();
+      return Math.max(min, Math.min(max, target));
+    };
+
+    const readCurrentPosition = () => {
+      const areaBox = area.getBoundingClientRect();
+      const walkerBox = walkerRef.current?.getBoundingClientRect();
+      return clampTarget(walkerBox ? walkerBox.left - areaBox.left : currentXRef.current);
+    };
+
+    const stopAtCurrentPosition = () => {
+      motionVersion += 1;
+      currentXRef.current = readCurrentPosition();
+      moveControls.stop();
+      moveControls.set({ x: currentXRef.current });
+      setMoving(false);
+    };
+
+    const canMove = () =>
+      !cancelled &&
+      !reduceMotion &&
+      inViewRef.current &&
+      !hoveredRef.current &&
+      !draggingRef.current &&
+      !interactingRef.current;
+
+    function scheduleWander(delay = 0) {
+      window.clearTimeout(wanderTimer);
+      if (!canMove() || followingPointer) return;
+      wanderTimer = window.setTimeout(chooseDestination, delay);
+    }
+
+    const moveTo = (nextTarget: number, mode: "wander" | "follow") => {
+      if (!canMove()) return;
+
+      const target = clampTarget(nextTarget);
+      const current = readCurrentPosition();
+      const distance = Math.abs(target - current);
+
+      if (distance < 3) {
+        if (mode === "wander") scheduleWander(24);
         return;
       }
 
-      const min = 8;
-      const max = Math.max(min, area.clientWidth - dog.offsetWidth - 8);
+      const version = ++motionVersion;
+      setFacingRight(target > current);
+      setMoving(true);
+      currentXRef.current = target;
+
+      void moveControls
+        .start({
+          x: target,
+          transition:
+            mode === "follow"
+              ? { type: "spring", stiffness: 105, damping: 19, mass: 0.72 }
+              : {
+                  duration: Math.max(1.25, Math.min(4.4, distance / 78)),
+                  ease: [0.45, 0, 0.55, 1],
+                },
+        })
+        .then(() => {
+          if (version !== motionVersion || !canMove()) return;
+          if (!followingPointer) scheduleWander(24);
+        });
+    };
+
+    const chooseDestination = () => {
+      if (!canMove() || followingPointer) return;
+
+      const { min, max } = bounds();
       const range = max - min;
       let target = min + Math.random() * range;
 
@@ -117,28 +194,75 @@ export function FooterDog() {
           : min + Math.random() * range * 0.12;
       }
 
-      const distance = Math.abs(target - currentXRef.current);
-      setFacingRight(target > currentXRef.current);
-      setMoving(true);
-      currentXRef.current = target;
+      moveTo(target, "wander");
+    };
 
-      await moveControls.start({
-        x: target,
-        transition: {
-          duration: Math.max(1.5, Math.min(4.8, distance / 74)),
-          ease: [0.45, 0, 0.55, 1],
-        },
-      });
-
-      if (cancelled || !inViewRef.current) return;
-      setMoving(false);
-      wanderTimer = window.setTimeout(chooseDestination, 900 + Math.random() * 1900);
+    const clampPosition = () => {
+      currentXRef.current = clampTarget(currentXRef.current);
+      moveControls.set({ x: currentXRef.current });
     };
 
     const startPosition = () => {
-      const max = Math.max(8, area.clientWidth - dog.offsetWidth - 8);
-      currentXRef.current = Math.max(8, (max + 8) / 2);
+      const { min, max } = bounds();
+      currentXRef.current = Math.max(min, (max + min) / 2);
       moveControls.set({ x: currentXRef.current });
+    };
+
+    const followPointer = (event: PointerEvent) => {
+      if (
+        event.pointerType === "touch" ||
+        draggingRef.current ||
+        interactingRef.current
+      ) return;
+
+      const dogBox = dog.getBoundingClientRect();
+      const overDog =
+        event.clientX >= dogBox.left &&
+        event.clientX <= dogBox.right &&
+        event.clientY >= dogBox.top &&
+        event.clientY <= dogBox.bottom;
+
+      if (overDog) {
+        if (!hoveredRef.current) pauseForHover();
+        return;
+      }
+
+      if (hoveredRef.current) resumeAfterHover();
+
+      const areaBox = area.getBoundingClientRect();
+      followingPointer = true;
+      window.clearTimeout(wanderTimer);
+      window.clearTimeout(followIdleTimer);
+      moveTo(event.clientX - areaBox.left - dog.offsetWidth / 2, "follow");
+
+      followIdleTimer = window.setTimeout(() => {
+        followingPointer = false;
+        scheduleWander(24);
+      }, 720);
+    };
+
+    const stopFollowingPointer = () => {
+      followingPointer = false;
+      window.clearTimeout(followIdleTimer);
+      scheduleWander(24);
+    };
+
+    const pauseForHover = () => {
+      if (draggingRef.current) return;
+      hoveredRef.current = true;
+      followingPointer = false;
+      window.clearTimeout(wanderTimer);
+      window.clearTimeout(followIdleTimer);
+      stopAtCurrentPosition();
+    };
+
+    const resumeAfterHover = () => {
+      hoveredRef.current = false;
+      if (!draggingRef.current && !interactingRef.current) scheduleWander(24);
+    };
+
+    resumeMotionRef.current = () => {
+      if (!hoveredRef.current) scheduleWander(24);
     };
 
     const resizeObserver = new ResizeObserver(clampPosition);
@@ -151,27 +275,34 @@ export function FooterDog() {
         window.clearTimeout(wanderTimer);
 
         if (!isVisible) {
-          const areaBox = area.getBoundingClientRect();
-          const walkerBox = walkerRef.current?.getBoundingClientRect();
-          if (walkerBox) currentXRef.current = walkerBox.left - areaBox.left;
-          moveControls.stop();
-          moveControls.set({ x: currentXRef.current });
-          setMoving(false);
+          stopAtCurrentPosition();
           return;
         }
 
-        if (!reduceMotion) wanderTimer = window.setTimeout(chooseDestination, 240);
+        scheduleWander(80);
       },
       { threshold: 0.04 },
     );
     intersectionObserver.observe(area);
+    window.addEventListener("pointermove", followPointer);
+    window.addEventListener("blur", stopFollowingPointer);
+    document.documentElement.addEventListener("pointerleave", stopFollowingPointer);
+    dog.addEventListener("pointerenter", pauseForHover);
+    dog.addEventListener("pointerleave", resumeAfterHover);
     startPosition();
 
     return () => {
       cancelled = true;
+      resumeMotionRef.current = () => undefined;
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
+      window.removeEventListener("pointermove", followPointer);
+      window.removeEventListener("blur", stopFollowingPointer);
+      document.documentElement.removeEventListener("pointerleave", stopFollowingPointer);
+      dog.removeEventListener("pointerenter", pauseForHover);
+      dog.removeEventListener("pointerleave", resumeAfterHover);
       window.clearTimeout(wanderTimer);
+      window.clearTimeout(followIdleTimer);
       moveControls.stop();
     };
   }, [moveControls, reduceMotion]);
@@ -184,6 +315,8 @@ export function FooterDog() {
   );
 
   const interact = () => {
+    if (didDragRef.current) return;
+
     interactingRef.current = true;
     playBark();
     setStanding(true);
@@ -191,6 +324,7 @@ export function FooterDog() {
     standTimerRef.current = window.setTimeout(() => {
       setStanding(false);
       interactingRef.current = false;
+      resumeMotionRef.current();
     }, 920);
 
     const areaBox = areaRef.current?.getBoundingClientRect();
@@ -215,6 +349,40 @@ export function FooterDog() {
     });
   };
 
+  const startDrag = () => {
+    didDragRef.current = true;
+    draggingRef.current = true;
+    interactingRef.current = false;
+    window.clearTimeout(standTimerRef.current);
+    setStanding(false);
+    moveControls.stop();
+    setMoving(false);
+  };
+
+  const finishDrag = () => {
+    dogRef.current?.blur();
+    const areaBox = areaRef.current?.getBoundingClientRect();
+    const walkerBox = walkerRef.current?.getBoundingClientRect();
+    if (areaBox && walkerBox) {
+      freePositionRef.current = true;
+      currentXRef.current = Math.max(
+        -areaBox.left + 8,
+        Math.min(
+          window.innerWidth - areaBox.left - walkerBox.width - 8,
+          walkerBox.left - areaBox.left,
+        ),
+      );
+      moveControls.set({ x: currentXRef.current });
+    }
+
+    draggingRef.current = false;
+    window.setTimeout(() => {
+      didDragRef.current = false;
+    }, 0);
+
+    if (!hoveredRef.current) resumeMotionRef.current();
+  };
+
   return (
     <div ref={areaRef} className={styles.area}>
       <motion.div
@@ -222,6 +390,12 @@ export function FooterDog() {
         className={styles.walker}
         animate={moveControls}
         initial={false}
+        drag
+        dragMomentum={false}
+        dragElastic={0.04}
+        whileDrag={{ scale: 1.04, zIndex: 10 }}
+        onDragStart={startDrag}
+        onDragEnd={finishDrag}
       >
         <motion.button
           ref={dogRef}
@@ -230,7 +404,7 @@ export function FooterDog() {
           animate={reactionControls}
           initial={false}
           onClick={interact}
-          aria-label="Play with the wandering pixel dog"
+          aria-label="Play with or drag the wandering pixel dog"
         >
           <span
             className={classNames(
