@@ -21,7 +21,7 @@
 }
 
 .dogButton {
-  --dog-shadow: rgb(10 10 10 / 10%);
+  --dog-shadow: var(--color-shadow, color-mix(in srgb, var(--color-fg) 10%, transparent));
 
   position: relative;
   display: block;
@@ -38,9 +38,9 @@
 }
 
 .dogButton:focus-visible {
-  border-radius: 16px;
+  border-radius: var(--radius-lg, 16px);
   outline: 2px solid var(--color-accent);
-  outline-offset: -14px;
+  outline-offset: 2px;
 }
 
 .sprite {
@@ -114,7 +114,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .dogButton:hover {
-    --dog-shadow: rgb(10 10 10 / 14%);
+    --dog-shadow: var(--color-shadow-strong, color-mix(in srgb, var(--color-fg) 14%, transparent));
   }
 
   .dogButton:hover .sprite {
