@@ -1,30 +1,23 @@
 "use client";
 
 import { type CSSProperties, type SVGProps, useEffect, useState } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { PiOpenAiLogoFill } from "react-icons/pi";
 import {
-  SiClaude,
-  SiFramer,
   SiGithub,
   SiLinear,
   SiNextdotjs,
   SiNotion,
-  SiReact,
-  SiTypescript,
+  SiSupabase,
   SiVercel,
 } from "react-icons/si";
 import { site } from "@/lib/site";
 import { FooterDog } from "@/components/footer-dog";
 
-function FigmaIcon(props: SVGProps<SVGSVGElement>) {
+function ClaudeCodeIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg {...props} viewBox="0 0 200 300">
-      <path fill="#0acf83" d="M50 300c27.6 0 50-22.4 50-50v-50H50c-27.6 0-50 22.4-50 50s22.4 50 50 50z" />
-      <path fill="#a259ff" d="M0 150c0-27.6 22.4-50 50-50h50v100H50c-27.6 0-50-22.4-50-50z" />
-      <path fill="#f24e1e" d="M0 50C0 22.4 22.4 0 50 0h50v100H50C22.4 100 0 77.6 0 50z" />
-      <path fill="#ff7262" d="M100 0h50c27.6 0 50 22.4 50 50s-22.4 50-50 50h-50V0z" />
-      <path fill="#1abcfe" d="M200 150c0 27.6-22.4 50-50 50s-50-22.4-50-50 22.4-50 50-50 50 22.4 50 50z" />
+    <svg {...props} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M21 10.5h3v3h-3v3h-1.5v3H18v-3h-1.5v3H15v-3H9v3H7.5v-3H6v3H4.5v-3H3v-3H0v-3h3v-6h18Zm-15 0h1.5v-3H6Zm10.5 0H18v-3h-1.5z" />
     </svg>
   );
 }
@@ -43,16 +36,17 @@ const contacts = [
 ] as const;
 
 const tools = [
-  { name: "Figma", icon: FigmaIcon, color: "light-dark(#000000, #ffffff)", href: "https://figma.com" },
-  { name: "Framer", icon: SiFramer, color: "#0055ff", href: "https://framer.com" },
-  { name: "React", icon: SiReact, color: "#61dafb", href: "https://react.dev" },
+  { name: "Paper", image: "/toolbox/paper.svg", href: "https://paper.design" },
+  { name: "Figma", image: "/toolbox/figma.svg", href: "https://figma.com" },
+  { name: "Spline", image: "/toolbox/spline.png", href: "https://spline.design" },
+  { name: "Claude Code", icon: ClaudeCodeIcon, color: "#D97757", href: "https://claude.ai/code" },
+  { name: "ChatGPT", image: "/toolbox/chatgpt.svg", href: "https://chatgpt.com" },
+  { name: "Supabase", icon: SiSupabase, color: "#3FCF8E", href: "https://supabase.com" },
+  { name: "Lovable", image: "/toolbox/lovable.svg", href: "https://lovable.dev" },
   { name: "Next.js", icon: SiNextdotjs, color: "light-dark(#000000, #ffffff)", href: "https://nextjs.org" },
-  { name: "TypeScript", icon: SiTypescript, color: "#3178c6", href: "https://typescriptlang.org" },
-  { name: "Claude", icon: SiClaude, color: "#d97757", href: "https://claude.ai" },
-  { name: "OpenAI", icon: PiOpenAiLogoFill, color: "light-dark(#000000, #ffffff)", href: "https://openai.com" },
-  { name: "Linear", icon: SiLinear, color: "#5e6ad2", href: "https://linear.app" },
+  { name: "Linear", icon: SiLinear, color: "#5E6AD2", href: "https://linear.app" },
   { name: "Notion", icon: SiNotion, color: "light-dark(#000000, #ffffff)", href: "https://notion.so" },
-  { name: "GitHub", icon: SiGithub, color: "light-dark(#181717, #f0f6fc)", href: "https://github.com" },
+  { name: "GitHub", icon: SiGithub, color: "light-dark(#181717, #ffffff)", href: "https://github.com" },
   { name: "Vercel", icon: SiVercel, color: "light-dark(#000000, #ffffff)", href: "https://vercel.com" },
 ] as const;
 
@@ -106,25 +100,41 @@ export function Footer() {
             <div className="grid min-w-0 gap-3 sm:grid-cols-[152px_minmax(0,1fr)] sm:items-center sm:gap-0">
               <p className="text-muted">Stack</p>
               <ul
-                className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-3 text-muted/65"
+                className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-3"
                 aria-label="Design and development stack"
               >
-                {tools.map(({ name, icon: Icon, color, href }) => (
-                  <li key={name}>
-                    <a
-                      className="toolbox-tool"
-                      data-tool-name={name}
-                      style={{ "--tool-color": color } as CSSProperties}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={name}
-                    >
-                      <Icon className="toolbox-tool__icon" aria-hidden="true" />
-                      <span className="sr-only">{name}</span>
-                    </a>
-                  </li>
-                ))}
+                {tools.map((tool) => {
+                  const localImage = "image" in tool;
+                  const Icon = "icon" in tool ? tool.icon : null;
+
+                  return (
+                    <li key={tool.name}>
+                      <a
+                        className={`toolbox-tool${localImage ? " toolbox-tool--local" : ""}`}
+                        data-tool-name={tool.name}
+                        style={"color" in tool ? ({ "--tool-color": tool.color } as CSSProperties) : undefined}
+                        href={tool.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={tool.name}
+                      >
+                        {localImage ? (
+                          <Image
+                            src={tool.image}
+                            alt=""
+                            width={20}
+                            height={20}
+                            className="toolbox-tool__icon"
+                            aria-hidden="true"
+                          />
+                        ) : Icon ? (
+                          <Icon className="toolbox-tool__icon" aria-hidden="true" />
+                        ) : null}
+                        <span className="sr-only">{tool.name}</span>
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>

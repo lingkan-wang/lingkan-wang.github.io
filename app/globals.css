@@ -38,12 +38,13 @@ body {
 .toolbox-tool {
   position: relative;
   display: grid;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 20px;
+  height: 20px;
   place-items: center;
-  color: var(--color-muted);
+  color: #999;
   border-radius: 2px;
   outline-offset: 5px;
+  transition: color 150ms ease-out;
 }
 
 .toolbox-tool::after {
@@ -51,7 +52,7 @@ body {
   position: absolute;
   bottom: calc(100% + 0.5rem);
   left: 50%;
-  z-index: 10;
+  z-index: 50;
   padding: 3px 6px;
   color: #555;
   font-size: 12px;
@@ -67,20 +68,27 @@ body {
 }
 
 .dark .toolbox-tool::after {
-  color: #d4d4d4;
-  background: #262626;
-  border-color: rgb(255 255 255 / 8%);
+  color: #999;
+  background: #1a1a1a;
+  border-color: rgb(255 255 255 / 7%);
 }
 
 .toolbox-tool__icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  filter: grayscale(1);
-  opacity: 0.4;
-  transition:
-    color 150ms ease-out,
-    filter 150ms ease-out,
-    opacity 150ms ease-out;
+  width: 20px;
+  height: 20px;
+}
+
+.toolbox-tool--local .toolbox-tool__icon {
+  filter: grayscale(1) opacity(0.4);
+  transition: filter 150ms ease-out;
+}
+
+.dark .toolbox-tool {
+  color: #555;
+}
+
+.dark .toolbox-tool--local .toolbox-tool__icon {
+  filter: grayscale(1) brightness(0) invert(1) opacity(0.57);
 }
 
 .toolbox-tool:focus-visible {
@@ -94,9 +102,20 @@ body {
 }
 
 .toolbox-tool:focus-visible .toolbox-tool__icon {
+  color: var(--tool-color);
+}
+
+.toolbox-tool--local:focus-visible .toolbox-tool__icon {
   filter: none;
-  opacity: 1;
   transition-duration: 0ms;
+}
+
+.dark .toolbox-tool:focus-visible {
+  color: #eee;
+}
+
+.dark .toolbox-tool--local:focus-visible .toolbox-tool__icon {
+  filter: brightness(0) invert(1);
 }
 
 .site-footer-link {
@@ -150,8 +169,19 @@ body {
   }
 
   .toolbox-tool:hover .toolbox-tool__icon {
+    color: var(--tool-color);
+  }
+
+  .toolbox-tool--local:hover .toolbox-tool__icon {
     filter: none;
-    opacity: 1;
+  }
+
+  .dark .toolbox-tool:hover {
+    color: #eee;
+  }
+
+  .dark .toolbox-tool--local:hover .toolbox-tool__icon {
+    filter: brightness(0) invert(1);
   }
 
   .site-footer-link:hover {
