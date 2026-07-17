@@ -14,6 +14,8 @@
 }
 
 .dogButton {
+  --dog-shadow: rgb(10 10 10 / 10%);
+
   position: relative;
   display: block;
   width: 100%;
@@ -40,12 +42,13 @@
   display: block;
   background-repeat: no-repeat;
   background-position: 0 0;
-  filter: drop-shadow(5px 7px 0 rgb(10 10 10 / 10%));
+  filter: drop-shadow(5px 7px 0 var(--dog-shadow));
   image-rendering: pixelated;
   transform: scaleX(var(--dog-face));
   transform-origin: center;
   user-select: none;
-  will-change: transform;
+  will-change: transform, opacity;
+  transition: opacity 110ms ease-out;
 }
 
 .walkSprite {
@@ -68,7 +71,7 @@
   opacity: 1;
 }
 
-.spriteMoving {
+.spriteMoving.spriteInView {
   animation:
     footer-dog-frames 360ms step-end infinite,
     footer-dog-bob 180ms ease-in-out infinite alternate;
@@ -103,8 +106,12 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .dogButton:hover {
+    --dog-shadow: rgb(10 10 10 / 14%);
+  }
+
   .dogButton:hover .sprite {
-    filter: drop-shadow(5px 8px 0 rgb(10 10 10 / 14%)) brightness(1.03);
+    filter: drop-shadow(5px 8px 0 var(--dog-shadow)) brightness(1.03);
   }
 }
 

@@ -6,6 +6,10 @@ import styles from "./footer-dog.module.css";
 
 let barkContext: AudioContext | null = null;
 
+function classNames(...values: Array<string | false | null | undefined>) {
+  return values.filter(Boolean).join(" ");
+}
+
 function playBark() {
   const AudioContextClass =
     window.AudioContext ??
@@ -71,9 +75,11 @@ export function FooterDog() {
   const currentXRef = useRef(0);
   const standTimerRef = useRef<number | undefined>(undefined);
   const interactingRef = useRef(false);
+  const inViewRef = useRef(false);
   const moveControls = useAnimationControls();
   const reactionControls = useAnimationControls();
   const reduceMotion = useReducedMotion();
+  const [inView, setInView] = useState(false);
   const [moving, setMoving] = useState(false);
   const [facingRight, setFacingRight] = useState(false);
   const [standing, setStanding] = useState(false);
@@ -94,7 +100,7 @@ export function FooterDog() {
     };
 
     const chooseDestination = async () => {
-      if (cancelled || reduceMotion) return;
+      if (cancelled || reduceMotion || !inViewRef.current) return;
       if (interactingRef.current) {
         wanderTimer = window.setTimeout(chooseDestination, 220);
         return;
@@ -124,7 +130,7 @@ export function FooterDog() {
         },
       });
 
-      if (cancelled) return;
+      if (cancelled || !inViewRef.current) return;
       setMoving(false);
       wanderTimer = window.setTimeout(chooseDestination, 900 + Math.random() * 1900);
     };
@@ -133,16 +139,38 @@ export function FooterDog() {
       const max = Math.max(8, area.clientWidth - dog.offsetWidth - 8);
       currentXRef.current = Math.max(8, (max + 8) / 2);
       moveControls.set({ x: currentXRef.current });
-      if (!reduceMotion) wanderTimer = window.setTimeout(chooseDestination, 650);
     };
 
-    const observer = new ResizeObserver(clampPosition);
-    observer.observe(area);
+    const resizeObserver = new ResizeObserver(clampPosition);
+    resizeObserver.observe(area);
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        const isVisible = entry.isIntersecting;
+        inViewRef.current = isVisible;
+        setInView(isVisible);
+        window.clearTimeout(wanderTimer);
+
+        if (!isVisible) {
+          const areaBox = area.getBoundingClientRect();
+          const walkerBox = walkerRef.current?.getBoundingClientRect();
+          if (walkerBox) currentXRef.current = walkerBox.left - areaBox.left;
+          moveControls.stop();
+          moveControls.set({ x: currentXRef.current });
+          setMoving(false);
+          return;
+        }
+
+        if (!reduceMotion) wanderTimer = window.setTimeout(chooseDestination, 240);
+      },
+      { threshold: 0.04 },
+    );
+    intersectionObserver.observe(area);
     startPosition();
 
     return () => {
       cancelled = true;
-      observer.disconnect();
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
       window.clearTimeout(wanderTimer);
       moveControls.stop();
     };
@@ -198,16 +226,19 @@ export function FooterDog() {
         <motion.button
           ref={dogRef}
           type="button"
-          className={`${styles.dogButton} ${standing ? styles.dogButtonStanding : ""}`}
+          className={classNames(styles.dogButton, standing && styles.dogButtonStanding)}
           animate={reactionControls}
           initial={false}
           onClick={interact}
           aria-label="Play with the wandering pixel dog"
         >
           <span
-            className={`${styles.sprite} ${styles.walkSprite} ${
-              moving && !standing ? styles.spriteMoving : ""
-            }`}
+            className={classNames(
+              styles.sprite,
+              styles.walkSprite,
+              moving && !standing && styles.spriteMoving,
+              inView && styles.spriteInView,
+            )}
             style={{ "--dog-face": facingRight ? -1 : 1 } as React.CSSProperties}
             aria-hidden="true"
           />
