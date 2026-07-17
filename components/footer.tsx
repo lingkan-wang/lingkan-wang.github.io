@@ -1,10 +1,9 @@
 "use client";
 
-import { type CSSProperties, useEffect, useState } from "react";
+import { type CSSProperties, type SVGProps, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { PiOpenAiLogoFill } from "react-icons/pi";
 import {
-  SiFigma,
   SiFramer,
   SiGithub,
   SiLinear,
@@ -16,6 +15,18 @@ import {
   SiVercel,
 } from "react-icons/si";
 import { site } from "@/lib/site";
+
+function FigmaIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...props} viewBox="0 0 200 300">
+      <path fill="#0acf83" d="M50 300c27.6 0 50-22.4 50-50v-50H50c-27.6 0-50 22.4-50 50s22.4 50 50 50z" />
+      <path fill="#a259ff" d="M0 150c0-27.6 22.4-50 50-50h50v100H50c-27.6 0-50-22.4-50-50z" />
+      <path fill="#f24e1e" d="M0 50C0 22.4 22.4 0 50 0h50v100H50C22.4 100 0 77.6 0 50z" />
+      <path fill="#ff7262" d="M100 0h50c27.6 0 50 22.4 50 50s-22.4 50-50 50h-50V0z" />
+      <path fill="#1abcfe" d="M200 150c0 27.6-22.4 50-50 50s-50-22.4-50-50 22.4-50 50-50 50 22.4 50 50z" />
+    </svg>
+  );
+}
 
 const contacts = [
   {
@@ -41,17 +52,17 @@ const contacts = [
 ] as const;
 
 const tools = [
-  { name: "Figma", icon: SiFigma, color: "#f24e1e", href: "https://figma.com" },
+  { name: "Figma", icon: FigmaIcon, color: "light-dark(#000000, #ffffff)", href: "https://figma.com" },
   { name: "Framer", icon: SiFramer, color: "#0055ff", href: "https://framer.com" },
-  { name: "React", icon: SiReact, color: "#087ea4", href: "https://react.dev" },
-  { name: "Next.js", icon: SiNextdotjs, color: "var(--color-fg)", href: "https://nextjs.org" },
+  { name: "React", icon: SiReact, color: "#61dafb", href: "https://react.dev" },
+  { name: "Next.js", icon: SiNextdotjs, color: "light-dark(#000000, #ffffff)", href: "https://nextjs.org" },
   { name: "TypeScript", icon: SiTypescript, color: "#3178c6", href: "https://typescriptlang.org" },
   { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06b6d4", href: "https://tailwindcss.com" },
-  { name: "OpenAI", icon: PiOpenAiLogoFill, color: "#10a37f", href: "https://openai.com" },
+  { name: "OpenAI", icon: PiOpenAiLogoFill, color: "light-dark(#000000, #ffffff)", href: "https://openai.com" },
   { name: "Linear", icon: SiLinear, color: "#5e6ad2", href: "https://linear.app" },
-  { name: "Notion", icon: SiNotion, color: "var(--color-fg)", href: "https://notion.so" },
-  { name: "GitHub", icon: SiGithub, color: "var(--color-fg)", href: "https://github.com" },
-  { name: "Vercel", icon: SiVercel, color: "var(--color-fg)", href: "https://vercel.com" },
+  { name: "Notion", icon: SiNotion, color: "light-dark(#000000, #ffffff)", href: "https://notion.so" },
+  { name: "GitHub", icon: SiGithub, color: "light-dark(#181717, #f0f6fc)", href: "https://github.com" },
+  { name: "Vercel", icon: SiVercel, color: "light-dark(#000000, #ffffff)", href: "https://vercel.com" },
 ] as const;
 
 export function Footer() {
