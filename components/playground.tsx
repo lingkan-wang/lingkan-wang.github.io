@@ -130,21 +130,6 @@ function Writing() {
   );
 }
 
-const categoryCopy: Record<PlaygroundCategory, { title: string; description: string }> = {
-  "vibe-coding": {
-    title: "Vibe Coding",
-    description: "Interactive components I design and build — live and playable right here. Have a click.",
-  },
-  "little-rubbish": {
-    title: "Little Rubbish",
-    description: "A home for tiny experiments, odd scraps, and ideas that are still becoming something.",
-  },
-  writing: {
-    title: "Writing",
-    description: "HCI and learning-sciences research on how people learn, collaborate, and interact with the things we build.",
-  },
-};
-
 export function Playground({ initialCategory = "vibe-coding" }: { initialCategory?: PlaygroundCategory }) {
   const [active, setActive] = useState<PlaygroundCategory>(initialCategory);
 
@@ -164,13 +149,11 @@ export function Playground({ initialCategory = "vibe-coding" }: { initialCategor
     window.history.replaceState(null, "", `#${category}`);
   }
 
-  const copy = categoryCopy[active];
-
   return (
     <div className="mx-auto max-w-[1080px] px-6 pb-28 pt-20 sm:pt-28">
       <Reveal>
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Playground</h1>
-        <p className="mt-4 max-w-[680px] text-[15px] leading-7 text-muted">
+        <p className="mt-4 text-[15px] leading-7 text-muted">
           A cabinet of things I code, collect, and write — from playable prototypes to small scraps and research.
         </p>
       </Reveal>
@@ -212,13 +195,6 @@ export function Playground({ initialCategory = "vibe-coding" }: { initialCategor
         aria-labelledby={`tab-${active}`}
         className="mt-12"
       >
-        <Reveal>
-          <div className="mb-10 flex flex-col gap-3 border-b border-border pb-7 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="text-2xl font-semibold tracking-tight">{copy.title}</h2>
-            <p className="max-w-[620px] text-[14px] leading-6 text-muted sm:text-right">{copy.description}</p>
-          </div>
-        </Reveal>
-
         {active === "vibe-coding" && <VibeCoding />}
         {active === "little-rubbish" && <LittleRubbish />}
         {active === "writing" && <Writing />}
