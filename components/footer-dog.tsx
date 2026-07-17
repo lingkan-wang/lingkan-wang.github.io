@@ -18,6 +18,7 @@ function classNames(...values: Array<string | false | null | undefined>) {
 
 type Point = { x: number; y: number };
 type Bounds = { minX: number; maxX: number; minY: number; maxY: number };
+type CollisionRect = { left: number; right: number; top: number; bottom: number };
 type MoveMode = "wander" | "command";
 
 function playBark() {
@@ -136,6 +137,56 @@ export function FooterDog() {
       y: Math.max(bounds.minY, Math.min(bounds.maxY, point.y)),
     });
 
+    const textObstacles = (): CollisionRect[] => {
+      const areaBox = area.getBoundingClientRect();
+      return Array.from(footer.querySelectorAll<HTMLElement>("h2, p, dt, dd, li"))
+        .map((element) => {
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          const box = range.getBoundingClientRect();
+          range.detach();
+          return {
+            left: box.left - areaBox.left,
+            right: box.right - areaBox.left,
+            top: box.top - areaBox.top,
+            bottom: box.bottom - areaBox.top,
+          };
+        })
+        .filter((box) => box.right > box.left && box.bottom > box.top);
+    };
+
+    const isSafePoint = (point: Point, obstacles = textObstacles()) => {
+      const padding = 12;
+      const dogRight = point.x + walker.offsetWidth;
+      const dogBottom = point.y + walker.offsetHeight;
+      return obstacles.every(
+        (box) =>
+          dogRight + padding <= box.left ||
+          point.x - padding >= box.right ||
+          dogBottom + padding <= box.top ||
+          point.y - padding >= box.bottom,
+      );
+    };
+
+    const isSafePath = (from: Point, to: Point, obstacles: CollisionRect[]) => {
+      const distance = Math.hypot(to.x - from.x, to.y - from.y);
+      const steps = Math.max(1, Math.ceil(distance / 22));
+      let reachedSafeSpace = isSafePoint(from, obstacles);
+
+      for (let step = 1; step <= steps; step += 1) {
+        const progress = step / steps;
+        const point = {
+          x: from.x + (to.x - from.x) * progress,
+          y: from.y + (to.y - from.y) * progress,
+        };
+        const safe = isSafePoint(point, obstacles);
+        if (safe) reachedSafeSpace = true;
+        else if (reachedSafeSpace) return false;
+      }
+
+      return reachedSafeSpace;
+    };
+
     const makeWanderZone = (center: Point): Bounds => {
       const bounds = fullBounds();
       const radiusX = Math.min(240, Math.max(130, area.clientWidth * 0.22));
@@ -240,24 +291,29 @@ export function FooterDog() {
       const bounds = wanderZoneRef.current ?? fullBounds();
       const rangeX = bounds.maxX - bounds.minX;
       const rangeY = bounds.maxY - bounds.minY;
-      let target: Point = {
-        x: bounds.minX + Math.random() * rangeX,
-        y: bounds.minY + Math.random() * rangeY,
-      };
+      const current = readCurrentPosition();
+      const obstacles = textObstacles();
+      let target: Point | null = null;
 
-      if (
-        rangeX > 100 &&
-        Math.abs(target.x - currentPositionRef.current.x) < Math.min(80, rangeX * 0.34)
-      ) {
-        target = {
-          ...target,
-          x:
-            currentPositionRef.current.x < bounds.minX + rangeX / 2
-              ? bounds.maxX - Math.random() * rangeX * 0.12
-              : bounds.minX + Math.random() * rangeX * 0.12,
+      for (let attempt = 0; attempt < 64; attempt += 1) {
+        const candidate = {
+          x: bounds.minX + Math.random() * rangeX,
+          y: bounds.minY + Math.random() * rangeY,
         };
+        if (
+          Math.hypot(candidate.x - current.x, candidate.y - current.y) >= 54 &&
+          isSafePoint(candidate, obstacles) &&
+          isSafePath(current, candidate, obstacles)
+        ) {
+          target = candidate;
+          break;
+        }
       }
 
+      if (!target) {
+        scheduleWander(320);
+        return;
+      }
       moveTo(target, "wander");
     };
 
@@ -319,10 +375,12 @@ export function FooterDog() {
       if (window.getSelection()?.toString()) return;
 
       const areaBox = area.getBoundingClientRect();
-      commandMotionRef.current({
+      const point = {
         x: mouseEvent.clientX - areaBox.left - walker.offsetWidth / 2,
         y: mouseEvent.clientY - areaBox.top - walker.offsetHeight / 2,
-      });
+      };
+      if (!isSafePoint(clampPoint(point))) return;
+      commandMotionRef.current(point);
     };
 
     const resizeObserver = new ResizeObserver(clampPosition);
