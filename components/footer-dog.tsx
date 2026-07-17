@@ -451,13 +451,17 @@ export function FooterDog() {
 
     reactionControls.stop();
     void reactionControls.start({
-      y: reduceMotion ? [0, -2, 0] : [0, -5, -4, -5, 0],
-      rotate: reduceMotion ? [0, 0, 0] : [0, -1.5, 1.2, -0.7, 0],
-      scale: reduceMotion ? [1, 1, 1] : [1, 0.985, 1.02, 1.01, 1],
+      y: reduceMotion ? [0, -2, 0] : [0, 1.2, -8.5, -12, -10, -4, 0, 1.2, 0],
+      rotate: reduceMotion ? [0, 0, 0] : [0, 0, -0.8, 0.55, 0.8, 0.3, 0, 0, 0],
+      scale: reduceMotion
+        ? [1, 1, 1]
+        : [1, 0.975, 1.012, 1.02, 1.014, 1.004, 0.982, 1.008, 1],
       transition: {
-        duration: reduceMotion ? 0.22 : 0.78,
-        ease: [0.22, 1, 0.36, 1],
-        times: reduceMotion ? [0, 0.5, 1] : [0, 0.18, 0.48, 0.72, 1],
+        duration: reduceMotion ? 0.22 : 0.84,
+        ease: [0.36, 0, 0.2, 1],
+        times: reduceMotion
+          ? [0, 0.5, 1]
+          : [0, 0.1, 0.24, 0.38, 0.5, 0.64, 0.78, 0.9, 1],
       },
     });
   };
@@ -525,7 +529,11 @@ export function FooterDog() {
     <div ref={areaRef} className={styles.area}>
       <motion.div
         ref={walkerRef}
-        className={styles.walker}
+        className={classNames(
+          styles.walker,
+          moving && !standing && styles.walkerMoving,
+          standing && styles.walkerStanding,
+        )}
         style={{ x: walkerX, y: walkerY }}
         initial={false}
         drag
@@ -537,12 +545,12 @@ export function FooterDog() {
         onDragStart={startDrag}
         onDragEnd={finishDrag}
       >
+        <span className={styles.groundShadow} aria-hidden="true" />
         <motion.button
           ref={dogRef}
           type="button"
           className={classNames(
             styles.dogButton,
-            moving && !standing && styles.dogButtonMoving,
             standing && styles.dogButtonStanding,
           )}
           animate={reactionControls}
