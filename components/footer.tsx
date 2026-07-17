@@ -92,7 +92,8 @@ export function Footer() {
   }
 
   return (
-    <footer className="px-6 pb-20 pt-16 sm:pb-24 sm:pt-20" aria-label="Site footer">
+    <footer className="relative px-6 pb-20 pt-16 sm:pb-24 sm:pt-20" aria-label="Site footer">
+      <FooterDog />
       <div className="mx-auto w-full max-w-[1080px]">
         <section className="mb-20 sm:mb-24" aria-labelledby="footer-toolbox-title">
           <h2
@@ -163,14 +164,10 @@ export function Footer() {
               })}
             </dl>
 
-            <p className="mt-20 text-muted sm:mt-24" aria-live="off">
+            <p className="mt-20 text-muted sm:mt-24" aria-live="off" data-footer-time>
               It&apos;s <span className="inline-block min-w-[4.8ch] tabular-nums">{californiaTime}</span> in California.
             </p>
           </section>
-
-          <div className="mt-14 min-w-0 lg:mt-0" data-footer-dog-slot>
-            <FooterDog />
-          </div>
         </div>
       </div>
     </footer>
