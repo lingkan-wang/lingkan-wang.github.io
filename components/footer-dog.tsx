@@ -18,7 +18,7 @@ function classNames(...values: Array<string | false | null | undefined>) {
 
 type Point = { x: number; y: number };
 type Bounds = { minX: number; maxX: number; minY: number; maxY: number };
-type MoveMode = "wander" | "follow" | "command";
+type MoveMode = "wander" | "command";
 
 function playBark() {
   const AudioContextClass =
@@ -113,11 +113,7 @@ export function FooterDog() {
 
     let cancelled = false;
     let wanderTimer: number | undefined;
-    let followIdleTimer: number | undefined;
-    let pointerFrame: number | undefined;
-    let pendingPointer: { x: number; y: number } | null = null;
     let motionVersion = 0;
-    let followingPointer = false;
 
     const stopAnimations = () => {
       moveAnimationsRef.current.forEach((animation) => animation.stop());
@@ -174,7 +170,7 @@ export function FooterDog() {
 
     function scheduleWander(delay = 0) {
       window.clearTimeout(wanderTimer);
-      if (!canAnimate() || followingPointer) return;
+      if (!canAnimate()) return;
       wanderTimer = window.setTimeout(chooseDestination, delay);
     }
 
@@ -210,19 +206,16 @@ export function FooterDog() {
       setMoving(true);
       stopAnimations();
 
-      const transition =
-        mode === "follow"
-          ? { type: "spring" as const, stiffness: 105, damping: 19, mass: 0.72 }
-          : {
-              duration: Math.max(0.52, Math.min(3.6, distance / 112)),
-              ease: [0.45, 0, 0.55, 1] as const,
-            };
+      const transition = {
+        duration: Math.max(0.52, Math.min(3.6, distance / 112)),
+        ease: [0.45, 0, 0.55, 1] as const,
+      };
       let completedAxes = 0;
       const completeAxis = () => {
         completedAxes += 1;
         if (completedAxes < 2 || version !== motionVersion || !canAnimate()) return;
         if (mode === "command") scheduleWander(650);
-        else if (!followingPointer) scheduleWander(24);
+        else scheduleWander(24);
       };
 
       moveAnimationsRef.current = [
@@ -232,7 +225,7 @@ export function FooterDog() {
     };
 
     const chooseDestination = () => {
-      if (!canAnimate() || followingPointer) return;
+      if (!canAnimate()) return;
 
       const bounds = wanderZoneRef.current ?? fullBounds();
       const rangeX = bounds.maxX - bounds.minX;
@@ -284,87 +277,10 @@ export function FooterDog() {
       walkerY.set(start.y);
     };
 
-    const applyPointerFollow = () => {
-      pointerFrame = undefined;
-      const pointer = pendingPointer;
-      if (
-        !pointer ||
-        cancelled ||
-        reduceMotion ||
-        !inViewRef.current ||
-        draggingRef.current ||
-        interactingRef.current
-      ) return;
-
-      const areaBox = area.getBoundingClientRect();
-      const insideFooter =
-        pointer.x >= areaBox.left &&
-        pointer.x <= areaBox.right &&
-        pointer.y >= areaBox.top &&
-        pointer.y <= areaBox.bottom;
-      if (!insideFooter) {
-        if (followingPointer) stopFollowingPointer();
-        return;
-      }
-
-      const dogBox = dog.getBoundingClientRect();
-      const overDog =
-        pointer.x >= dogBox.left &&
-        pointer.x <= dogBox.right &&
-        pointer.y >= dogBox.top &&
-        pointer.y <= dogBox.bottom;
-
-      if (overDog) {
-        if (!hoveredRef.current) pauseForHover();
-        return;
-      }
-
-      if (hoveredRef.current) resumeAfterHover();
-
-      followingPointer = true;
-      window.clearTimeout(wanderTimer);
-      window.clearTimeout(followIdleTimer);
-      moveTo(
-        {
-          x: pointer.x - areaBox.left - walker.offsetWidth / 2,
-          y: pointer.y - areaBox.top - walker.offsetHeight / 2,
-        },
-        "follow",
-      );
-
-      followIdleTimer = window.setTimeout(() => {
-        followingPointer = false;
-        wanderZoneRef.current = makeWanderZone(readCurrentPosition());
-        scheduleWander(24);
-      }, 720);
-    };
-
-    const followPointer = (event: PointerEvent) => {
-      if (
-        event.pointerType === "touch" ||
-        draggingRef.current ||
-        interactingRef.current ||
-        !inViewRef.current ||
-        reduceMotion
-      ) return;
-
-      pendingPointer = { x: event.clientX, y: event.clientY };
-      if (pointerFrame === undefined) pointerFrame = window.requestAnimationFrame(applyPointerFollow);
-    };
-
-    const stopFollowingPointer = () => {
-      followingPointer = false;
-      window.clearTimeout(followIdleTimer);
-      wanderZoneRef.current = makeWanderZone(readCurrentPosition());
-      scheduleWander(24);
-    };
-
     const pauseForHover = () => {
       if (draggingRef.current) return;
       hoveredRef.current = true;
-      followingPointer = false;
       window.clearTimeout(wanderTimer);
-      window.clearTimeout(followIdleTimer);
       stopAtCurrentPosition();
     };
 
@@ -378,9 +294,7 @@ export function FooterDog() {
     };
     pauseMotionRef.current = stopAtCurrentPosition;
     commandMotionRef.current = (point) => {
-      followingPointer = false;
       window.clearTimeout(wanderTimer);
-      window.clearTimeout(followIdleTimer);
       moveTo(point, "command");
     };
 
@@ -420,9 +334,6 @@ export function FooterDog() {
       { threshold: 0.04 },
     );
     intersectionObserver.observe(area);
-    window.addEventListener("pointermove", followPointer);
-    window.addEventListener("blur", stopFollowingPointer);
-    document.documentElement.addEventListener("pointerleave", stopFollowingPointer);
     footer.addEventListener("click", walkToFooterClick);
     dog.addEventListener("pointerenter", pauseForHover);
     dog.addEventListener("pointerleave", resumeAfterHover);
@@ -435,15 +346,10 @@ export function FooterDog() {
       commandMotionRef.current = () => undefined;
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
-      window.removeEventListener("pointermove", followPointer);
-      window.removeEventListener("blur", stopFollowingPointer);
-      document.documentElement.removeEventListener("pointerleave", stopFollowingPointer);
       footer.removeEventListener("click", walkToFooterClick);
       dog.removeEventListener("pointerenter", pauseForHover);
       dog.removeEventListener("pointerleave", resumeAfterHover);
       window.clearTimeout(wanderTimer);
-      window.clearTimeout(followIdleTimer);
-      if (pointerFrame !== undefined) window.cancelAnimationFrame(pointerFrame);
       stopAnimations();
     };
   }, [reduceMotion, walkerX, walkerY]);
