@@ -78,12 +78,8 @@ export default function About() {
         <Reveal delay={0.05}>
           <p className="mb-3 text-right font-mono text-[11px] uppercase tracking-widest text-muted">▸ click around…</p>
           <div className="grid grid-cols-2 gap-3">
-            <div className={cardCls}>
-              <XCard />
-            </div>
-            <div className={cardCls}>
-              <ThreadsCard />
-            </div>
+            <XCard />
+            <ThreadsCard />
             <div className={cardCls}>
               <PhotoCard />
             </div>
