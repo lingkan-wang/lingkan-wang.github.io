@@ -57,6 +57,9 @@ const tools = [
 export function Footer() {
   const pathname = usePathname();
   const [californiaTime, setCaliforniaTime] = useState("--:--");
+  const hideFooter = ["/about", "/playground"].some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
 
   useEffect(() => {
     const formatter = new Intl.DateTimeFormat("en-US", {
@@ -82,7 +85,7 @@ export function Footer() {
     };
   }, []);
 
-  if (pathname === "/about" || pathname === "/playground") {
+  if (hideFooter) {
     return null;
   }
 
