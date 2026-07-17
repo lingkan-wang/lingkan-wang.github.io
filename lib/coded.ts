@@ -1,5 +1,5 @@
-// Vibe Coding = things you design AND build. Each is shown as a live, fully-playable
-// demo inside the Playground (all interaction happens inside the frame).
+// Coded pieces shown as live, fully-playable demos inside the Playground
+// (all interaction happens inside the frame). The Playground assigns them to tabs.
 // `offset` crops that many px off the TOP of the embed (to hide a demo's own redundant
 // heading); every card uses the same visible frame height.
 export type CodedWork = {

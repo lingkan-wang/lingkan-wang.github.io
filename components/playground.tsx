@@ -36,10 +36,10 @@ function categoryFromHash(): PlaygroundCategory | null {
     : null;
 }
 
-function VibeCoding() {
+function ProjectGrid({ projects }: { projects: typeof codedWork }) {
   return (
     <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2">
-      {codedWork.map((project, index) => (
+      {projects.map((project, index) => (
         <Reveal key={project.slug} delay={(index % 2) * 0.05}>
           <article>
             <div
@@ -90,32 +90,12 @@ function VibeCoding() {
   );
 }
 
+function VibeCoding() {
+  return <ProjectGrid projects={codedWork.slice(0, 3)} />;
+}
+
 function LittleRubbish() {
-  return (
-    <Reveal>
-      <div className="relative min-h-[440px] overflow-hidden rounded-2xl border border-border bg-[#fafafa] p-6 dark:bg-[#111] sm:p-10">
-        <div className="relative flex min-h-[360px] flex-col items-center justify-center text-center">
-          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted">
-            Drawer 02 · currently sorting
-          </p>
-          <h2 className="mt-4 text-2xl font-medium tracking-tight">The little things go here.</h2>
-          <p className="mt-3 max-w-[460px] text-[14px] leading-6 text-muted">
-            Small experiments, visual jokes, unfinished ideas, and things that do not need a case study. Nothing public in the drawer yet.
-          </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-2">
-            {["Tiny experiments", "Visual scraps", "Maybe later"].map((label) => (
-              <span
-                key={label}
-                className="rounded-full border border-border bg-bg/80 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted backdrop-blur"
-              >
-                {label}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </Reveal>
-  );
+  return <ProjectGrid projects={codedWork.slice(3)} />;
 }
 
 function Writing() {
