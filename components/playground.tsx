@@ -1,6 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  type CSSProperties,
+  type KeyboardEvent,
+  type PointerEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { PiDotsSixVertical } from "react-icons/pi";
+import { MusicCard } from "@/components/about/music-card";
 import { codedWork } from "@/lib/coded";
 import { research } from "@/lib/research";
 import { ResearchCard } from "@/components/research-card";
@@ -94,8 +103,283 @@ function VibeCoding() {
   return <ProjectGrid projects={codedWork.slice(0, 3)} />;
 }
 
+type LittlePlacement = {
+  x: number;
+  y: number;
+  width: number;
+  previewHeight: number;
+  rotation: number;
+  z: number;
+};
+
+const initialLittlePlacements: Record<string, LittlePlacement> = {
+  "bubble-todo": {
+    x: 18,
+    y: 22,
+    width: 278,
+    previewHeight: 370,
+    rotation: -2,
+    z: 1,
+  },
+  "toast-sonner": {
+    x: 656,
+    y: 18,
+    width: 390,
+    previewHeight: 244,
+    rotation: 1.8,
+    z: 2,
+  },
+  "feedback-popover": {
+    x: 370,
+    y: 470,
+    width: 336,
+    previewHeight: 252,
+    rotation: -0.8,
+    z: 3,
+  },
+  "music-player": {
+    x: 786,
+    y: 405,
+    width: 260,
+    previewHeight: 330,
+    rotation: 1.2,
+    z: 4,
+  },
+};
+
+type DragState = {
+  slug: string;
+  pointerId: number;
+  startX: number;
+  startY: number;
+  originX: number;
+  originY: number;
+  itemWidth: number;
+  itemHeight: number;
+};
+
 function LittleRubbish() {
-  return <ProjectGrid projects={codedWork.slice(3)} />;
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<DragState | null>(null);
+  const topZ = useRef(4);
+  const [dragging, setDragging] = useState<string | null>(null);
+  const [placements, setPlacements] = useState<Record<string, LittlePlacement>>(
+    initialLittlePlacements,
+  );
+
+  function bringToFront(slug: string) {
+    topZ.current += 1;
+    setPlacements((current) => ({
+      ...current,
+      [slug]: { ...current[slug], z: topZ.current },
+    }));
+  }
+
+  function startDrag(slug: string, event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    const item = event.currentTarget.closest<HTMLElement>("[data-little-item]");
+    const placement = placements[slug];
+    if (!item || !placement) return;
+
+    event.preventDefault();
+    bringToFront(slug);
+    setDragging(slug);
+
+    dragRef.current = {
+      slug,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: placement.x,
+      originY: placement.y,
+      itemWidth: item.offsetWidth,
+      itemHeight: item.offsetHeight,
+    };
+  }
+
+  function moveWithKeyboard(slug: string, event: KeyboardEvent<HTMLButtonElement>) {
+    const directions: Record<string, [number, number]> = {
+      ArrowLeft: [-1, 0],
+      ArrowRight: [1, 0],
+      ArrowUp: [0, -1],
+      ArrowDown: [0, 1],
+    };
+    const direction = directions[event.key];
+    const canvas = canvasRef.current;
+    const placement = placements[slug];
+    if (!direction || !canvas || !placement) return;
+
+    event.preventDefault();
+    const step = event.shiftKey ? 30 : 10;
+    const item = event.currentTarget.closest<HTMLElement>("[data-little-item]");
+    const maxX = Math.max(0, canvas.clientWidth - (item?.offsetWidth ?? placement.width));
+    const maxY = Math.max(0, canvas.clientHeight - (item?.offsetHeight ?? 0));
+
+    bringToFront(slug);
+    setPlacements((current) => ({
+      ...current,
+      [slug]: {
+        ...current[slug],
+        x: Math.min(maxX, Math.max(0, current[slug].x + direction[0] * step)),
+        y: Math.min(maxY, Math.max(0, current[slug].y + direction[1] * step)),
+      },
+    }));
+  }
+
+  useEffect(() => {
+    if (!dragging) return;
+
+    function move(event: globalThis.PointerEvent) {
+      const drag = dragRef.current;
+      const canvas = canvasRef.current;
+      if (!drag || drag.pointerId !== event.pointerId || !canvas) return;
+
+      event.preventDefault();
+      const maxX = Math.max(0, canvas.clientWidth - drag.itemWidth);
+      const maxY = Math.max(0, canvas.clientHeight - drag.itemHeight);
+      const x = Math.min(maxX, Math.max(0, drag.originX + event.clientX - drag.startX));
+      const y = Math.min(maxY, Math.max(0, drag.originY + event.clientY - drag.startY));
+
+      setPlacements((current) => ({
+        ...current,
+        [drag.slug]: { ...current[drag.slug], x, y },
+      }));
+    }
+
+    function end(event: globalThis.PointerEvent) {
+      if (dragRef.current?.pointerId !== event.pointerId) return;
+      dragRef.current = null;
+      setDragging(null);
+    }
+
+    window.addEventListener("pointermove", move, { passive: false });
+    window.addEventListener("pointerup", end);
+    window.addEventListener("pointercancel", end);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("pointercancel", end);
+    };
+  }, [dragging]);
+
+  return (
+    <Reveal>
+      <div
+        ref={canvasRef}
+        className="little-rubbish-canvas relative space-y-12 md:min-h-[820px] md:space-y-0"
+      >
+        <p className="mb-8 text-center text-[13px] text-muted md:absolute md:left-1/2 md:top-[270px] md:mb-0 md:-translate-x-1/2 md:text-[14px]">
+          Tiny experiments. Move anything.
+        </p>
+
+        {codedWork.slice(3).map((project) => {
+          const placement = placements[project.slug] ?? initialLittlePlacements[project.slug];
+          const itemStyle = {
+            "--little-x": `${placement.x}px`,
+            "--little-y": `${placement.y}px`,
+            "--little-width": `${placement.width}px`,
+            "--little-preview-height": `${placement.previewHeight}px`,
+            "--little-rotation": `${placement.rotation}deg`,
+            "--little-z": placement.z,
+          } as CSSProperties;
+
+          return (
+            <article
+              key={project.slug}
+              data-little-item
+              data-dragging={dragging === project.slug ? "true" : "false"}
+              className="little-rubbish-item"
+              style={itemStyle}
+              onPointerDown={() => bringToFront(project.slug)}
+            >
+              <div className="little-rubbish-preview overflow-hidden rounded-xl border border-border bg-[#fafafa]">
+                <iframe
+                  src={project.live}
+                  title={`${project.title} — live demo`}
+                  loading="lazy"
+                  style={{
+                    height: placement.previewHeight + project.offset,
+                    marginTop: -project.offset,
+                  }}
+                  className="block w-full"
+                />
+              </div>
+
+              <div
+                className="little-rubbish-caption mt-3 flex cursor-grab touch-none items-start justify-between gap-4 rounded-md outline-none active:cursor-grabbing"
+                onPointerDown={(event) => startDrag(project.slug, event)}
+              >
+                <div className="min-w-0">
+                  <h2 className="text-[13px] font-medium leading-snug tracking-tight">
+                    {project.title}
+                  </h2>
+                  <span className="mt-0.5 block font-mono text-[11px] text-muted">
+                    {project.year}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  aria-label={`Move ${project.title}`}
+                  title="Drag to move · Arrow keys also work"
+                  className="little-rubbish-handle shrink-0 rounded-sm text-muted outline-offset-4 transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-accent"
+                  onFocus={() => bringToFront(project.slug)}
+                  onKeyDown={(event) => moveWithKeyboard(project.slug, event)}
+                >
+                  <PiDotsSixVertical aria-hidden="true" className="h-5 w-5" />
+                </button>
+              </div>
+            </article>
+          );
+        })}
+
+        <article
+          data-little-item
+          data-dragging={dragging === "music-player" ? "true" : "false"}
+          className="little-rubbish-item"
+          style={
+            {
+              "--little-x": `${placements["music-player"].x}px`,
+              "--little-y": `${placements["music-player"].y}px`,
+              "--little-width": `${placements["music-player"].width}px`,
+              "--little-preview-height": `${placements["music-player"].previewHeight}px`,
+              "--little-rotation": `${placements["music-player"].rotation}deg`,
+              "--little-z": placements["music-player"].z,
+            } as CSSProperties
+          }
+          onPointerDown={() => bringToFront("music-player")}
+        >
+          <div className="little-rubbish-preview overflow-hidden rounded-xl border border-border bg-[#f7f7f7] p-3">
+            <MusicCard />
+          </div>
+
+          <div
+            className="little-rubbish-caption mt-3 flex cursor-grab touch-none items-start justify-between gap-4 rounded-md outline-none active:cursor-grabbing"
+            onPointerDown={(event) => startDrag("music-player", event)}
+          >
+            <div className="min-w-0">
+              <h2 className="text-[13px] font-medium leading-snug tracking-tight">
+                Music Player — a tiny listening machine
+              </h2>
+              <span className="mt-0.5 block font-mono text-[11px] text-muted">2026</span>
+            </div>
+
+            <button
+              type="button"
+              aria-label="Move Music Player — a tiny listening machine"
+              title="Drag to move · Arrow keys also work"
+              className="little-rubbish-handle shrink-0 rounded-sm text-muted outline-offset-4 transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-accent"
+              onFocus={() => bringToFront("music-player")}
+              onKeyDown={(event) => moveWithKeyboard("music-player", event)}
+            >
+              <PiDotsSixVertical aria-hidden="true" className="h-5 w-5" />
+            </button>
+          </div>
+        </article>
+      </div>
+    </Reveal>
+  );
 }
 
 function Writing() {
@@ -173,7 +457,7 @@ export function Playground({ initialCategory = "vibe-coding" }: { initialCategor
         id={`panel-${active}`}
         role="tabpanel"
         aria-labelledby={`tab-${active}`}
-        className="mt-12"
+        className={active === "little-rubbish" ? "mt-8" : "mt-12"}
       >
         {active === "vibe-coding" && <VibeCoding />}
         {active === "little-rubbish" && <LittleRubbish />}
