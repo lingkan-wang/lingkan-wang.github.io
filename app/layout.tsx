@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Nav } from "@/components/nav";
 import { CommandPalette } from "@/components/command-palette";
+import { Footer } from "@/components/footer";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <Nav />
           <main className="flex-1">{children}</main>
+          <Footer />
           <CommandPalette />
         </ThemeProvider>
       </body>
