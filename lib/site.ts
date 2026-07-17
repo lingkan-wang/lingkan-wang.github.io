@@ -7,8 +7,10 @@ export const site = {
   previously: ["CMU HCII", "Ecovacs Robotics", "KuaiShou (Kwai)", "Varsity Tutors"],
   email: "wanglingkan614@gmail.com",
   links: {
+    website: "https://lingkan-wang.github.io/",
     linkedin: "https://www.linkedin.com/in/lingkanwang/",
     x: "https://x.com/WangLingkan",
+    github: "https://github.com/lingkan-wang",
     // kept so the (untouched) command palette still compiles; not shown in the header
     instagram: "https://www.instagram.com/wanglingkan183/",
   },
