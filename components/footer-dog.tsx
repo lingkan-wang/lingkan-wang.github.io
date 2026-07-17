@@ -201,7 +201,6 @@ export function FooterDog() {
           />
         </motion.button>
       </motion.div>
-      <span className={styles.hint}>click to say hi</span>
     </div>
   );
 }
