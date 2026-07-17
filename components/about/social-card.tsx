@@ -44,7 +44,7 @@ export function SocialCard({
       rel="noopener noreferrer"
       aria-label={ariaLabel}
       onPointerEnter={onHover}
-      className="group @container relative flex min-h-[282px] flex-col overflow-hidden rounded-2xl bg-fg/[0.035] p-8 text-fg transition-[transform,box-shadow,background-color] duration-200 ease-out hover:-translate-y-0.5 hover:bg-fg/[0.055] hover:shadow-[0_16px_36px_-20px_rgba(0,0,0,0.35)] active:scale-[0.985] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent @min-[200px]:min-h-[292px]"
+      className="group @container relative flex min-h-[282px] flex-col overflow-hidden rounded-2xl bg-fg/[0.035] p-8 text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent @min-[200px]:min-h-[292px]"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm font-semibold">
