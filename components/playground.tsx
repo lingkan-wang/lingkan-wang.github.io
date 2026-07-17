@@ -25,6 +25,14 @@ import { ResearchCard } from "@/components/research-card";
 import { Reveal } from "@/components/reveal";
 
 const FRAME_H = 420;
+const vibeCodingProjects = codedWork.filter((project) =>
+  ["photo-transfer", "masii-sign", "journey-globe", "toast-sonner"].includes(
+    project.slug,
+  ),
+);
+const littleRubbishProjects = codedWork.filter((project) =>
+  ["bubble-todo", "feedback-popover"].includes(project.slug),
+);
 
 export type PlaygroundCategory = "vibe-coding" | "little-rubbish" | "writing";
 
@@ -109,7 +117,7 @@ function ProjectGrid({ projects }: { projects: typeof codedWork }) {
 }
 
 function VibeCoding() {
-  return <ProjectGrid projects={codedWork.slice(0, 3)} />;
+  return <ProjectGrid projects={vibeCodingProjects} />;
 }
 
 type LittlePlacement = {
@@ -130,21 +138,13 @@ const initialLittlePlacements: Record<string, LittlePlacement> = {
     rotation: -2,
     z: 1,
   },
-  "toast-sonner": {
-    x: 656,
-    y: 18,
-    width: 390,
-    previewHeight: 430,
-    rotation: 1.8,
-    z: 2,
-  },
   "feedback-popover": {
     x: 360,
     y: 720,
     width: 336,
     previewHeight: 360,
     rotation: -0.8,
-    z: 3,
+    z: 2,
   },
   "music-player": {
     x: 786,
@@ -152,7 +152,7 @@ const initialLittlePlacements: Record<string, LittlePlacement> = {
     width: 260,
     previewHeight: 330,
     rotation: 1.2,
-    z: 4,
+    z: 3,
   },
 };
 
@@ -246,7 +246,7 @@ function LittleRubbish() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState | null>(null);
   const suppressClickRef = useRef<string | null>(null);
-  const topZ = useRef(4);
+  const topZ = useRef(3);
   const [dragging, setDragging] = useState<string | null>(null);
   const [interacting, setInteracting] = useState<string | null>(null);
   const [placements, setPlacements] = useState<Record<string, LittlePlacement>>(
@@ -399,7 +399,7 @@ function LittleRubbish() {
           Tiny experiments. Move anything.
         </p>
 
-        {codedWork.slice(3).map((project) => {
+        {littleRubbishProjects.map((project) => {
           const placement = placements[project.slug] ?? initialLittlePlacements[project.slug];
           const itemStyle = {
             "--little-x": `${placement.x}px`,
