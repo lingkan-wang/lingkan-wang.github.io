@@ -1,20 +1,27 @@
 .area {
   position: relative;
   min-height: 220px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .walker {
   position: absolute;
-  bottom: -10px;
+  z-index: 1;
+  bottom: 18px;
   left: 0;
   width: clamp(112px, 16vw, 138px);
   aspect-ratio: 512 / 560;
+  cursor: grab;
+  touch-action: none;
   will-change: transform;
 }
 
+.walker:active {
+  cursor: grabbing;
+}
+
 .dogButton {
-  --dog-shadow: rgb(10 10 10 / 10%);
+  --dog-shadow: var(--color-shadow, color-mix(in srgb, var(--color-fg) 10%, transparent));
 
   position: relative;
   display: block;
@@ -24,16 +31,21 @@
   border: 0;
   background: transparent;
   color: var(--color-fg);
-  cursor: pointer;
+  cursor: inherit;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transform-origin: 50% 88%;
+  transition: scale 120ms ease-out;
+}
+
+.dogButton:active {
+  scale: 0.97;
 }
 
 .dogButton:focus-visible {
-  border-radius: 16px;
+  border-radius: var(--radius-lg, 16px);
   outline: 2px solid var(--color-accent);
-  outline-offset: -14px;
+  outline-offset: 2px;
 }
 
 .sprite {
@@ -48,7 +60,9 @@
   transform-origin: center;
   user-select: none;
   will-change: transform, opacity;
-  transition: opacity 110ms ease-out;
+  transition:
+    opacity 110ms ease-out,
+    filter 120ms ease-out;
 }
 
 .walkSprite {
@@ -107,7 +121,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .dogButton:hover {
-    --dog-shadow: rgb(10 10 10 / 14%);
+    --dog-shadow: var(--color-shadow-strong, color-mix(in srgb, var(--color-fg) 14%, transparent));
   }
 
   .dogButton:hover .sprite {
