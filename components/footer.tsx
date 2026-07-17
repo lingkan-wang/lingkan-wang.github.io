@@ -36,14 +36,9 @@ const contacts = [
     href: `mailto:${site.email}`,
   },
   {
-    label: "LinkedIn",
-    value: "lingkanwang",
-    href: site.links.linkedin,
-  },
-  {
-    label: "X",
-    value: "WangLingkan",
-    href: site.links.x,
+    label: "Phone",
+    value: "4129960978",
+    href: "tel:+14129960978",
   },
   {
     label: "GitHub",
