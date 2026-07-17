@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/lib/site";
+import { FooterDog } from "@/components/footer-dog";
 
 const contacts = [
   {
@@ -98,11 +99,9 @@ export function Footer() {
           </p>
         </div>
 
-        <div
-          className="hidden min-h-[360px] lg:block"
-          data-footer-dog-slot
-          aria-hidden="true"
-        />
+        <div className="mt-14 min-w-0 lg:mt-0" data-footer-dog-slot>
+          <FooterDog />
+        </div>
       </div>
     </footer>
   );
