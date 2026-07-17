@@ -297,9 +297,13 @@ export function FooterDog() {
       let target: Point | null = null;
 
       for (let attempt = 0; attempt < 64; attempt += 1) {
+        const verticalStep = Math.min(46, Math.max(22, rangeY * 0.32));
         const candidate = {
           x: bounds.minX + Math.random() * rangeX,
-          y: bounds.minY + Math.random() * rangeY,
+          y: Math.max(
+            bounds.minY,
+            Math.min(bounds.maxY, current.y + (Math.random() * 2 - 1) * verticalStep),
+          ),
         };
         if (
           Math.hypot(candidate.x - current.x, candidate.y - current.y) >= 54 &&
@@ -536,7 +540,11 @@ export function FooterDog() {
         <motion.button
           ref={dogRef}
           type="button"
-          className={classNames(styles.dogButton, standing && styles.dogButtonStanding)}
+          className={classNames(
+            styles.dogButton,
+            moving && !standing && styles.dogButtonMoving,
+            standing && styles.dogButtonStanding,
+          )}
           animate={reactionControls}
           initial={false}
           onClick={interact}
