@@ -1,5 +1,5 @@
-// HCI / learning-sciences research. Cards mirror the Coded Work layout:
-// a first-page paper preview on top, then title + venue + tags + summary.
+// HCI / learning-sciences writing. These papers live under Playground → Writing.
+// Each card uses a first-page preview, title, venue, tags, and summary.
 export type Paper = {
   title: string;
   venue: string; // e.g. "CHI 2026"

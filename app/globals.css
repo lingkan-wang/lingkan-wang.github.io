@@ -47,7 +47,7 @@ body {
   color: var(--color-muted);
 }
 
-/* Spotify-style playlist page (/coded) micro-animations. The reduced-motion
+/* Shared micro-animations. The reduced-motion
    block below neutralizes all of these via !important. */
 @keyframes vinyl-rotate { to { transform: rotate(360deg); } }
 .vinyl-disc { transform-box: fill-box; transform-origin: center; }
