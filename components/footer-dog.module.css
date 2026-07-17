@@ -38,7 +38,7 @@
   transition: scale 120ms ease-out;
 }
 
-.dogButton::before {
+.groundShadow {
   position: absolute;
   z-index: 0;
   left: 16%;
@@ -159,15 +159,16 @@
   opacity: 1;
 }
 
-.dogButtonStanding::before {
-  opacity: 0.52;
-  transform: scaleX(0.68);
+.walkerStanding .groundShadow {
+  animation: footer-dog-jump-shadow 840ms cubic-bezier(0.36, 0, 0.2, 1) both;
+}
+
+.walkerMoving .groundShadow {
+  animation: footer-dog-ground-contact 240ms ease-in-out infinite alternate;
 }
 
 .spriteMoving.spriteInView {
-  animation:
-    footer-dog-frames 440ms step-end infinite,
-    footer-dog-bob 220ms ease-in-out infinite alternate;
+  animation: footer-dog-frames 480ms step-end infinite;
 }
 
 @keyframes footer-dog-frames {
@@ -192,13 +193,43 @@
   }
 }
 
-@keyframes footer-dog-bob {
+@keyframes footer-dog-ground-contact {
   from {
-    transform: scaleX(var(--dog-face)) translateY(0);
+    opacity: 0.66;
+    transform: scaleX(0.9);
   }
 
   to {
-    transform: scaleX(var(--dog-face)) translateY(-1.5px);
+    opacity: 0.72;
+    transform: scaleX(0.96);
+  }
+}
+
+@keyframes footer-dog-jump-shadow {
+  0% {
+    opacity: 0.7;
+    transform: scaleX(0.94);
+  }
+
+  10% {
+    opacity: 0.76;
+    transform: scaleX(1);
+  }
+
+  38%,
+  50% {
+    opacity: 0.34;
+    transform: scaleX(0.62);
+  }
+
+  78% {
+    opacity: 0.75;
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0.52;
+    transform: scaleX(0.68);
   }
 }
 
@@ -251,6 +282,11 @@
     animation: none;
   }
 
+  .walkerMoving .groundShadow,
+  .walkerStanding .groundShadow {
+    animation: none;
+  }
+
   .greeting,
   .dogButton:hover .greeting,
   .dogButton:focus-visible .greeting {
@@ -266,7 +302,7 @@
     visibility: hidden;
   }
 
-  .dogButton::before {
+  .groundShadow {
     transition: none;
   }
 }
