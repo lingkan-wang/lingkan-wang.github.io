@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { PiOpenAiLogoFill } from "react-icons/pi";
 import {
   SiFigma,
@@ -40,17 +40,17 @@ const contacts = [
 ] as const;
 
 const tools = [
-  { name: "Figma", icon: SiFigma },
-  { name: "Framer", icon: SiFramer },
-  { name: "React", icon: SiReact },
-  { name: "Next.js", icon: SiNextdotjs },
-  { name: "TypeScript", icon: SiTypescript },
-  { name: "Tailwind CSS", icon: SiTailwindcss },
-  { name: "OpenAI", icon: PiOpenAiLogoFill },
-  { name: "Linear", icon: SiLinear },
-  { name: "Notion", icon: SiNotion },
-  { name: "GitHub", icon: SiGithub },
-  { name: "Vercel", icon: SiVercel },
+  { name: "Figma", icon: SiFigma, color: "#f24e1e", href: "https://figma.com" },
+  { name: "Framer", icon: SiFramer, color: "#0055ff", href: "https://framer.com" },
+  { name: "React", icon: SiReact, color: "#087ea4", href: "https://react.dev" },
+  { name: "Next.js", icon: SiNextdotjs, color: "var(--color-fg)", href: "https://nextjs.org" },
+  { name: "TypeScript", icon: SiTypescript, color: "#3178c6", href: "https://typescriptlang.org" },
+  { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06b6d4", href: "https://tailwindcss.com" },
+  { name: "OpenAI", icon: PiOpenAiLogoFill, color: "#10a37f", href: "https://openai.com" },
+  { name: "Linear", icon: SiLinear, color: "#5e6ad2", href: "https://linear.app" },
+  { name: "Notion", icon: SiNotion, color: "var(--color-fg)", href: "https://notion.so" },
+  { name: "GitHub", icon: SiGithub, color: "var(--color-fg)", href: "https://github.com" },
+  { name: "Vercel", icon: SiVercel, color: "var(--color-fg)", href: "https://vercel.com" },
 ] as const;
 
 export function Footer() {
@@ -98,10 +98,20 @@ export function Footer() {
                 className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-3 text-muted/65"
                 aria-label="Design and development stack"
               >
-                {tools.map(({ name, icon: Icon }) => (
-                  <li key={name} className="grid size-6 place-items-center" title={name}>
-                    <Icon className="size-6" aria-hidden="true" />
-                    <span className="sr-only">{name}</span>
+                {tools.map(({ name, icon: Icon, color, href }) => (
+                  <li key={name}>
+                    <a
+                      className="toolbox-tool"
+                      data-tool-name={name}
+                      style={{ "--tool-color": color } as CSSProperties}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={name}
+                    >
+                      <Icon className="toolbox-tool__icon" aria-hidden="true" />
+                      <span className="sr-only">{name}</span>
+                    </a>
                   </li>
                 ))}
               </ul>
