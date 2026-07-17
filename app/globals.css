@@ -140,11 +140,9 @@ body {
 }
 
 .little-rubbish-preview {
-  height: 320px;
-  box-shadow: 0 14px 32px rgb(0 0 0 / 5%);
-  transition:
-    box-shadow 180ms ease,
-    transform 180ms ease;
+  height: auto;
+  overflow: visible;
+  background: transparent;
 }
 
 .little-rubbish-caption {
@@ -176,17 +174,13 @@ body {
   }
 
   .little-rubbish-item[data-dragging="true"] {
-    filter: drop-shadow(0 20px 24px rgb(0 0 0 / 12%));
+    filter: drop-shadow(0 18px 20px rgb(0 0 0 / 10%));
     transform: rotate(0deg) scale(1.015);
     transition-duration: 80ms;
   }
 
   .little-rubbish-preview {
-    height: var(--little-preview-height);
-  }
-
-  .little-rubbish-item[data-dragging="true"] .little-rubbish-preview {
-    box-shadow: 0 24px 48px rgb(0 0 0 / 10%);
+    height: auto;
   }
 
   .little-rubbish-handle {

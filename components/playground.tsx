@@ -117,7 +117,7 @@ const initialLittlePlacements: Record<string, LittlePlacement> = {
     x: 18,
     y: 22,
     width: 278,
-    previewHeight: 370,
+    previewHeight: 460,
     rotation: -2,
     z: 1,
   },
@@ -125,21 +125,21 @@ const initialLittlePlacements: Record<string, LittlePlacement> = {
     x: 656,
     y: 18,
     width: 390,
-    previewHeight: 244,
+    previewHeight: 430,
     rotation: 1.8,
     z: 2,
   },
   "feedback-popover": {
-    x: 370,
-    y: 470,
+    x: 360,
+    y: 720,
     width: 336,
-    previewHeight: 252,
+    previewHeight: 360,
     rotation: -0.8,
     z: 3,
   },
   "music-player": {
     x: 786,
-    y: 405,
+    y: 720,
     width: 260,
     previewHeight: 330,
     rotation: 1.2,
@@ -267,9 +267,9 @@ function LittleRubbish() {
     <Reveal>
       <div
         ref={canvasRef}
-        className="little-rubbish-canvas relative space-y-12 md:min-h-[820px] md:space-y-0"
+        className="little-rubbish-canvas relative space-y-12 overflow-visible md:min-h-[1200px] md:space-y-0"
       >
-        <p className="mb-8 text-center text-[13px] text-muted md:absolute md:left-1/2 md:top-[270px] md:mb-0 md:-translate-x-1/2 md:text-[14px]">
+        <p className="mb-8 text-center text-[13px] text-muted md:absolute md:left-1/2 md:top-[320px] md:mb-0 md:-translate-x-1/2 md:text-[14px]">
           Tiny experiments. Move anything.
         </p>
 
@@ -293,14 +293,13 @@ function LittleRubbish() {
               style={itemStyle}
               onPointerDown={() => bringToFront(project.slug)}
             >
-              <div className="little-rubbish-preview overflow-hidden rounded-xl border border-border bg-[#fafafa]">
+              <div className="little-rubbish-preview">
                 <iframe
                   src={project.live}
                   title={`${project.title} — live demo`}
                   loading="lazy"
                   style={{
                     height: placement.previewHeight + project.offset,
-                    marginTop: -project.offset,
                   }}
                   className="block w-full"
                 />
@@ -350,7 +349,7 @@ function LittleRubbish() {
           }
           onPointerDown={() => bringToFront("music-player")}
         >
-          <div className="little-rubbish-preview overflow-hidden rounded-xl border border-border bg-[#f7f7f7] p-3">
+          <div className="little-rubbish-preview">
             <MusicCard />
           </div>
 
