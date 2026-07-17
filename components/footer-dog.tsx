@@ -103,6 +103,7 @@ export function FooterDog() {
   const [moving, setMoving] = useState(false);
   const [facingRight, setFacingRight] = useState(false);
   const [standing, setStanding] = useState(false);
+  const [greetingSuppressed, setGreetingSuppressed] = useState(false);
   const [dragBounds, setDragBounds] = useState({ left: 0, right: 0, top: 0, bottom: 0 });
 
   useEffect(() => {
@@ -432,6 +433,7 @@ export function FooterDog() {
   const interact = () => {
     if (didDragRef.current) return;
 
+    setGreetingSuppressed(true);
     interactingRef.current = true;
     playBark();
     setStanding(true);
@@ -465,6 +467,7 @@ export function FooterDog() {
   };
 
   const prepareDrag = () => {
+    setGreetingSuppressed(true);
     pauseMotionRef.current();
     const areaBox = areaRef.current?.getBoundingClientRect();
     const walkerBox = walkerRef.current?.getBoundingClientRect();
@@ -537,9 +540,17 @@ export function FooterDog() {
           animate={reactionControls}
           initial={false}
           onClick={interact}
+          onPointerLeave={() => setGreetingSuppressed(false)}
+          onBlur={() => setGreetingSuppressed(false)}
           aria-label="Play with or drag Pom Pom, the wandering pixel dog"
         >
-          <span className={styles.greeting} aria-hidden="true">
+          <span
+            className={classNames(
+              styles.greeting,
+              greetingSuppressed && styles.greetingSuppressed,
+            )}
+            aria-hidden="true"
+          >
             Hi I am pom pom
           </span>
           <span

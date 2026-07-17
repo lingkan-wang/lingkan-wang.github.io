@@ -205,6 +205,21 @@
   }
 }
 
+.dogButton .greetingSuppressed,
+.dogButton:hover .greetingSuppressed,
+.dogButton:focus-visible .greetingSuppressed,
+.dogButtonStanding .greeting,
+.dogButtonStanding:hover .greeting,
+.dogButtonStanding:focus-visible .greeting {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 5px) scale(0.96);
+  transition:
+    opacity 80ms ease-in,
+    transform 80ms ease-in,
+    visibility 0s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .spriteMoving,
   .spriteMoving.spriteInView,
@@ -217,5 +232,13 @@
   .dogButton:focus-visible .greeting {
     transform: translate(-50%, 0);
     transition: opacity 100ms linear;
+  }
+
+  .dogButton .greetingSuppressed,
+  .dogButton:hover .greetingSuppressed,
+  .dogButton:focus-visible .greetingSuppressed,
+  .dogButtonStanding .greeting {
+    opacity: 0;
+    visibility: hidden;
   }
 }
