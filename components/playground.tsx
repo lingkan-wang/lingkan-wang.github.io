@@ -33,6 +33,91 @@ const vibeCodingProjects = codedWork.filter((project) =>
 const littleRubbishProjects = codedWork.filter((project) =>
   ["bubble-todo", "feedback-popover"].includes(project.slug),
 );
+const bubbleEmbedSrcDoc = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <base href="https://lingkan-wang.github.io/bubble-todo/" />
+    <link rel="stylesheet" href="style.css" />
+    <style>html, body { touch-action: none; }</style>
+  </head>
+  <body class="mode-peek">
+    <div id="stage">
+      <div id="fly-layer"></div>
+      <div id="parked-layer"></div>
+      <div id="hint">Type a to-do · double-click to blow · click to pop ✓</div>
+      <div id="girl-wrap">
+        <img id="girl" src="assets/girl.png" draggable="false" alt="" />
+        <div id="attached-bubble" class="bubble">
+          <div class="bubble-img"></div>
+          <div class="bubble-text" contenteditable="false" spellcheck="false"></div>
+        </div>
+      </div>
+      <img id="peek" src="assets/peek.png" draggable="false" alt="" />
+      <div id="peek-hint">click me 👇</div>
+    </div>
+    <script>
+      (() => {
+        const channel = "little-rubbish-drag";
+        let press = null;
+        let suppressClick = false;
+        const send = (phase, event) => {
+          parent.postMessage({
+            channel,
+            slug: "bubble-todo",
+            phase,
+            pointerId: event.pointerId,
+            clientX: event.clientX,
+            clientY: event.clientY,
+            pointerType: event.pointerType,
+            button: event.button
+          }, "*");
+        };
+
+        document.addEventListener("pointerdown", (event) => {
+          if (event.pointerType === "mouse" && event.button !== 0) return;
+          press = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            moved: false
+          };
+          try { event.target.setPointerCapture?.(event.pointerId); } catch {}
+          send("down", event);
+        }, true);
+
+        document.addEventListener("pointermove", (event) => {
+          if (!press || press.pointerId !== event.pointerId) return;
+          if (Math.hypot(event.clientX - press.startX, event.clientY - press.startY) > 3) {
+            press.moved = true;
+          }
+          send("move", event);
+          if (!press.moved) return;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }, { capture: true, passive: false });
+
+        const finish = (event) => {
+          if (!press || press.pointerId !== event.pointerId) return;
+          suppressClick = press.moved;
+          send("up", event);
+          press = null;
+          if (suppressClick) setTimeout(() => { suppressClick = false; }, 0);
+        };
+        document.addEventListener("pointerup", finish, true);
+        document.addEventListener("pointercancel", finish, true);
+        document.addEventListener("click", (event) => {
+          if (!suppressClick) return;
+          suppressClick = false;
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }, true);
+      })();
+    </script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>`;
 
 export type PlaygroundCategory = "vibe-coding" | "little-rubbish" | "writing";
 
@@ -248,10 +333,14 @@ function LittleRubbish() {
   const suppressClickRef = useRef<string | null>(null);
   const topZ = useRef(3);
   const [dragging, setDragging] = useState<string | null>(null);
-  const [interacting, setInteracting] = useState<string | null>(null);
   const [placements, setPlacements] = useState<Record<string, LittlePlacement>>(
     initialLittlePlacements,
   );
+  const placementsRef = useRef(placements);
+
+  useEffect(() => {
+    placementsRef.current = placements;
+  }, [placements]);
 
   function bringToFront(slug: string) {
     topZ.current += 1;
@@ -261,11 +350,14 @@ function LittleRubbish() {
     }));
   }
 
-  function startDrag(slug: string, event: PointerEvent<HTMLElement>) {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
-
-    const item = event.currentTarget.closest<HTMLElement>("[data-little-item]");
-    const placement = placements[slug];
+  function startDragAt(
+    slug: string,
+    item: HTMLElement,
+    pointerId: number,
+    clientX: number,
+    clientY: number,
+  ) {
+    const placement = placementsRef.current[slug];
     if (!item || !placement) return;
 
     bringToFront(slug);
@@ -273,9 +365,9 @@ function LittleRubbish() {
 
     dragRef.current = {
       slug,
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      startY: event.clientY,
+      pointerId,
+      startX: clientX,
+      startY: clientY,
       originX: placement.x,
       originY: placement.y,
       itemWidth: item.offsetWidth,
@@ -285,25 +377,15 @@ function LittleRubbish() {
   }
 
   function handleItemPointerDown(slug: string, event: PointerEvent<HTMLElement>) {
-    const target = event.target as Element;
-    if (target.closest("[data-interact-toggle]")) return;
     if (!window.matchMedia("(min-width: 768px)").matches) {
       bringToFront(slug);
       return;
     }
+    if (event.pointerType === "mouse" && event.button !== 0) return;
 
-    const fromCaption = Boolean(target.closest(".little-rubbish-caption"));
-    if (interacting === slug && !fromCaption) {
-      bringToFront(slug);
-      return;
-    }
-
-    startDrag(slug, event);
-  }
-
-  function toggleInteraction(slug: string) {
-    bringToFront(slug);
-    setInteracting((current) => (current === slug ? null : slug));
+    const item = event.currentTarget.closest<HTMLElement>("[data-little-item]");
+    if (!item) return;
+    startDragAt(slug, item, event.pointerId, event.clientX, event.clientY);
   }
 
   function suppressClickAfterDrag(slug: string, event: ReactMouseEvent<HTMLElement>) {
@@ -311,6 +393,41 @@ function LittleRubbish() {
     event.preventDefault();
     event.stopPropagation();
     suppressClickRef.current = null;
+  }
+
+  function moveDrag(pointerId: number, clientX: number, clientY: number) {
+    const drag = dragRef.current;
+    const canvas = canvasRef.current;
+    if (!drag || drag.pointerId !== pointerId || !canvas) return false;
+
+    if (Math.abs(clientX - drag.startX) > 3 || Math.abs(clientY - drag.startY) > 3) {
+      drag.moved = true;
+    }
+    const maxX = Math.max(0, canvas.clientWidth - drag.itemWidth);
+    const maxY = Math.max(0, canvas.clientHeight - drag.itemHeight);
+    const x = Math.min(maxX, Math.max(0, drag.originX + clientX - drag.startX));
+    const y = Math.min(maxY, Math.max(0, drag.originY + clientY - drag.startY));
+
+    setPlacements((current) => ({
+      ...current,
+      [drag.slug]: { ...current[drag.slug], x, y },
+    }));
+    return drag.moved;
+  }
+
+  function endDrag(pointerId: number) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== pointerId) return false;
+    if (drag.moved) {
+      suppressClickRef.current = drag.slug;
+      window.setTimeout(() => {
+        if (suppressClickRef.current === drag.slug) suppressClickRef.current = null;
+      }, 0);
+    }
+    const moved = drag.moved;
+    dragRef.current = null;
+    setDragging(null);
+    return moved;
   }
 
   function moveWithKeyboard(slug: string, event: KeyboardEvent<HTMLButtonElement>) {
@@ -344,49 +461,71 @@ function LittleRubbish() {
 
   useEffect(() => {
     function move(event: globalThis.PointerEvent) {
-      const drag = dragRef.current;
-      const canvas = canvasRef.current;
-      if (!drag || drag.pointerId !== event.pointerId || !canvas) return;
-
+      if (!moveDrag(event.pointerId, event.clientX, event.clientY)) return;
       event.preventDefault();
-      if (
-        Math.abs(event.clientX - drag.startX) > 3 ||
-        Math.abs(event.clientY - drag.startY) > 3
-      ) {
-        drag.moved = true;
-      }
-      const maxX = Math.max(0, canvas.clientWidth - drag.itemWidth);
-      const maxY = Math.max(0, canvas.clientHeight - drag.itemHeight);
-      const x = Math.min(maxX, Math.max(0, drag.originX + event.clientX - drag.startX));
-      const y = Math.min(maxY, Math.max(0, drag.originY + event.clientY - drag.startY));
-
-      setPlacements((current) => ({
-        ...current,
-        [drag.slug]: { ...current[drag.slug], x, y },
-      }));
     }
 
     function end(event: globalThis.PointerEvent) {
-      const drag = dragRef.current;
-      if (!drag || drag.pointerId !== event.pointerId) return;
-      if (drag.moved) {
-        suppressClickRef.current = drag.slug;
-        window.setTimeout(() => {
-          if (suppressClickRef.current === drag.slug) suppressClickRef.current = null;
-        }, 0);
+      endDrag(event.pointerId);
+    }
+
+    function receiveFramePointer(event: MessageEvent) {
+      const data = event.data as {
+        channel?: string;
+        slug?: string;
+        phase?: "down" | "move" | "up";
+        pointerId?: number;
+        clientX?: number;
+        clientY?: number;
+        pointerType?: string;
+        button?: number;
+      };
+      if (
+        data.channel !== "little-rubbish-drag" ||
+        data.slug !== "bubble-todo" ||
+        typeof data.pointerId !== "number" ||
+        typeof data.clientX !== "number" ||
+        typeof data.clientY !== "number"
+      ) {
+        return;
       }
-      dragRef.current = null;
-      setDragging(null);
+
+      const frame = canvasRef.current?.querySelector<HTMLIFrameElement>(
+        'iframe[data-drag-bridge="bubble-todo"]',
+      );
+      const item = frame?.closest<HTMLElement>("[data-little-item]");
+      if (!frame || !item || event.source !== frame.contentWindow) return;
+      if (!window.matchMedia("(min-width: 768px)").matches) {
+        if (data.phase === "down") bringToFront(data.slug);
+        return;
+      }
+
+      const frameRect = frame.getBoundingClientRect();
+      const clientX = frameRect.left + data.clientX;
+      const clientY = frameRect.top + data.clientY;
+
+      if (data.phase === "down") {
+        if (data.pointerType === "mouse" && data.button !== 0) return;
+        startDragAt(data.slug, item, data.pointerId, clientX, clientY);
+      } else if (data.phase === "move") {
+        moveDrag(data.pointerId, clientX, clientY);
+      } else if (data.phase === "up") {
+        endDrag(data.pointerId);
+      }
     }
 
     window.addEventListener("pointermove", move, { passive: false });
     window.addEventListener("pointerup", end);
     window.addEventListener("pointercancel", end);
+    window.addEventListener("message", receiveFramePointer);
     return () => {
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", end);
       window.removeEventListener("pointercancel", end);
+      window.removeEventListener("message", receiveFramePointer);
     };
+    // The listeners intentionally stay mounted; drag state and positions live in refs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -416,7 +555,6 @@ function LittleRubbish() {
               data-little-item
               data-project={project.slug}
               data-dragging={dragging === project.slug ? "true" : "false"}
-              data-interacting={interacting === project.slug ? "true" : "false"}
               className="little-rubbish-item"
               style={itemStyle}
               onPointerDown={(event) => handleItemPointerDown(project.slug, event)}
@@ -428,33 +566,17 @@ function LittleRubbish() {
                     <FloatingFeedback />
                   </div>
                 ) : (
-                  <>
-                    <iframe
-                      src={project.live}
-                      title={`${project.title} — live demo`}
-                      loading="lazy"
-                      style={{
-                        height: placement.previewHeight + project.offset,
-                      }}
-                      className="block w-full"
-                    />
-                    <div className="little-rubbish-drag-surface" aria-hidden="true" />
-                    <button
-                      type="button"
-                      data-interact-toggle
-                      aria-pressed={interacting === project.slug}
-                      aria-label={
-                        interacting === project.slug
-                          ? `Switch ${project.title} to move mode`
-                          : `Interact with ${project.title}`
-                      }
-                      className="little-rubbish-interact-toggle"
-                      onPointerDown={(event) => event.stopPropagation()}
-                      onClick={() => toggleInteraction(project.slug)}
-                    >
-                      {interacting === project.slug ? "Move" : "Interact"}
-                    </button>
-                  </>
+                  <iframe
+                    src={project.slug === "bubble-todo" ? undefined : project.live}
+                    srcDoc={project.slug === "bubble-todo" ? bubbleEmbedSrcDoc : undefined}
+                    title={`${project.title} — live demo`}
+                    loading="lazy"
+                    style={{
+                      height: placement.previewHeight + project.offset,
+                    }}
+                    data-drag-bridge={project.slug}
+                    className="block w-full"
+                  />
                 )}
               </div>
 
@@ -489,7 +611,6 @@ function LittleRubbish() {
           data-little-item
           data-project="music-player"
           data-dragging={dragging === "music-player" ? "true" : "false"}
-          data-interacting={interacting === "music-player" ? "true" : "false"}
           className="little-rubbish-item"
           style={
             {
