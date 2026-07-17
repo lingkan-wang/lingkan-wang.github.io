@@ -5,6 +5,7 @@ import type { NextConfig } from "next";
 const isStaticExport = !!process.env.STATIC_EXPORT;
 
 const nextConfig: NextConfig = {
+  turbopack: { root: process.cwd() },
   ...(isStaticExport
     ? { output: "export", trailingSlash: true, images: { unoptimized: true } }
     : {}),

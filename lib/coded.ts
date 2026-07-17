@@ -1,5 +1,5 @@
-// Coded Work = things you design AND build. Each is shown as a live, fully-playable
-// demo embedded from its GitHub Pages URL (all interaction happens inside the frame).
+// Vibe Coding = things you design AND build. Each is shown as a live, fully-playable
+// demo inside the Playground (all interaction happens inside the frame).
 // `offset` crops that many px off the TOP of the embed (to hide a demo's own redundant
 // heading); every card uses the same visible frame height.
 export type CodedWork = {
@@ -22,7 +22,7 @@ export const codedWork: CodedWork[] = [
       "A file-transfer motion study recreated 1:1 from a reference video: photos pop out of one avatar, arc across a spring-following bezier, and shrink into the other. Drag either avatar and the stream lags elastically. Hover a photo mid-flight to freeze it and hit ✕ to unsend it before it lands.",
     tags: ["Vanilla JS", "Spring Physics", "Bezier"],
     year: 2026,
-    live: "/photo-transfer/",
+    live: "/photo-transfer/index.html",
     offset: 0,
   },
   {
@@ -32,7 +32,7 @@ export const codedWork: CodedWork[] = [
       "A prize-claim agreement you sign by drawing on the pad or typing your name in a script font, then watch re-traced stroke-by-stroke to verify the claim. Canvas capture + replay, collapsible legal terms, and Pending → Processing → Completed states. Built for masii.",
     tags: ["Vanilla JS", "Canvas", "Signature"],
     year: 2026,
-    live: "/masii-sign/",
+    live: "/masii-sign/index.html",
     offset: 0,
   },
   {

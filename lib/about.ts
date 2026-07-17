@@ -9,7 +9,7 @@ export const bio: { heading: string; body: string; keywords?: Keyword[] }[] = [
   {
     heading: "Who I am",
     body: "I'm a product builder who came up through digital media and design, so I sit between the creative side and the figure-it-out side. What I like most is taking something messy (a pile of data, a tangled flow, a fuzzy product goal) and shaping it into something that feels right and actually works. Alongside that, I've always done HCI research, digging into how people learn, collaborate, and interact with the things we build. That habit of taking things apart to see how they tick is pretty much why I landed in design, where systems thinking and empathy get to work on the same problem.",
-    keywords: [{ word: "HCI research", emoji: "\u{1F4C4}", href: "/research" }],
+    keywords: [{ word: "HCI research", emoji: "\u{1F4C4}", href: "/playground#writing" }],
   },
   {
     heading: "Where I came from",
