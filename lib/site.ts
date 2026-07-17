@@ -10,6 +10,7 @@ export const site = {
     website: "https://lingkan-wang.github.io/",
     linkedin: "https://www.linkedin.com/in/lingkanwang/",
     x: "https://x.com/WangLingkan",
+    threads: "https://www.threads.com/@wanglingkan183?hl=en",
     github: "https://github.com/lingkan-wang",
     // kept so the (untouched) command palette still compiles; not shown in the header
     instagram: "https://www.instagram.com/wanglingkan183/",

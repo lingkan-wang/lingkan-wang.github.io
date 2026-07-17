@@ -3,7 +3,7 @@ import { Reveal } from "@/components/reveal";
 import { site } from "@/lib/site";
 import { bio } from "@/lib/about";
 import { XCard } from "@/components/about/x-card";
-import { MusicCard } from "@/components/about/music-card";
+import { ThreadsCard } from "@/components/about/threads-card";
 import { PhotoCard } from "@/components/about/photo-card";
 import { WechatCard } from "@/components/about/wechat-card";
 import { IMessage } from "@/components/about/imessage";
@@ -82,7 +82,7 @@ export default function About() {
               <XCard />
             </div>
             <div className={cardCls}>
-              <MusicCard />
+              <ThreadsCard />
             </div>
             <div className={cardCls}>
               <PhotoCard />
