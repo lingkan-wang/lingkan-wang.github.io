@@ -537,8 +537,11 @@ export function FooterDog() {
           animate={reactionControls}
           initial={false}
           onClick={interact}
-          aria-label="Play with or drag the wandering pixel dog"
+          aria-label="Play with or drag Pom Pom, the wandering pixel dog"
         >
+          <span className={styles.greeting} aria-hidden="true">
+            Hi I am pom pom
+          </span>
           <span
             className={classNames(
               styles.sprite,
