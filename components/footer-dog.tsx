@@ -10,7 +10,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import styles from "./footer-dog.module.css";
 
-let barkContext: AudioContext | null = null;
+let barkAudio: HTMLAudioElement | null = null;
 
 function classNames(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
@@ -21,62 +21,18 @@ type Bounds = { minX: number; maxX: number; minY: number; maxY: number };
 type CollisionRect = { left: number; right: number; top: number; bottom: number };
 type MoveMode = "wander" | "command";
 
+function getBarkAudio() {
+  barkAudio ??= new Audio("/dog/dog-woof-woof.mp3");
+  barkAudio.preload = "auto";
+  barkAudio.volume = 0.68;
+  return barkAudio;
+}
+
 function playBark() {
-  const AudioContextClass =
-    window.AudioContext ??
-    (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-
-  if (!AudioContextClass) return;
-  barkContext ??= new AudioContextClass();
-  const context = barkContext;
-  if (context.state === "suspended") void context.resume();
-
-  const barkBurst = (start: number, pitch: number, volume: number) => {
-    const length = Math.ceil(context.sampleRate * 0.15);
-    const buffer = context.createBuffer(1, length, context.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let index = 0; index < length; index += 1) {
-      const decay = 1 - index / length;
-      data[index] = (Math.random() * 2 - 1) * decay;
-    }
-
-    const noise = context.createBufferSource();
-    const filter = context.createBiquadFilter();
-    const noiseGain = context.createGain();
-    const voice = context.createOscillator();
-    const voiceGain = context.createGain();
-    const master = context.createGain();
-
-    noise.buffer = buffer;
-    filter.type = "bandpass";
-    filter.frequency.setValueAtTime(pitch * 2.6, start);
-    filter.Q.value = 0.72;
-
-    voice.type = "sawtooth";
-    voice.frequency.setValueAtTime(pitch * 1.25, start);
-    voice.frequency.exponentialRampToValueAtTime(pitch * 0.68, start + 0.13);
-
-    noiseGain.gain.setValueAtTime(0.0001, start);
-    noiseGain.gain.exponentialRampToValueAtTime(0.7, start + 0.012);
-    noiseGain.gain.exponentialRampToValueAtTime(0.0001, start + 0.15);
-    voiceGain.gain.setValueAtTime(0.0001, start);
-    voiceGain.gain.exponentialRampToValueAtTime(0.36, start + 0.014);
-    voiceGain.gain.exponentialRampToValueAtTime(0.0001, start + 0.14);
-    master.gain.value = volume;
-
-    noise.connect(filter).connect(noiseGain).connect(master);
-    voice.connect(voiceGain).connect(master);
-    master.connect(context.destination);
-
-    noise.start(start);
-    voice.start(start);
-    noise.stop(start + 0.16);
-    voice.stop(start + 0.16);
-  };
-
-  const now = context.currentTime + 0.01;
-  barkBurst(now, 150, 0.16);
-  barkBurst(now + 0.17, 128, 0.11);
+  const audio = getBarkAudio();
+  audio.pause();
+  audio.currentTime = 0;
+  void audio.play().catch(() => undefined);
 }
 
 export function FooterDog() {
@@ -105,6 +61,10 @@ export function FooterDog() {
   const [standing, setStanding] = useState(false);
   const [greetingSuppressed, setGreetingSuppressed] = useState(false);
   const [dragBounds, setDragBounds] = useState({ left: 0, right: 0, top: 0, bottom: 0 });
+
+  useEffect(() => {
+    getBarkAudio().load();
+  }, []);
 
   useEffect(() => {
     const area = areaRef.current;
