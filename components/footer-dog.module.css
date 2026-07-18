@@ -10,7 +10,7 @@
   z-index: 1;
   top: 0;
   left: 0;
-  width: clamp(112px, 16vw, 138px);
+  width: clamp(100px, 14vw, 122px);
   aspect-ratio: 512 / 560;
   cursor: grab;
   pointer-events: auto;
