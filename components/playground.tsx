@@ -388,7 +388,6 @@ function LittleRubbish({
     if (!item || !placement) return;
 
     bringToFront(slug);
-    setDragging(slug);
 
     dragRef.current = {
       slug,
@@ -409,7 +408,7 @@ function LittleRubbish({
     const target = event.target as Element;
     if (
       target.closest(
-        "button, a, input, textarea, select, iframe, [contenteditable='true'], [data-no-drag]",
+        "input, textarea, select, iframe, [contenteditable='true'], [data-no-drag]",
       )
     ) {
       bringToFront(slug);
@@ -433,8 +432,12 @@ function LittleRubbish({
     const canvas = canvasRef.current;
     if (!drag || drag.pointerId !== pointerId || !canvas) return false;
 
-    if (Math.hypot(clientX - drag.startX, clientY - drag.startY) > 6) {
+    if (
+      !drag.moved &&
+      Math.hypot(clientX - drag.startX, clientY - drag.startY) > 6
+    ) {
       drag.moved = true;
+      setDragging(drag.slug);
     }
     if (!drag.moved) return false;
 
@@ -517,7 +520,7 @@ function LittleRubbish({
       };
       if (
         data.channel !== "little-rubbish-drag" ||
-        data.slug !== "bubble-todo" ||
+        (data.slug !== "bubble-todo" && data.slug !== "feedback-popover") ||
         typeof data.pointerId !== "number" ||
         typeof data.clientX !== "number" ||
         typeof data.clientY !== "number"
@@ -526,7 +529,7 @@ function LittleRubbish({
       }
 
       const frame = canvasRef.current?.querySelector<HTMLIFrameElement>(
-        'iframe[data-drag-bridge="bubble-todo"]',
+        `iframe[data-drag-bridge="${data.slug}"]`,
       );
       const item = frame?.closest<HTMLElement>("[data-little-item]");
       if (!frame || !item || event.source !== frame.contentWindow) return;
@@ -608,7 +611,9 @@ function LittleRubbish({
               data-dragging={dragging === project.slug ? "true" : "false"}
               className="little-rubbish-item"
               style={itemStyle(project.slug)}
-              onPointerDown={(event) => handleItemPointerDown(project.slug, event)}
+              onPointerDownCapture={(event) =>
+                handleItemPointerDown(project.slug, event)
+              }
               onClickCapture={(event) => suppressClickAfterDrag(project.slug, event)}
             >
               <div className="little-rubbish-preview">
@@ -648,7 +653,9 @@ function LittleRubbish({
           data-dragging={dragging === "music-player" ? "true" : "false"}
           className="little-rubbish-item"
           style={itemStyle("music-player")}
-          onPointerDown={(event) => handleItemPointerDown("music-player", event)}
+          onPointerDownCapture={(event) =>
+            handleItemPointerDown("music-player", event)
+          }
           onClickCapture={(event) => suppressClickAfterDrag("music-player", event)}
         >
           <div
@@ -679,7 +686,9 @@ function LittleRubbish({
             data-dragging={dragging === project.slug ? "true" : "false"}
             className="little-rubbish-item"
             style={itemStyle(project.slug)}
-            onPointerDown={(event) => handleItemPointerDown(project.slug, event)}
+            onPointerDownCapture={(event) =>
+              handleItemPointerDown(project.slug, event)
+            }
             onClickCapture={(event) => suppressClickAfterDrag(project.slug, event)}
           >
             <Link
