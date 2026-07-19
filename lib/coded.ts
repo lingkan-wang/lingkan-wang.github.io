@@ -73,7 +73,7 @@ export const codedWork: CodedWork[] = [
       "A feedback button that morphs into a popover and celebrates with a confetti burst on submit. Spring-based layout animation.",
     tags: ["Popover", "Morph", "Confetti"],
     year: 2026,
-    live: "https://lingkan-wang.github.io/feedback-popover/?v=transparent-embed",
+    live: "https://lingkan-wang.github.io/feedback-popover/?v=white-embed",
     offset: 0,
   },
 ];
