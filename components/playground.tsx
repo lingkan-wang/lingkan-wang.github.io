@@ -13,13 +13,7 @@ import {
   useState,
 } from "react";
 import {
-  PiChatCircleDots,
-  PiCheckCircle,
   PiDotsSixVertical,
-  PiHeart,
-  PiPaperPlaneTilt,
-  PiSmiley,
-  PiSmileySad,
 } from "react-icons/pi";
 import { MusicCard } from "@/components/about/music-card";
 import { codedWork } from "@/lib/coded";
@@ -242,9 +236,9 @@ const littleLayouts: Record<string, LittleLayout> = {
     z: 1,
   },
   "feedback-popover": {
-    desktop: { x: 0.43, y: 84, width: 310 },
-    mobile: { x: 0.92, y: 200, width: 280 },
-    previewHeight: 250,
+    desktop: { x: 0.43, y: 84, width: 336 },
+    mobile: { x: 0.92, y: 200, width: 304 },
+    previewHeight: 360,
     rotation: -0.8,
     z: 2,
   },
@@ -299,80 +293,6 @@ type DragState = {
   itemHeight: number;
   moved: boolean;
 };
-
-function FloatingFeedback() {
-  const [state, setState] = useState<"closed" | "open" | "sent">("closed");
-  const [rating, setRating] = useState<"bad" | "okay" | "love" | null>(null);
-
-  if (state === "closed") {
-    return (
-      <button
-        type="button"
-        className="little-feedback-trigger"
-        onClick={() => setState("open")}
-      >
-        <PiChatCircleDots aria-hidden="true" className="h-5 w-5" />
-        <span>Feedback</span>
-      </button>
-    );
-  }
-
-  if (state === "sent") {
-    return (
-      <button
-        type="button"
-        className="little-feedback-success"
-        onClick={() => {
-          setRating(null);
-          setState("closed");
-        }}
-      >
-        <PiCheckCircle aria-hidden="true" className="h-5 w-5" />
-        <span>Thank you</span>
-      </button>
-    );
-  }
-
-  const ratings = [
-    { id: "bad" as const, label: "Bad", Icon: PiSmileySad },
-    { id: "okay" as const, label: "Okay", Icon: PiSmiley },
-    { id: "love" as const, label: "Love it", Icon: PiHeart },
-  ];
-
-  return (
-    <div className="little-feedback-popover">
-      <div>
-        <p className="text-[13px] font-medium">How was your experience?</p>
-        <p className="mt-0.5 text-[11px] text-muted">Pick one, then send it my way.</p>
-      </div>
-
-      <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Feedback rating">
-        {ratings.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            aria-pressed={rating === id}
-            className="little-feedback-rating"
-            onClick={() => setRating(id)}
-          >
-            <Icon aria-hidden="true" className="h-5 w-5" />
-            <span>{label}</span>
-          </button>
-        ))}
-      </div>
-
-      <button
-        type="button"
-        disabled={!rating}
-        className="little-feedback-send"
-        onClick={() => setState("sent")}
-      >
-        <PiPaperPlaneTilt aria-hidden="true" className="h-4 w-4" />
-        <span>Send feedback</span>
-      </button>
-    </div>
-  );
-}
 
 function LittleRubbish({
   projectMockups,
@@ -485,6 +405,16 @@ function LittleRubbish({
 
   function handleItemPointerDown(slug: string, event: PointerEvent<HTMLElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    const target = event.target as Element;
+    if (
+      target.closest(
+        "button, a, input, textarea, select, iframe, [contenteditable='true'], [data-no-drag]",
+      )
+    ) {
+      bringToFront(slug);
+      return;
+    }
 
     const item = event.currentTarget.closest<HTMLElement>("[data-little-item]");
     if (!item) return;
@@ -682,23 +612,17 @@ function LittleRubbish({
               onClickCapture={(event) => suppressClickAfterDrag(project.slug, event)}
             >
               <div className="little-rubbish-preview">
-                {project.slug === "feedback-popover" ? (
-                  <div className="little-feedback-stage">
-                    <FloatingFeedback />
-                  </div>
-                ) : (
-                  <iframe
-                    src={project.slug === "bubble-todo" ? undefined : project.live}
-                    srcDoc={project.slug === "bubble-todo" ? bubbleEmbedSrcDoc : undefined}
-                    title={`${project.title} — live demo`}
-                    loading="lazy"
-                    style={{
-                      height: previewHeight + project.offset,
-                    }}
-                    data-drag-bridge={project.slug}
-                    className="block w-full"
-                  />
-                )}
+                <iframe
+                  src={project.slug === "bubble-todo" ? undefined : project.live}
+                  srcDoc={project.slug === "bubble-todo" ? bubbleEmbedSrcDoc : undefined}
+                  title={`${project.title} — live demo`}
+                  loading="lazy"
+                  style={{
+                    height: previewHeight + project.offset,
+                  }}
+                  data-drag-bridge={project.slug}
+                  className="block w-full"
+                />
               </div>
 
               <div
