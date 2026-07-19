@@ -3,6 +3,14 @@
 // (Georgia-Lyu style). First person / no third person; each line matches its illustration.
 export type CubeItem = { label: string; src?: string };
 
+// These lighter, prototype-led projects live in Playground → Little Rubbish.
+// Keeping the list here lets Home and Playground stay in sync.
+export const littleRubbishWorkSlugs = [
+  "bumble-interest-cards",
+  "kwai-guild-dashboard",
+  "taimer-ai",
+] as const;
+
 export const cubeItems: CubeItem[] = [
   { src: "/cube/01.png", label: "Tennis every weekend" },
   { src: "/cube/02.png", label: "Always in headphones" },
