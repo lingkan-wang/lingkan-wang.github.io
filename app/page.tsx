@@ -2,16 +2,20 @@ import { getAllProjects } from "@/lib/projects";
 import { CubeHero } from "@/components/cube-hero";
 import { ProjectCard, type CardItem } from "@/components/project-card";
 import { Reveal } from "@/components/reveal";
+import { littleRubbishWorkSlugs } from "@/lib/home";
 
 export default function Home() {
-  const projects: CardItem[] = getAllProjects().map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    tags: p.tags,
-    outcome: p.summary,
-    year: p.year,
-    cover: p.cover || undefined,
-  }));
+  const littleRubbishSlugs = new Set<string>(littleRubbishWorkSlugs);
+  const projects: CardItem[] = getAllProjects()
+    .filter((project) => !littleRubbishSlugs.has(project.slug))
+    .map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      tags: p.tags,
+      outcome: p.summary,
+      year: p.year,
+      cover: p.cover || undefined,
+    }));
 
   return (
     <>
