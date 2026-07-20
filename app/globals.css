@@ -230,24 +230,6 @@ body {
   filter: drop-shadow(0 12px 16px rgb(0 0 0 / 8%));
 }
 
-.little-rubbish-caption {
-  padding: 0 2px;
-  user-select: none;
-}
-
-.little-rubbish-handle {
-  display: inline-grid;
-  min-width: 28px;
-  min-height: 28px;
-  place-items: center;
-  cursor: grab;
-  touch-action: none;
-}
-
-.little-rubbish-handle:active {
-  cursor: grabbing;
-}
-
 @media (max-width: 639px) {
   .site-footer-link {
     width: 100%;

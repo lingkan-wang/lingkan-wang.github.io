@@ -12,9 +12,6 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  PiDotsSixVertical,
-} from "react-icons/pi";
 import { MusicCard } from "@/components/about/music-card";
 import { codedWork } from "@/lib/coded";
 import { research } from "@/lib/research";
@@ -110,6 +107,21 @@ const bubbleEmbedSrcDoc = `<!doctype html>
           event.preventDefault();
           event.stopImmediatePropagation();
         }, true);
+
+        window.addEventListener("message", (event) => {
+          if (
+            event.source !== parent ||
+            event.data?.channel !== "little-rubbish-control" ||
+            event.data?.action !== "collapse-bubble-todo"
+          ) {
+            return;
+          }
+          document.body.dispatchEvent(new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window
+          }));
+        });
       })();
     </script>
     <script type="module" src="app.js"></script>
@@ -468,7 +480,9 @@ function LittleRubbish({
     return moved;
   }
 
-  function moveWithKeyboard(slug: string, event: KeyboardEvent<HTMLButtonElement>) {
+  function moveWithKeyboard(slug: string, event: KeyboardEvent<HTMLElement>) {
+    if (event.target !== event.currentTarget) return;
+
     const directions: Record<string, [number, number]> = {
       ArrowLeft: [-1, 0],
       ArrowRight: [1, 0],
@@ -482,9 +496,8 @@ function LittleRubbish({
 
     event.preventDefault();
     const step = event.shiftKey ? 30 : 10;
-    const item = event.currentTarget.closest<HTMLElement>("[data-little-item]");
-    const maxX = Math.max(0, canvas.clientWidth - (item?.offsetWidth ?? placement.width));
-    const maxY = Math.max(0, canvas.clientHeight - (item?.offsetHeight ?? 0));
+    const maxX = Math.max(0, canvas.clientWidth - event.currentTarget.offsetWidth);
+    const maxY = Math.max(0, canvas.clientHeight - event.currentTarget.offsetHeight);
 
     bringToFront(slug);
     setPlacements((current) => ({
@@ -573,18 +586,19 @@ function LittleRubbish({
     } as CSSProperties;
   }
 
-  function dragHandle(slug: string, title: string) {
-    return (
-      <button
-        type="button"
-        aria-label={`Move ${title}`}
-        title="Drag to move · Arrow keys also work"
-        className="little-rubbish-handle shrink-0 rounded-sm text-muted outline-offset-4 transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-accent"
-        onFocus={() => bringToFront(slug)}
-        onKeyDown={(event) => moveWithKeyboard(slug, event)}
-      >
-        <PiDotsSixVertical aria-hidden="true" className="h-5 w-5" />
-      </button>
+  function collapseBubbleTodoFromCanvas(event: ReactMouseEvent<HTMLDivElement>) {
+    const target = event.target as Element;
+    if (target.closest("[data-little-item]")) return;
+
+    const frame = canvasRef.current?.querySelector<HTMLIFrameElement>(
+      'iframe[data-drag-bridge="bubble-todo"]',
+    );
+    frame?.contentWindow?.postMessage(
+      {
+        channel: "little-rubbish-control",
+        action: "collapse-bubble-todo",
+      },
+      "*",
     );
   }
 
@@ -594,6 +608,7 @@ function LittleRubbish({
         ref={canvasRef}
         data-layout-ready={layoutReady ? "true" : "false"}
         className="little-rubbish-canvas"
+        onClick={collapseBubbleTodoFromCanvas}
       >
         <div className="little-rubbish-intro">
           <span>Little Rubbish</span>
@@ -611,6 +626,9 @@ function LittleRubbish({
               data-dragging={dragging === project.slug ? "true" : "false"}
               className="little-rubbish-item"
               style={itemStyle(project.slug)}
+              tabIndex={0}
+              aria-label={`Move ${project.title}`}
+              onKeyDown={(event) => moveWithKeyboard(project.slug, event)}
               onPointerDownCapture={(event) =>
                 handleItemPointerDown(project.slug, event)
               }
@@ -630,19 +648,6 @@ function LittleRubbish({
                 />
               </div>
 
-              <div
-                className="little-rubbish-caption mt-3 flex cursor-grab touch-none items-start justify-between gap-4 rounded-md outline-none active:cursor-grabbing"
-              >
-                <div className="min-w-0">
-                  <h2 className="text-[13px] font-medium leading-snug tracking-tight">
-                    {project.title}
-                  </h2>
-                  <span className="mt-0.5 block font-mono text-[11px] text-muted">
-                    {project.year}
-                  </span>
-                </div>
-                {dragHandle(project.slug, project.title)}
-              </div>
             </article>
           );
         })}
@@ -653,6 +658,9 @@ function LittleRubbish({
           data-dragging={dragging === "music-player" ? "true" : "false"}
           className="little-rubbish-item"
           style={itemStyle("music-player")}
+          tabIndex={0}
+          aria-label="Move Music Player"
+          onKeyDown={(event) => moveWithKeyboard("music-player", event)}
           onPointerDownCapture={(event) =>
             handleItemPointerDown("music-player", event)
           }
@@ -664,18 +672,6 @@ function LittleRubbish({
           >
             <MusicCard />
           </div>
-
-          <div
-            className="little-rubbish-caption mt-3 flex cursor-grab touch-none items-start justify-between gap-4 rounded-md outline-none active:cursor-grabbing"
-          >
-            <div className="min-w-0">
-              <h2 className="text-[13px] font-medium leading-snug tracking-tight">
-                Music Player — a tiny listening machine
-              </h2>
-              <span className="mt-0.5 block font-mono text-[11px] text-muted">2026</span>
-            </div>
-            {dragHandle("music-player", "Music Player — a tiny listening machine")}
-          </div>
         </article>
 
         {projectMockups.map((project) => (
@@ -686,6 +682,9 @@ function LittleRubbish({
             data-dragging={dragging === project.slug ? "true" : "false"}
             className="little-rubbish-item"
             style={itemStyle(project.slug)}
+            tabIndex={0}
+            aria-label={`Move ${project.title}`}
+            onKeyDown={(event) => moveWithKeyboard(project.slug, event)}
             onPointerDownCapture={(event) =>
               handleItemPointerDown(project.slug, event)
             }
@@ -707,18 +706,6 @@ function LittleRubbish({
                 className="little-rubbish-mockup-image h-auto w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.02]"
               />
             </Link>
-
-            <div className="little-rubbish-caption mt-3 flex cursor-grab touch-none items-start justify-between gap-4 rounded-md outline-none active:cursor-grabbing">
-              <div className="min-w-0">
-                <h2 className="text-[13px] font-medium leading-snug tracking-tight">
-                  {project.title}
-                </h2>
-                <span className="mt-0.5 block font-mono text-[11px] text-muted">
-                  {project.year}
-                </span>
-              </div>
-              {dragHandle(project.slug, project.title)}
-            </div>
           </article>
         ))}
       </div>
