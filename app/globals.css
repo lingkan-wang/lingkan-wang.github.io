@@ -162,28 +162,6 @@ body {
   border-radius: 24px;
 }
 
-.little-rubbish-intro {
-  position: absolute;
-  top: 24px;
-  left: 24px;
-  z-index: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  color: var(--color-muted);
-  font-family: var(--font-mono), monospace;
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  line-height: 1.45;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-
-.little-rubbish-intro span:first-child {
-  color: var(--color-fg);
-  font-weight: 600;
-}
-
 .little-rubbish-item {
   position: absolute;
   left: var(--little-x);

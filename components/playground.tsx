@@ -40,7 +40,7 @@ const bubbleEmbedSrcDoc = `<!doctype html>
     <div id="stage">
       <div id="fly-layer"></div>
       <div id="parked-layer"></div>
-      <div id="hint">Type a to-do · double-click to blow · click to pop ✓</div>
+      <div id="hint" aria-hidden="true"></div>
       <div id="girl-wrap">
         <img id="girl" src="assets/girl.png" draggable="false" alt="" />
         <div id="attached-bubble" class="bubble">
@@ -49,7 +49,7 @@ const bubbleEmbedSrcDoc = `<!doctype html>
         </div>
       </div>
       <img id="peek" src="assets/peek.png" draggable="false" alt="" />
-      <div id="peek-hint">click me 👇</div>
+      <div id="peek-hint" aria-hidden="true"></div>
     </div>
     <script>
       (() => {
@@ -610,11 +610,6 @@ function LittleRubbish({
         className="little-rubbish-canvas"
         onClick={collapseBubbleTodoFromCanvas}
       >
-        <div className="little-rubbish-intro">
-          <span>Little Rubbish</span>
-          <span>Drag anything · tap to interact</span>
-        </div>
-
         {littleRubbishProjects.map((project) => {
           const previewHeight = littleLayouts[project.slug].previewHeight ?? 300;
 
