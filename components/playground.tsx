@@ -255,9 +255,9 @@ const littleLayouts: Record<string, LittleLayout> = {
     z: 2,
   },
   "sticker-peel": {
-    desktop: { x: 0.75, y: 96, width: 300 },
-    mobile: { x: 0.5, y: 402, width: 262 },
-    previewHeight: 420,
+    desktop: { x: 0.62, y: 78, width: 232 },
+    mobile: { x: 0.52, y: 396, width: 208 },
+    previewHeight: 318,
     rotation: 1.6,
     z: 7,
   },
@@ -540,7 +540,9 @@ function LittleRubbish({
       };
       if (
         data.channel !== "little-rubbish-drag" ||
-        (data.slug !== "bubble-todo" && data.slug !== "feedback-popover") ||
+        (data.slug !== "bubble-todo" &&
+          data.slug !== "feedback-popover" &&
+          data.slug !== "sticker-peel") ||
         typeof data.pointerId !== "number" ||
         typeof data.clientX !== "number" ||
         typeof data.clientY !== "number"
