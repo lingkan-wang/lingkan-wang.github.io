@@ -16,6 +16,16 @@ export type CodedWork = {
 
 export const codedWork: CodedWork[] = [
   {
+    slug: "sticker-peel",
+    title: "Sticker — peel it off, carry it, stick it back",
+    blurb:
+      "A die-cut sticker you actually peel. Drag from any edge and a vertex shader curls the sheet around a cylinder, showing the paper backing underneath; pull past three quarters and it comes away in your cursor, swinging with the weight of it. Click to lay it back down anywhere. Grab it by the middle instead and you just slide it around.",
+    tags: ["Three.js", "GLSL", "Spring Physics"],
+    year: 2026,
+    live: "https://lingkan-wang.github.io/sticker-peel/?embed=1",
+    offset: 0,
+  },
+  {
     slug: "photo-transfer",
     title: "Transfer — photos that fly from A to B",
     blurb:

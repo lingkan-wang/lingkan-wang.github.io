@@ -25,7 +25,7 @@ const vibeCodingProjects = codedWork.filter((project) =>
   ),
 );
 const littleRubbishProjects = codedWork.filter((project) =>
-  ["bubble-todo", "feedback-popover"].includes(project.slug),
+  ["bubble-todo", "feedback-popover", "sticker-peel"].includes(project.slug),
 );
 const bubbleEmbedSrcDoc = `<!doctype html>
 <html lang="en">
@@ -253,6 +253,13 @@ const littleLayouts: Record<string, LittleLayout> = {
     previewHeight: 360,
     rotation: -0.8,
     z: 2,
+  },
+  "sticker-peel": {
+    desktop: { x: 0.75, y: 96, width: 300 },
+    mobile: { x: 0.5, y: 402, width: 262 },
+    previewHeight: 420,
+    rotation: 1.6,
+    z: 7,
   },
   "music-player": {
     desktop: { x: 0.03, y: 684, width: 260 },
