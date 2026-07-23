@@ -64,17 +64,34 @@ function BriefQuote({ quote, cite }: { quote: string; cite: string }) {
   );
 }
 
-/** The "how might we" reframing: a numbered list of questions. */
-function HmwList({ items }: { items: string[] }) {
+/** A decision card: the call, and what it cost. */
+function DecisionCard({ n, title, body, tradeoff }: { n: string; title: string; body: string; tradeoff: string }) {
   return (
-    <ol className="mt-6 space-y-4">
-      {items.map((q, i) => (
-        <li key={q} className="flex gap-4">
-          <span className="mt-1 font-mono text-sm text-accent tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-          <span className="text-pretty text-lg leading-[1.4] text-fg/90">{q}</span>
-        </li>
+    <div className="rounded-2xl border border-border p-5 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-fg/20">
+      <span className="font-mono text-xs text-accent">{n}</span>
+      <h3 className="mt-2 text-base font-normal tracking-tight">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-muted">{body}</p>
+      <p className="mt-3 border-t border-border pt-3 text-sm leading-6 text-muted">
+        <span className="font-mono text-[0.7rem] uppercase tracking-[0.06em] text-fg/50">Tradeoff</span> {tradeoff}
+      </p>
+    </div>
+  );
+}
+
+/** A labelled metric list: mono label + one-line definition. */
+function MetricList({ items }: { items: { label: string; body: string }[] }) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-border">
+      {items.map((m) => (
+        <div
+          key={m.label}
+          className="grid gap-1 border-b border-border p-4 text-sm leading-6 last:border-0 sm:grid-cols-[9rem_1fr] sm:gap-6"
+        >
+          <div className="font-mono text-[0.72rem] uppercase tracking-[0.06em] text-accent sm:pt-0.5">{m.label}</div>
+          <div className="text-fg/80">{m.body}</div>
+        </div>
       ))}
-    </ol>
+    </div>
   );
 }
 
@@ -114,12 +131,12 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
   const toc: TocItem[] = [
     { id: "overview", label: "Overview" },
     { id: "background", label: "Problem" },
-    { id: "mapping", label: "Mapping" },
     { id: "solution", label: "Solution" },
     { id: "principles", label: "Principles" },
     { id: "process", label: "Process" },
     { id: "decisions", label: "Decisions" },
-    { id: "handoff", label: "Handoff" },
+    { id: "shipped", label: "Shipped" },
+    { id: "metrics", label: "Metrics" },
     { id: "outcome", label: "Outcome" },
   ];
 
@@ -127,12 +144,6 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
     { key: "guilt", n: "Charity apps", title: "Guilt", body: "They lead with need and dollar amounts. Giving starts to feel like a bill you forgot to pay." },
     { key: "gambling", n: "Prize apps", title: "Gambling", body: "They show odds, entries, and near-misses. Giving starts to feel like a bet." },
     { key: "flexing", n: "Social apps", title: "Flexing", body: "They rank donors by dollars. Giving turns into a status game about money." },
-  ];
-
-  const hmw = [
-    "Make giving feel rewarding without turning it into gambling?",
-    "Show real impact without reducing it to a dollar amount?",
-    "Give people daily momentum and status without a public social feed?",
   ];
 
   const solutionSlides = [
@@ -145,18 +156,50 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
   ];
 
   const decisions = [
-    { n: "01", title: "Two currencies, on purpose", body: "MAS is the fuel you earn. GoodPrint is the impact you grow. Keeping them separate stops money from becoming the score. You show off your GoodPrint, not your dollars." },
-    { n: "02", title: "Collective impact, never individual dollars", body: 'Impact reads "you were part of feeding 100,000 people," never "your $5 bought X." One choice removes the guilt and the money-flex at the same time.' },
-    { n: "03", title: "Rewards without the casino", body: "Show today's prize, the winner, and the proof. Never show odds, entries, or a loss. Membership makes members eligible automatically, so there is no daily tap-to-enter that feels like a bet." },
-    { n: "04", title: "Momentum without pressure", body: "The Run, our word for the streak, stays alive with any Move, not with spending. It brings people back tomorrow without guilt or pay-to-win." },
-    { n: "05", title: "Private by default", body: "No public profiles, comments, or donor rankings. The energy is social. The mechanics are not. It also kept V1 small enough to actually ship." },
+    {
+      n: "01",
+      title: "Two currencies, on purpose",
+      body: "MAS is the fuel you earn; GoodPrint is the impact you grow. Splitting them stops money from becoming the score.",
+      tradeoff: "Two currencies to teach instead of one.",
+    },
+    {
+      n: "02",
+      title: "Collective impact, never dollars",
+      body: 'Impact reads "you helped feed 100,000 people," never "your $5 bought X." One line kills guilt and the money-flex at once.',
+      tradeoff: "You lose the concreteness of a personal, dollar-for-dollar receipt.",
+    },
+    {
+      n: "03",
+      title: "Rewards without the casino",
+      body: "Show today's prize, the winner, and the proof. Never odds, entries, or a loss. Membership auto-enters, so nothing feels like a bet.",
+      tradeoff: "Less urgency than countdowns and near-misses would manufacture.",
+    },
+    {
+      n: "04",
+      title: "Momentum without pressure",
+      body: "The Run, our streak, survives on any Move, never on spending. It pulls people back tomorrow without guilt or pay-to-win.",
+      tradeoff: "No paid streak-saves, a monetization lever left on the table.",
+    },
+    {
+      n: "05",
+      title: "Private by default",
+      body: "No public profiles, comments, or donor rankings. The energy is social; the mechanics are not.",
+      tradeoff: "Gives up the cheapest growth loop, but kept V1 small enough to ship.",
+    },
+  ];
+
+  const metrics = [
+    { label: "North star", body: "Weekly active givers who complete a Move: habit, not a one-time donation." },
+    { label: "Activation", body: "Share of new members who make their first Move on day one." },
+    { label: "Retention", body: "D7 / D30 Run continuation, the real test of whether giving became a habit." },
+    { label: "Trust", body: "Winner-proof view rate, and conversion lift after someone sees a Receipt." },
+    { label: "Guardrail", body: "Membership conversion without the guilt or casino signals we designed out." },
   ];
 
   const reflections = [
-    "The real insight was not visual. Once I named the three traps, guilt, gambling, and flexing, every screen had a clear job.",
-    "Splitting MAS from GoodPrint solved the hardest problem: how to reward giving without letting money become the status.",
-    'The line between "exciting" and "casino" is thinner than it looks. It lives in small calls, like whether you ever show a countdown next to a prize.',
-    "Next time I would test the three-second home screen with real users before building the full system, not after.",
+    "Test the three-second home screen with real users before building the full system, not after.",
+    "Validate GoodPrint's real data source early: collective impact only lands if the number is true, not decorative.",
+    "Design one non-social growth loop sooner: private-by-default kept V1 clean but left acquisition thin.",
   ];
 
   const sourceTree = {
@@ -283,11 +326,11 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
           />
         </section>
 
-        {/* ─── RESEARCH → DESIGN MAPPING ─── */}
-        <section id="mapping" className={GAP}>
-          <SectionHead label="Research → design" title="Every problem got a specific design answer." />
+        {/* ─── SOLUTION (problem → answer + preview) ─── */}
+        <section id="solution" className={GAP}>
+          <SectionHead label="Solution" title="Every trap got a specific answer." />
           <Reveal className="mt-12">
-            <P text="With no users to interview yet, the research was the competitive landscape and the brief. I turned each problem into a design rule, so the build could be checked against it." />
+            <P text="I turned each trap into a design rule, then built and checked every screen against it." />
           </Reveal>
           <Reveal className="mt-8">
             <div className="overflow-hidden rounded-2xl border border-border">
@@ -303,16 +346,8 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
               ))}
             </div>
           </Reveal>
-        </section>
-
-        {/* ─── SOLUTION (HMW + preview) ─── */}
-        <section id="solution" className={GAP}>
-          <SectionHead label="Approach" title="How might we make giving feel like none of them?" />
-          <Reveal className="mt-12">
-            <HmwList items={hmw} />
-          </Reveal>
           <Reveal className="mt-16">
-            <SubHead label="Solution preview" title="One small action, three payoffs, no donation ask." />
+            <SubHead label="In the product" title="One small action, three payoffs, no donation ask." />
             <P text="MASii turns one small daily action into a reward, a growing impact score, and a shot at real prizes, with no donation ask on the home screen." className="mt-5" />
           </Reveal>
           <SolutionCarousel slides={solutionSlides} />
@@ -349,26 +384,37 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
           <ProcessFlow steps={processSteps} source={{ href: "https://x.com/WangLingkan/status/2076001006836732255", label: "See the full process on X" }} />
         </section>
 
-        {/* ─── DESIGN DECISIONS ─── */}
+        {/* ─── DECISIONS & TRADEOFFS ─── */}
         <section id="decisions" className={GAP}>
-          <SectionHead label="Design decisions" title="Five calls that kept it on the right side of the line." />
+          <SectionHead label="Decisions & tradeoffs" title="Five calls, and what each one cost." />
           <Reveal className="mt-12">
             <div className="grid gap-4 sm:grid-cols-2">
               {decisions.map((d) => (
-                <NumberedCard key={d.n} n={d.n} title={d.title} body={d.body} />
+                <DecisionCard key={d.n} n={d.n} title={d.title} body={d.body} tradeoff={d.tradeoff} />
               ))}
             </div>
           </Reveal>
         </section>
 
-        {/* ─── DESIGNER HANDOFF ─── */}
-        <section id="handoff" className={GAP}>
-          <SectionHead label="Handoff" title="Designer handoff" />
+        {/* ─── WHAT SHIPPED ─── */}
+        <section id="shipped" className={GAP}>
+          <SectionHead label="What shipped" title="A complete V1, ready to hand off." />
           <Reveal className="mt-12">
-            <P text="An organized Figma file: pages grouped by module, a shared component library, prototype wiring, and every state designed in place, so another designer can pick it up without a walkthrough." />
+            <P text="A five-tab information architecture, six end-to-end flows, and roughly 150 hi-fi screens with every empty, loading, and error state, built on an ~11-component design system and wired into a clickable prototype another designer can pick up cold." />
           </Reveal>
           <Reveal className="mt-6">
             <DesignerHandoff items={handoffItems} />
+          </Reveal>
+        </section>
+
+        {/* ─── SUCCESS METRICS ─── */}
+        <section id="metrics" className={GAP}>
+          <SectionHead label="Success metrics" title="What I'd hold it to." />
+          <Reveal className="mt-12">
+            <P text="There were no users at launch, so the job was to define what winning means, not to report it. These are the metrics I'd measure the loop against." />
+          </Reveal>
+          <Reveal className="mt-8">
+            <MetricList items={metrics} />
           </Reveal>
         </section>
 
@@ -386,7 +432,7 @@ export function MasiiCaseStudy({ meta }: { meta: Project }) {
           </Reveal>
 
           <Reveal className="mt-16">
-            <MiniLabel>Reflections</MiniLabel>
+            <MiniLabel>What I&rsquo;d do differently</MiniLabel>
             <Reflections items={reflections} />
           </Reveal>
           <Thesis>The test was never how much someone gave. It was whether they came back the next day.</Thesis>

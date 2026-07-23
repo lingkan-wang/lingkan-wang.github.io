@@ -53,9 +53,9 @@ const tools = [
 export function Footer() {
   const pathname = usePathname();
   const [californiaTime, setCaliforniaTime] = useState("--:--");
-  const hideFooter = ["/about", "/playground"].some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`),
-  );
+  // Toolbox / Contact / California-clock + dog only belong on the homepage.
+  // Every other route (case studies, coded, research, about, playground) hides it.
+  const hideFooter = pathname !== "/";
 
   useEffect(() => {
     const formatter = new Intl.DateTimeFormat("en-US", {
