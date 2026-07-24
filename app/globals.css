@@ -190,6 +190,17 @@ body {
   background: transparent;
 }
 
+/* dog-stickers: full-bleed sky card with rounded corners */
+.little-rubbish-item[data-project="dog-stickers"] .little-rubbish-preview {
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 16px 30px rgb(0 0 0 / 14%);
+}
+.little-rubbish-item[data-project="dog-stickers"] iframe {
+  display: block;
+  border-radius: 18px;
+}
+
 .little-rubbish-item[data-dragging="true"] {
   cursor: grabbing;
   user-select: none;
