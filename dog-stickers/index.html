@@ -12,19 +12,11 @@
     user-select:none;touch-action:none;
     background:#8fb0c9;                         /* sky-ish letterbox */
   }
-  /* soft blurred fill of the same photo behind the framed image */
-  .backdrop{position:fixed;inset:-8%;z-index:0;background:url("bg.png") center/cover no-repeat;
-    filter:blur(28px) brightness(1.03);transform:scale(1.1);pointer-events:none;}
+  /* sky photo fills the whole card, edge to edge (no border) */
+  .bg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0;pointer-events:none;}
 
-  /* framed photo, keeps the image aspect ratio, centered */
-  .frame{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    aspect-ratio:659/1024;height:min(98vh, calc(98vw * 1024 / 659));z-index:1;}
-  .frame .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;
-    display:block;border-radius:2px;box-shadow:0 20px 50px rgba(20,40,60,.35);}
-
-  /* physics stage mapped exactly onto the paper region of the photo */
-  #stage{position:absolute;left:10.6%;top:9.7%;width:78.8%;height:75.6%;
-    z-index:2;overflow:hidden;border-radius:2px;}
+  /* physics stage positioned by JS onto the paper region of the cover-rendered photo */
+  #stage{position:fixed;z-index:2;overflow:hidden;border-radius:2px;}
   #stage canvas{position:relative;display:block;}
 
   .toolbar{position:fixed;top:14px;right:14px;z-index:8;display:flex;gap:10px;}
@@ -42,12 +34,8 @@
 </style>
 </head>
 <body>
-  <div class="backdrop"></div>
-
-  <div class="frame">
-    <img class="bg" src="bg.png" alt="paper on a line" />
-    <div id="stage"></div>
-  </div>
+  <img class="bg" src="bg.png" alt="paper on a line" />
+  <div id="stage"></div>
 
   <script src="matter.min.js"></script>
   <script>
@@ -69,7 +57,22 @@
   let engine, render, runner, mouseConstraint, walls = [];
   let PW = 0, PH = 0;
 
+  // photo natural size + paper region as fractions of it
+  const IMG_W=659, IMG_H=1024;
+  const PAP={ L:0.106, T:0.097, W:0.788, H:0.756 };
+  function positionStage(){
+    const vw=window.innerWidth, vh=window.innerHeight;
+    const scale=Math.max(vw/IMG_W, vh/IMG_H);          // object-fit: cover
+    const dw=IMG_W*scale, dh=IMG_H*scale;
+    const ox=(vw-dw)/2, oy=(vh-dh)/2;
+    stage.style.left  = (ox + PAP.L*dw) + 'px';
+    stage.style.top   = (oy + PAP.T*dh) + 'px';
+    stage.style.width = (PAP.W*dw) + 'px';
+    stage.style.height= (PAP.H*dh) + 'px';
+  }
+
   function measure(){
+    positionStage();
     const r = stage.getBoundingClientRect();
     PW = Math.max(40, r.width); PH = Math.max(40, r.height);
   }
