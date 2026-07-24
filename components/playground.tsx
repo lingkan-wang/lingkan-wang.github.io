@@ -20,12 +20,14 @@ import { Reveal } from "@/components/reveal";
 
 const FRAME_H = 420;
 const vibeCodingProjects = codedWork.filter((project) =>
-  ["dog-stickers", "photo-transfer", "masii-sign", "journey-globe", "toast-sonner"].includes(
+  ["photo-transfer", "masii-sign", "journey-globe", "toast-sonner"].includes(
     project.slug,
   ),
 );
 const littleRubbishProjects = codedWork.filter((project) =>
-  ["bubble-todo", "feedback-popover", "sticker-peel"].includes(project.slug),
+  ["bubble-todo", "feedback-popover", "sticker-peel", "dog-stickers"].includes(
+    project.slug,
+  ),
 );
 const bubbleEmbedSrcDoc = `<!doctype html>
 <html lang="en">
@@ -260,6 +262,13 @@ const littleLayouts: Record<string, LittleLayout> = {
     previewHeight: 318,
     rotation: 1.6,
     z: 7,
+  },
+  "dog-stickers": {
+    desktop: { x: 0.34, y: 388, width: 250 },
+    mobile: { x: 0.62, y: 700, width: 228 },
+    previewHeight: 400,
+    rotation: -1.8,
+    z: 8,
   },
   "music-player": {
     desktop: { x: 0.03, y: 684, width: 260 },
