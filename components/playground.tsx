@@ -551,7 +551,8 @@ function LittleRubbish({
         data.channel !== "little-rubbish-drag" ||
         (data.slug !== "bubble-todo" &&
           data.slug !== "feedback-popover" &&
-          data.slug !== "sticker-peel") ||
+          data.slug !== "sticker-peel" &&
+          data.slug !== "dog-stickers") ||
         typeof data.pointerId !== "number" ||
         typeof data.clientX !== "number" ||
         typeof data.clientY !== "number"
