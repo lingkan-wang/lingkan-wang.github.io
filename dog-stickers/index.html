@@ -56,6 +56,7 @@
   const stage = document.getElementById('stage');
   let engine, render, runner, mouseConstraint, walls = [];
   let PW = 0, PH = 0;
+  let cardDragging = false;      // true while the whole card is being dragged in the parent
 
   // photo natural size + paper region as fractions of it
   const IMG_W=659, IMG_H=1024;
@@ -97,8 +98,29 @@
     Composite.add(engine.world, mouseConstraint);
     render.mouse = mouse;
 
+    // drag-to-move-card bridge: matches how other Little Rubbish demos work.
+    // Press on a sticker -> Matter drags that sticker; press on empty paper/sky
+    // -> forward pointer to the parent so the whole card moves.
+    if (window.parent !== window){
+      const SLUG='dog-stickers';
+      const post=(phase,e)=>window.parent.postMessage({channel:'little-rubbish-drag',slug:SLUG,
+        phase,pointerId:e.pointerId,clientX:e.clientX,clientY:e.clientY,
+        pointerType:e.pointerType,button:e.button},'*');
+      window.addEventListener('pointerdown',(e)=>{
+        const rect=render.canvas.getBoundingClientRect();
+        const pt={x:e.clientX-rect.left, y:e.clientY-rect.top};
+        if (Matter.Query.point(dogs, pt).length>0) return;   // grabbing a sticker
+        cardDragging=true; post('down',e);
+      });
+      window.addEventListener('pointermove',(e)=>{ if(cardDragging) post('move',e); });
+      const endCard=(e)=>{ if(cardDragging){ post('up',e); cardDragging=false; } };
+      window.addEventListener('pointerup',endCard);
+      window.addEventListener('pointercancel',endCard);
+    }
+
     // hover repel — confined to the paper
     Events.on(engine, 'beforeUpdate', () => {
+      if (cardDragging) return;
       const p = mouse.position;
       if (!p || (p.x===0 && p.y===0)) return;
       if (p.x<0 || p.y<0 || p.x>PW || p.y>PH) return;
