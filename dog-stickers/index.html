@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>小狗贴纸 · 挂纸</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;height:100%;overflow:hidden;}
+  body{
+    font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic Pro","PingFang SC",system-ui,sans-serif;
+    user-select:none;touch-action:none;
+    background:#8fb0c9;                         /* sky-ish letterbox */
+  }
+  /* soft blurred fill of the same photo behind the framed image */
+  .backdrop{position:fixed;inset:-8%;z-index:0;background:url("bg.png") center/cover no-repeat;
+    filter:blur(28px) brightness(1.03);transform:scale(1.1);pointer-events:none;}
+
+  /* framed photo, keeps the image aspect ratio, centered */
+  .frame{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    aspect-ratio:659/1024;height:min(98vh, calc(98vw * 1024 / 659));z-index:1;}
+  .frame .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;
+    display:block;border-radius:2px;box-shadow:0 20px 50px rgba(20,40,60,.35);}
+
+  /* physics stage mapped exactly onto the paper region of the photo */
+  #stage{position:absolute;left:10.6%;top:9.7%;width:78.8%;height:75.6%;
+    z-index:2;overflow:hidden;border-radius:2px;}
+  #stage canvas{position:relative;display:block;}
+
+  .toolbar{position:fixed;top:14px;right:14px;z-index:8;display:flex;gap:10px;}
+  .btn{-webkit-appearance:none;appearance:none;border:none;cursor:pointer;font-family:inherit;font-weight:800;
+    font-size:14px;color:#fff;padding:11px 16px;border-radius:999px;background:#ff4d8d;
+    box-shadow:0 4px 0 #d81b60,0 8px 16px rgba(0,0,0,.25);transition:transform .08s,box-shadow .08s;}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 #d81b60;}
+  .btn.ghost{background:#fff;color:#d81b60;box-shadow:0 4px 0 #ffbcd3,0 8px 16px rgba(0,0,0,.18);}
+  .btn.ghost:active{box-shadow:0 1px 0 #ffbcd3;}
+  .brand{position:fixed;left:16px;top:14px;z-index:8;color:#fff;font-weight:900;font-style:italic;
+    font-size:26px;letter-spacing:.01em;text-shadow:2px 2px 0 rgba(216,27,96,.9),0 2px 8px rgba(0,0,0,.3);}
+  .hint{position:fixed;left:0;right:0;bottom:12px;z-index:8;text-align:center;color:#fff;opacity:.95;
+    font-size:13px;letter-spacing:.03em;text-shadow:0 1px 5px rgba(0,0,0,.5);pointer-events:none;}
+  @media (max-width:520px){ .btn{padding:9px 12px;font-size:12px;} .toolbar{gap:6px;top:10px;right:10px;} .brand{font-size:20px;} }
+</style>
+</head>
+<body>
+  <div class="backdrop"></div>
+
+  <div class="frame">
+    <img class="bg" src="bg.png" alt="paper on a line" />
+    <div id="stage"></div>
+  </div>
+
+  <script src="matter.min.js"></script>
+  <script>
+  const { Engine, Render, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events, Common } = Matter;
+  const STICKERS = ["stickers/rock.png","stickers/lovely.png","stickers/wonderful.png","stickers/rush.png"];
+  const TOTAL = 16;          // fixed total number of stickers
+  const MAX_BODIES = TOTAL;
+  const dogs = [];
+  const meta = {};
+  let loaded = 0;
+  STICKERS.forEach(src => {
+    const img = new Image();
+    img.onload = () => { meta[src] = { w: img.naturalWidth, h: img.naturalHeight }; if(++loaded===STICKERS.length) start(); };
+    img.onerror = () => { meta[src] = { w: 500, h: 600 }; if(++loaded===STICKERS.length) start(); };
+    img.src = src;
+  });
+
+  const stage = document.getElementById('stage');
+  let engine, render, runner, mouseConstraint, walls = [];
+  let PW = 0, PH = 0;
+
+  function measure(){
+    const r = stage.getBoundingClientRect();
+    PW = Math.max(40, r.width); PH = Math.max(40, r.height);
+  }
+
+  function start(){
+    measure();
+    engine = Engine.create();
+    engine.gravity.y = 1;
+
+    render = Render.create({
+      element: stage, engine,
+      options:{ width:PW, height:PH, background:'transparent', wireframes:false,
+        pixelRatio: Math.min(window.devicePixelRatio||1, 2) }
+    });
+    Render.run(render);
+    runner = Runner.create();
+    Runner.run(runner, engine);
+    buildWalls();
+
+    const mouse = Mouse.create(render.canvas);
+    mouseConstraint = MouseConstraint.create(engine, { mouse, constraint:{ stiffness:0.16, render:{visible:false} } });
+    Composite.add(engine.world, mouseConstraint);
+    render.mouse = mouse;
+
+    // hover repel — confined to the paper
+    Events.on(engine, 'beforeUpdate', () => {
+      const p = mouse.position;
+      if (!p || (p.x===0 && p.y===0)) return;
+      if (p.x<0 || p.y<0 || p.x>PW || p.y>PH) return;
+      if (mouseConstraint.body) return;
+      const R = Math.max(64, PW*0.26);
+      for (const b of dogs){
+        const dx=b.position.x-p.x, dy=b.position.y-p.y, d2=dx*dx+dy*dy;
+        if (d2 < R*R && d2 > 4){
+          const d=Math.sqrt(d2), s=1-d/R, strength=s*s*0.026*b.mass;
+          Body.applyForce(b, b.position, { x:(dx/d)*strength, y:(dy/d)*strength });
+          Body.setAngularVelocity(b, b.angularVelocity + (dx>0?1:-1)*s*0.02);
+        }
+      }
+    });
+
+    // fixed number of stickers, all dropped from the top once on load
+    let i=0; const seed=setInterval(()=>{
+      dropDog(Common.random(PW*0.1,PW*0.9), -60-Math.random()*420);
+      if(++i>=TOTAL){ clearInterval(seed); setTimeout(()=>{ sealed=true; buildWalls(); }, 2200); }
+    },95);
+
+    window.addEventListener('resize', onResize);
+  }
+
+  let sealed=false;                              // once true, the paper top is closed
+  function buildWalls(){
+    walls.forEach(w=>Composite.remove(engine.world,w));
+    const t=200, opt={isStatic:true, restitution:0.2, render:{visible:false}};
+    walls=[
+      Bodies.rectangle(PW/2, PH+t/2, PW+t*2, t, opt),   // floor
+      Bodies.rectangle(-t/2, PH/2, t, PH*3, opt),       // left
+      Bodies.rectangle(PW+t/2, PH/2, t, PH*3, opt),     // right
+      // top: far above while raining in, sealed to the paper edge afterwards
+      Bodies.rectangle(PW/2, sealed ? -t/2 : -700, PW+t*2, t, opt),
+    ];
+    Composite.add(engine.world, walls);
+  }
+
+  function dropDog(x,y){
+    const src=STICKERS[Math.floor(Math.random()*STICKERS.length)], m=meta[src];
+    const targetW = PW * Common.random(0.15, 0.21);
+    const scale=targetW/m.w, w=m.w*scale, h=m.h*scale;
+    x=Math.max(w*0.55, Math.min(PW-w*0.55, x));
+    const body=Bodies.rectangle(x,y,w*0.82,h*0.82,{
+      restitution:0.42, friction:0.55, frictionAir:0.006,
+      angle:Common.random(-0.5,0.5), chamfer:{radius:Math.min(w,h)*0.18},
+      render:{ sprite:{ texture:src, xScale:scale, yScale:scale } }
+    });
+    Body.setAngularVelocity(body, Common.random(-0.12,0.12));
+    Composite.add(engine.world, body);
+    dogs.push(body);
+    while(dogs.length>MAX_BODIES){ Composite.remove(engine.world, dogs.shift()); }
+  }
+
+  let rt;
+  function onResize(){
+    clearTimeout(rt);
+    rt=setTimeout(()=>{
+      measure();
+      const pr=render.options.pixelRatio;
+      render.options.width=PW; render.options.height=PH;
+      render.canvas.width=PW*pr; render.canvas.height=PH*pr;
+      render.canvas.style.width=PW+'px'; render.canvas.style.height=PH+'px';
+      Render.setPixelRatio(render, pr);
+      buildWalls();
+    },150);
+  }
+  </script>
+</body>
+</html>
