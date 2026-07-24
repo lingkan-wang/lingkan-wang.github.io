@@ -16,6 +16,16 @@ export type CodedWork = {
 
 export const codedWork: CodedWork[] = [
   {
+    slug: "dog-stickers",
+    title: "Sticker drop — a paper full of puppies",
+    blurb:
+      "Sixteen die-cut puppy stickers rain from the top of a crumpled paper pinned to a clothesline and pile up with real physics (Matter.js). Sweep your cursor through the heap to shove them aside, or grab one and fling it — everything stays trapped inside the paper. Backgrounds and cut-outs made from my own sticker shots.",
+    tags: ["Matter.js", "Physics", "Vanilla JS"],
+    year: 2026,
+    live: "/dog-stickers/index.html",
+    offset: 0,
+  },
+  {
     slug: "sticker-peel",
     title: "Sticker — peel it off, carry it, stick it back",
     blurb:

@@ -20,7 +20,7 @@ import { Reveal } from "@/components/reveal";
 
 const FRAME_H = 420;
 const vibeCodingProjects = codedWork.filter((project) =>
-  ["photo-transfer", "masii-sign", "journey-globe", "toast-sonner"].includes(
+  ["dog-stickers", "photo-transfer", "masii-sign", "journey-globe", "toast-sonner"].includes(
     project.slug,
   ),
 );
