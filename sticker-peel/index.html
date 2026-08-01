@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lingkan Sticker</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: #e8e6e1;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* ?embed 时去掉背景，让贴纸以透明底嵌进宿主页面（渲染器本来就是 alpha: true）。
+     独立打开时保留原本的桌面底色 */
+  body.is-embed { background: transparent; }
+  #stage {
+    position: fixed;
+    inset: 0;
+    cursor: default;
+    touch-action: none;
+  }
+  #stage.zone-edge { cursor: grab; }
+  #stage.zone-center { cursor: move; }
+  #stage.is-dragging,
+  #stage.is-holding { cursor: grabbing; }
+  #stage canvas { display: block; }
+  .peel-hint {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(28, 26, 24, 0.88);
+    color: #fff;
+    font: 500 13px/1 -apple-system, system-ui, "Helvetica Neue", sans-serif;
+    /* 必须定宽不折行：标签的水平位置由 JS 读 offsetWidth 夹进画布，
+       一旦允许折行，宽度会随位置变化而变化，夹取读到的是上一帧的宽度，
+       反而把标签推出画布。宽度稳定，夹取才成立 */
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 150ms ease;
+    /* 必须穿透：否则标签会盖在贴纸上方接走 hover, 命中在标签与贴纸之间反复横跳,
+       表现为文案不停闪烁 */
+    pointer-events: none;
+  }
+  .peel-hint.is-visible { opacity: 1; }
+</style>
+</head>
+<body>
+  <div id="stage"></div>
+  <script>
+    // 在模块加载前定好，避免嵌入时先闪一下不透明底色
+    if (new URLSearchParams(location.search).has('embed')) {
+      document.body.classList.add('is-embed');
+    }
+  </script>
+  <script type="module">
+    import { createStickerPeel } from './src/main.js';
+    createStickerPeel(document.getElementById('stage'));
+  </script>
+</body>
+</html>

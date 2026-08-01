@@ -31,9 +31,12 @@
   .hint{position:fixed;left:0;right:0;bottom:12px;z-index:8;text-align:center;color:#fff;opacity:.95;
     font-size:13px;letter-spacing:.03em;text-shadow:0 1px 5px rgba(0,0,0,.5);pointer-events:none;}
   @media (max-width:520px){ .btn{padding:9px 12px;font-size:12px;} .toolbar{gap:6px;top:10px;right:10px;} .brand{font-size:20px;} }
+  .is-embed .bg { display: none; }
+  .is-embed body { background: transparent; }
 </style>
 </head>
 <body>
+  <script>if (new URLSearchParams(location.search).has('embed')) document.documentElement.classList.add('is-embed');</script>
   <img class="bg" src="bg.png" alt="paper on a line" />
   <div id="stage"></div>
 
@@ -61,7 +64,15 @@
   // photo natural size + paper region as fractions of it
   const IMG_W=659, IMG_H=1024;
   const PAP={ L:0.106, T:0.097, W:0.788, H:0.756 };
+  const EMBED = document.documentElement.classList.contains('is-embed');
   function positionStage(){
+    if (EMBED) {
+      stage.style.left = '0px';
+      stage.style.top = '0px';
+      stage.style.width = window.innerWidth + 'px';
+      stage.style.height = window.innerHeight + 'px';
+      return;
+    }
     const vw=window.innerWidth, vh=window.innerHeight;
     const scale=Math.max(vw/IMG_W, vh/IMG_H);          // object-fit: cover
     const dw=IMG_W*scale, dh=IMG_H*scale;
@@ -161,7 +172,7 @@
 
   function dropDog(x,y){
     const src=STICKERS[Math.floor(Math.random()*STICKERS.length)], m=meta[src];
-    const targetW = PW * Common.random(0.15, 0.21);
+    const targetW = PW * (EMBED ? Common.random(0.09, 0.13) : Common.random(0.15, 0.21));
     const scale=targetW/m.w, w=m.w*scale, h=m.h*scale;
     x=Math.max(w*0.55, Math.min(PW-w*0.55, x));
     const body=Bodies.rectangle(x,y,w*0.82,h*0.82,{

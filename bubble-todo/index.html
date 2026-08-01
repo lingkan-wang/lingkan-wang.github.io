@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bubble To-do</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="mode-peek">
+  <div id="stage">
+    <div id="fly-layer"></div>
+    <div id="parked-layer"></div>
+    <div id="hint">Type a to-do · double-click to blow · click to pop ✓</div>
+    <div id="girl-wrap">
+      <img id="girl" src="assets/girl.png" draggable="false" alt="" />
+      <div id="attached-bubble" class="bubble">
+        <div class="bubble-img"></div>
+        <div class="bubble-text" contenteditable="false" spellcheck="false"></div>
+      </div>
+    </div>
+    <img id="peek" src="assets/peek.png" draggable="false" alt="" />
+    <div id="peek-hint">click me 👇</div>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

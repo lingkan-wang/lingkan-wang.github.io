@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sonner</title>
+  <link rel="stylesheet" href="sonner.css">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; background: #fafafa; color: #18181b;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .panel { display: grid; gap: 16px; padding: 40px; width: 560px; max-width: 92vw; }
+    .panel h1 { font-size: 20px; margin: 0; }
+    .panel p.sub { margin: 0; color: #71717a; font-size: 14px; }
+    .group { display: grid; gap: 8px; }
+    .group h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #a1a1aa; margin: 8px 0 0; font-weight: 600; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button {
+      font: inherit; font-size: 13px; padding: 8px 14px; border-radius: 9px;
+      border: 1px solid rgba(0, 0, 0, 0.12); background: #fff; cursor: pointer;
+      display: inline-flex; align-items: center;
+      transition: transform .1s ease, background .15s ease;
+    }
+    button:hover { background: #f4f4f5; }
+    button:active { transform: scale(0.97); }
+    label { font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+    /* Custom select: strip the native OS arrow and draw our own chevron so it
+       lives *inside* the rounded control, matching the buttons' look + feel. */
+    select {
+      font: inherit; font-size: 13px;
+      padding: 8px 32px 8px 12px;      /* right padding leaves room for the chevron */
+      border-radius: 9px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      color: #18181b; cursor: pointer;
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      background-color: #fff;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 11px center;
+      background-size: 14px 14px;
+      transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease;
+    }
+    select:hover { background-color: #f4f4f5; border-color: rgba(0, 0, 0, 0.2); }
+    select:active { transform: scale(0.97); }   /* same press feedback as the buttons */
+    select:focus-visible {
+      outline: none;
+      border-color: rgba(24, 24, 27, 0.55);
+      box-shadow: 0 0 0 3px rgba(24, 24, 27, 0.10);
+    }
+    /* checkboxes pick up the same near-black accent as the action button */
+    .switches input[type="checkbox"] { accent-color: #18181b; cursor: pointer; }
+    .switches label { cursor: pointer; }
+    .switches { gap: 16px; }
+
+    /* ---- Trigger 按钮里的 3D 图标（与 toast 同款图片、同款 keyframes） ---- */
+    .btn-ic { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; margin-right: 7px; }
+    .btn-ic .i3d { width: 18px; height: 18px; display: block; }
+    /* 按钮里的图标保持静止（不做点击动画）；toast 上的图标动画不受影响 */
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <div class="group">
+      <h1>Sonner</h1>
+      <p class="sub">Vanilla HTML/CSS/JS, zero dependencies. Fire a few to see them stack, hover to expand, drag sideways to dismiss.</p>
+    </div>
+
+    <div class="group">
+      <h2>Trigger</h2>
+      <div class="row">
+        <button id="btn-default">Default</button>
+        <button id="btn-success">Success</button>
+        <button id="btn-error">Error</button>
+        <button id="btn-warning">Warning</button>
+        <button id="btn-info">Info</button>
+        <button id="btn-loading">Loading</button>
+      </div>
+      <div class="row">
+        <button id="btn-desc">With description</button>
+        <button id="btn-action">With action</button>
+        <button id="btn-promise">Promise</button>
+        <button id="btn-burst">Burst 3</button>
+        <button id="btn-clear">Dismiss all</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>Settings</h2>
+      <div class="row">
+        <label>Position:
+          <select id="sel-pos">
+            <option value="bottom-right">bottom-right</option>
+            <option value="bottom-center">bottom-center</option>
+            <option value="bottom-left">bottom-left</option>
+            <option value="top-right">top-right</option>
+            <option value="top-center">top-center</option>
+            <option value="top-left">top-left</option>
+          </select>
+        </label>
+      </div>
+      <div class="row switches">
+        <label><input type="checkbox" id="sw-rich"> Rich colors</label>
+        <label><input type="checkbox" id="sw-expand"> Expand by default</label>
+        <label><input type="checkbox" id="sw-dark"> Dark</label>
+        <label><input type="checkbox" id="sw-close"> Close button</label>
+      </div>
+    </div>
+  </main>
+
+  <script src="sonner.js"></script>
+  <script>
+    var T = window.toast;
+    var ICN = T.icons;
+
+    // 每个 Trigger 按钮：图标 + 动画类型 + 点击产生的 toast
+    var BTNS = {
+      'btn-default': { icon: ICN.bell,    anim: 'default', fire: function () { T('Saved to drafts', { icon: ICN.bell }); } },
+      'btn-success': { icon: ICN.success, anim: 'success', fire: function () { T.success('Uploaded successfully'); } },
+      'btn-error':   { icon: ICN.error,   anim: 'error',   fire: function () { T.error('Something went wrong'); } },
+      'btn-warning': { icon: ICN.warning, anim: 'warning', fire: function () { T.warning('Storage almost full'); } },
+      'btn-info':    { icon: ICN.info,    anim: 'info',    fire: function () { T.info('3 new notifications'); } },
+      'btn-loading': { icon: ICN.loader,  anim: 'loading', fire: function () { T.loading('Processing…'); } },
+      'btn-desc':    { icon: ICN.note,    anim: 'default', fire: function () { T('Meeting created', { description: 'Thu 2:00 PM · Design Sync · 5 people notified', icon: ICN.note }); } },
+      'btn-action':  { icon: ICN.undo,    anim: 'default', fire: function () { T('Deleted "Untitled document"', { icon: ICN.undo, action: { label: 'Undo', onClick: function () { T.success('Restored'); } } }); } },
+      'btn-promise': { icon: ICN.loader,  anim: 'loading', fire: function () { T.promise(new Promise(function (res) { setTimeout(res, 1600); }), { loading: 'Saving…', success: 'Saved', error: 'Failed to save' }); } },
+      'btn-burst':   { icon: ICN.layers,  anim: 'default', fire: function () { T('First', { icon: ICN.bell }); T.success('Second'); T.info('Third'); } },
+      'btn-clear':   { icon: ICN.trash,   anim: 'default', fire: function () { T.dismiss(); } }
+    };
+
+    Object.keys(BTNS).forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (!btn) return;
+      var cfg = BTNS[id];
+      btn.insertAdjacentHTML('afterbegin', '<span class="btn-ic">' + cfg.icon + '</span>');
+      btn.addEventListener('click', function () { cfg.fire(); });
+    });
+
+    // ---- Settings ----
+    document.getElementById('sel-pos').addEventListener('change', function (e) {
+      T.configure({ position: e.target.value });
+      T(e.target.value, { icon: ICN.bell });
+    });
+    document.getElementById('sw-rich').addEventListener('change', function (e) { T.configure({ richColors: e.target.checked }); });
+    document.getElementById('sw-expand').addEventListener('change', function (e) { T.configure({ expand: e.target.checked }); });
+    document.getElementById('sw-dark').addEventListener('change', function (e) { T.configure({ theme: e.target.checked ? 'dark' : 'light' }); });
+    document.getElementById('sw-close').addEventListener('change', function (e) { T.configure({ closeButton: e.target.checked }); });
+  </script>
+</body>
+</html>

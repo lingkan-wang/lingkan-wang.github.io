@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback</title>
+  <link rel="stylesheet" href="feedback.css?v=success-shadow">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #f4f4f5; color: #18181b;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    body.is-embedded { background: transparent; }
+    body.is-embedded .fb-scrim { background: transparent; }
+    body.is-embedded .caption { display: none; }
+    .caption { position: fixed; left: 50%; top: calc(50% + 64px); transform: translateX(-50%);
+      color: #a1a1aa; font-size: 13px; white-space: nowrap; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <p class="caption">Press the button to see it morph.</p>
+  <script>
+    if (window.self !== window.top) document.body.classList.add("is-embedded");
+  </script>
+  <script>
+    (() => {
+      const channel = "little-rubbish-drag";
+      const slug = "feedback-popover";
+      let press = null;
+      let suppressClick = false;
+
+      const send = (phase, event) => {
+        parent.postMessage({
+          channel,
+          slug,
+          phase,
+          pointerId: event.pointerId,
+          clientX: event.clientX,
+          clientY: event.clientY,
+          pointerType: event.pointerType,
+          button: event.button
+        }, "*");
+      };
+
+      document.addEventListener("pointerdown", (event) => {
+        if (window.self === window.top) return;
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+
+        const target = event.target instanceof Element ? event.target : null;
+        if (
+          !target?.closest(".fb") ||
+          target.closest("input, textarea, select, [contenteditable='true']")
+        ) {
+          return;
+        }
+
+        press = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          moved: false
+        };
+        try { target.setPointerCapture?.(event.pointerId); } catch {}
+        send("down", event);
+      }, true);
+
+      document.addEventListener("pointermove", (event) => {
+        if (!press || press.pointerId !== event.pointerId) return;
+        if (Math.hypot(event.clientX - press.startX, event.clientY - press.startY) > 6) {
+          press.moved = true;
+        }
+        send("move", event);
+        if (!press.moved) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }, { capture: true, passive: false });
+
+      const finish = (event) => {
+        if (!press || press.pointerId !== event.pointerId) return;
+        suppressClick = press.moved;
+        send("up", event);
+        press = null;
+        if (suppressClick) {
+          setTimeout(() => { suppressClick = false; }, 0);
+        }
+      };
+
+      document.addEventListener("pointerup", finish, true);
+      document.addEventListener("pointercancel", finish, true);
+      document.addEventListener("click", (event) => {
+        if (!suppressClick) return;
+        suppressClick = false;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }, true);
+    })();
+  </script>
+  <script src="feedback.js"></script>
+</body>
+</html>
