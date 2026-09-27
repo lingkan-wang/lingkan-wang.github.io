@@ -720,8 +720,8 @@
       <div class="xp-row"><span>2025 - 2026</span><p data-pretext><span class="role">Product Builder</span> <span class="org">Cyan Studio</span></p></div>
       <div class="xp-row"><span>2024 - 2026</span><p data-pretext><span class="role">M.S. HCI, METALS</span> <span class="org">Carnegie Mellon</span></p></div>
       <div class="xp-row"><span>2025 - 2026</span><p data-pretext><span class="role">UX Lead, Parent Dashboard</span> <span class="org">Varsity Tutors</span></p></div>
-      <div class="xp-row"><span>2024</span><p data-pretext><span class="role">Product Designer</span> <span class="org">Ecovacs</span></p></div>
-      <div class="xp-row"><span>Earlier</span><p data-pretext><span class="role">Product Designer</span> <span class="org">Kwai, GenAI startup</span></p></div>
+      <div class="xp-row"><span>2024</span><p data-pretext><span class="role">Product Designer</span> <span class="org">Ecovacs Robotics, Kwai</span></p></div>
+      <div class="xp-row"><span>Earlier</span><p data-pretext><span class="role">Product Designer</span> <span class="org">GenAI startup</span></p></div>
     </div>
   </section>
 
@@ -995,6 +995,8 @@ var x0=["BN","BN","BN","BN","BN","BN","BN","BN","BN","S","B","S","WS","B","BN","
   const measured = [...document.querySelectorAll('[data-pretext]')];
 
   function prepareEl(el) {
+    // xp rows are single-line grid cells; Pretext over-measures them and uneven min-heights break the rhythm
+    if (el.closest('.xp-row')) return;
     const cs = getComputedStyle(el);
     prepared.set(el, {
       handle: prepare(el.textContent, `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`),
